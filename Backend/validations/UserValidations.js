@@ -59,7 +59,7 @@ const registerValidation = [
 
 // Login validation
 const loginValidations = [
-    userEmailValidation().custom(userExsistValidation),
+    userEmailValidation(),
     userPasswordValidation()
 ]
 
