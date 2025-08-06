@@ -18,7 +18,7 @@ axios.get('http://localhost:3000/profile', { withCredentials: true })
 Key Points to Remember when cookie is used
 Use httpOnly: true so JavaScript can't access the cookie (better security).
 
-Set secure: true when using HTTPS in production.
+Set secure: true when using HTTPS in production.  remenber to do this
 
 Use sameSite to prevent CSRF attacks (strict or lax recommended).
 

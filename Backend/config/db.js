@@ -5,7 +5,6 @@ dotenv.config();
 // Retrieve database credentials from environment variables 
 const dbUserName = process.env.DB_USERNAME;
 const dbPassword = process.env.DB_PASSWORD;
-console.log(dbUserName, dbPassword);
 
 const connectDB = async () => {
   try {

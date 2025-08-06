@@ -1,18 +1,18 @@
 import { body } from "express-validator";
-import User from "../models/User.js";s
+import User from "../models/User.js";
 
 // User name validation
 const userNameValidation = () => {
-    body("userName")
-        .notEmpty()
-        .withMessage("User name is required")
-        .isLength({ min: 3 })
-        .withMessage("User name must be at least 3 characters long");
+    return body("name")
+            .notEmpty()
+            .withMessage("User name is required")
+            .isLength({ min: 3 })
+            .withMessage("User name must be at least 3 characters long");
 }
 
 // User email validation
 const userEmailValidation = () => {
-    body("email")
+    return body("email")
         .notEmpty()
         .withMessage("Email is required")
         .isEmail()
@@ -25,11 +25,12 @@ const userExsistValidation = async(value) => {
     if (user) {
         throw new Error("User already exists");
     }
+    return true;
 }
 
 // User password validation
 const userPasswordValidation = () => {
-    body('password')
+    return body('password')
         .notEmpty()
         .withMessage("Password is required")
         .isLength({ min: 6 })
@@ -37,23 +38,29 @@ const userPasswordValidation = () => {
 }
 
 // Confirm password validation
-const confirmPasswordValidation = (confirmPassword, req) => {
-    if (confirmPassword !== req.body.password) {
+const confirmPasswordValidation = () => {
+  return body("confirmPassword")
+    .notEmpty().withMessage("Confirm password is required")
+    .custom((confirmPassword, { req }) => {
+      if (confirmPassword !== req.body.password) {
         throw new Error("Passwords do not match");
-    }
-}
+      }
+      return true;
+    });
+};
 
 // Rgistration validation
 const registerValidation = [
-    userNameValidation,
-    userEmailValidation.custom(userExsistValidation),
-    userPasswordValidation.custom(confirmPasswordValidation)
-]
+  userNameValidation(),
+  userEmailValidation().custom(userExsistValidation), // format + async DB check
+  userPasswordValidation(),
+  confirmPasswordValidation()
+];
 
 // Login validation
 const loginValidations = [
-    userEmailValidation.custom(userExsistValidation),
-    userPasswordValidation
+    userEmailValidation().custom(userExsistValidation),
+    userPasswordValidation()
 ]
 
 export { registerValidation, loginValidations };
