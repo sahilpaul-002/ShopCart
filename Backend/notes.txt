@@ -1,0 +1,26 @@
+Frontend (React / Axios Example) // AXIOS is used in place of fetch()
+When sending requests, ensure cookies are included:
+
+
+import axios from 'axios';
+
+// Send login request
+axios.post('http://localhost:3000/login', { username: 'Sahil', password: '123' }, { withCredentials: true })
+  .then(res => console.log(res.data))
+  .catch(err => console.error(err));
+
+// Access protected route
+axios.get('http://localhost:3000/profile', { withCredentials: true })
+  .then(res => console.log(res.data))
+  .catch(err => console.error(err));
+  
+
+Key Points to Remember when cookie is used
+Use httpOnly: true so JavaScript can't access the cookie (better security).
+
+Set secure: true when using HTTPS in production.
+
+Use sameSite to prevent CSRF attacks (strict or lax recommended).
+
+On the frontend, always enable withCredentials: true.
+
