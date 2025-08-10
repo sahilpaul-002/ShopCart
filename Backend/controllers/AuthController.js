@@ -139,4 +139,25 @@ const loginUser = async (req, res) => {
 }
 // ------------------------------------ ************ ------------------------------------ \\
 
-export { registerUser, loginUser };
+
+// ------------------------------------ User Log in ------------------------------------ \\
+//http://localhost:5000/api/auth/logout
+const logoutUser = async (req, res) => {
+    try {
+        res.clearCookie("lToken", {
+            signed: true,    // Signed cookie for encryption
+            httpOnly: true,  // Prevents client-side JS from accessing the cookie
+            secure: false,   // Set to true in production with HTTPS
+            sameSite: 'strict',
+            path: "/"
+        });
+        res.status(200).json({success: true, message: "Logout successful"})
+    }
+    catch (e) {
+        // Catch other error
+        res.status(500).json({ success: false, message: e.message });
+    }
+}
+// ------------------------------------ ************ ------------------------------------ \\
+
+export { registerUser, loginUser, logoutUser };

@@ -32,6 +32,13 @@ app.get('/', (req, res) => {
 // Individual routes
 app.use('/api/auth', authRouter);
 
+app.get("/check-cookie", (req, res) => {
+    res.json({
+        signedCookies: req.signedCookies,
+        hasStoken: !!req.signedCookies.lToken
+    });
+});
+
 
 app.listen(port, () => {
   console.log(`ShopCart app listening on port "http://localhost:${port}"`)
