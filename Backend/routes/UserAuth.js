@@ -13,7 +13,7 @@ router.post('/login',loginValidations,loginUser)
 // ------------------------------------ ************ ------------------------------------ \\
 
 // ------------------------------------ User Log out ------------------------------------ \\
-router.post('/logout',loginValidations,logoutUser)
+router.get('/logout',loginValidations,logoutUser)
 // ------------------------------------ ************ ------------------------------------ \\
 
 
