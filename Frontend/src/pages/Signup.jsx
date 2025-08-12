@@ -1,14 +1,65 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router'
 import Navbar from '../components/Navbar'
 import Form from 'react-bootstrap/Form';
-import PrimaryButton from '../components/PrimaryButton';
-import Separator60 from '../components/Separator60';
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
+import WhitePrimaryButton from '../components/WhitePrimaryButton';
 import GoogleLogo from '../assets/google-logo.png';
 
 export default function Signup() {
+    // ---------------------------- Logic for password visibility ---------------------------- \\
+    // Set state to store the password visibility state
+    const [hiddenFields, setHiddenFields] = useState({
+        password: true,
+        confirmPassword: true,
+    });
+
+    // Function to handle the click for password visibility
+    const handleClickEye = (field) => {
+        setHiddenFields((prev) => ({
+            ...prev,
+            [field]: !prev[field]
+        }))
+    }
+    // ---------------------------- ***************************** ---------------------------- \\
+
+    // ---------------------------- Logic to capture the input text ---------------------------- \\
+    const [userInput, setUserInput] = useState({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
+
+    // Function to handle the onChange on input text feilds
+    const handleOnChange = (e) => {
+        const { name, value } = e.target //Get field name and value
+        setUserInput((prev) => ({
+            ...prev,
+            [name]: value // update the specific field
+        }));
+    }
+    // ---------------------------- ***************************** ---------------------------- \\
+
+    // ---------------------------- Logic to handle the form submission ---------------------------- \\
+    // Function handle on submission of form
+    const handleOnSubmit = (e) => {
+        e.preventDefault()
+        console.log(userInput);
+
+        // Reset the user input state
+        setUserInput({
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: ''
+        })
+    }
+    // ---------------------------- ***************************** ---------------------------- \\
+
     return (
-        <div className="w-[100vw] h-[100vh] bg-gradient-to-l from-[#141414] to-[#0c2025] text-white flex flex-col items-center justify-start">
+        <div className="w-[100vw] bg-gradient-to-l from-[#141414] to-[#0c2025] text-white flex flex-col items-center justify-start">
 
             {/* NavBar */}
             <Navbar />
@@ -22,30 +73,58 @@ export default function Signup() {
                 </div>
                 {/* Sign up Form */}
                 <div className='form-box m-3 w-[80%] px-[20px] py-[20px] bg-[#00000025]  rounded-[10px]'>
-                    <Form>
-                        <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Label>Email address</Form.Label>
-                            <Form.Control type="email" placeholder="Enter email" />
+                    <Form onSubmit={handleOnSubmit}>
+                        <Form.Group className="mb-3" controlId="name">
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control type="text" placeholder="Enter name" name='name' required onChange={handleOnChange} />
                         </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="formBasicPassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" placeholder="Password" />
+                        <Form.Group className="mb-3" controlId="email">
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control type="email" placeholder="Enter email" name='email' onChange={handleOnChange} />
                         </Form.Group>
+
+                        <Form.Group className="mb-3 relative" controlId="password">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control type={hiddenFields.password ? "password" : "text"} placeholder="Enter password" name='password' required onChange={handleOnChange} />
+                            {/* Mask password eye */}
+                            {!hiddenFields.password && <FaEye color="black" className='absolute right-[4%] bottom-[16%] cursor-pointer' onClick={() => { handleClickEye("password") }} />}
+                            {hiddenFields.password && <FaEyeSlash color="black" className='absolute right-[4%] bottom-[16%] cursor-pointer' onClick={() => { handleClickEye("password") }} />}
+                        </Form.Group>
+
+                        <Form.Group className="mb-3 relative" controlId="confimPassword">
+                            <Form.Label>Confirm password</Form.Label>
+                            <Form.Control type={hiddenFields.confirmPassword ? "password" : "text"} placeholder="Confirm Password" name='confimPassword' required onChange={handleOnChange} />
+                            {/* Mask password eye */}
+                            {!hiddenFields.confirmPassword && <FaEye color="black" className='absolute right-[4%] bottom-[16%] cursor-pointer' onClick={() => { handleClickEye("confirmPassword") }} />}
+                            {hiddenFields.confirmPassword && <FaEyeSlash color="black" className='absolute right-[4%] bottom-[16%] cursor-pointer' onClick={() => { handleClickEye("confirmPassword") }} />}
+                        </Form.Group>
+
                         {/* Submit button */}
-                        <div className="primary-button mx-[auto] w-[120px] bg-[red]">
-                            <PrimaryButton />
+                        <div className="primary-button mx-[auto] w-[120px]">
+                            <WhitePrimaryButton />
                         </div>
-                        {/* Separator */}
-                        <Separator60 />
+                        {/* Or Separator */}
+                        <div className="or-separator text-[14px] w-[20px] mx-[auto] my-[10px]">OR</div>
                         {/* Google Sign In */}
-                        <div className='google-signin-box w-[80%] mx-[auto] px-[20px] py-[10px] bg-[#00000025] border-[1px] border-[#96969635] rounded-[10px] flex justify-center items-center gap-[10px] cursor-[pointer]'>
-                            <div className="google-logo w-[10%] rounded-[20px]">
+                        <div className='google-signin-box w-[80%] mx-[auto] px-[20px] py-[10px] bg-[#42656cae] border-[1px] border-[#96969635] rounded-[10px] flex justify-center items-center gap-[10px] cursor-[pointer]'>
+                            <div className="google-logo w-[30px] max-w-[60px] rounded-[20px]">
                                 <img src={GoogleLogo} alt="Google Logo" />
                             </div>
                             <div className="google-text">
-                                <span className='text-[24px] font-[600]'>Sign In with Google</span>
+                                <span className='text-[12px] sm:text-[24px] font-[600]'>Sign In with Google</span>
                             </div>
+                        </div>
+                        {/* Login Link */}
+                        <div className='login-link w-[80%] mx-[auto] px-[30px] py-[10px] bg-[transparent] text-[12px] flex justify-center items-center gap-[10px]'>
+                            <span>
+                                Already have an account ?
+                            </span>
+                            <Link className='!no-underline !text-[white] hover:!underline hover:!text-blue-500 cursor-[pointer]' to='/auth/login'>
+                                <span>
+                                    Log In
+                                </span>
+                            </Link>
                         </div>
                     </Form>
                 </div>
