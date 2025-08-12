@@ -6,6 +6,7 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import WhitePrimaryButton from '../components/WhitePrimaryButton';
 import GoogleLogo from '../assets/google-logo.png';
+import {userSignUpApi} from '../apiCalls/userAuth';
 
 export default function Signup() {
     // ---------------------------- Logic for password visibility ---------------------------- \\
@@ -44,17 +45,37 @@ export default function Signup() {
 
     // ---------------------------- Logic to handle the form submission ---------------------------- \\
     // Function handle on submission of form
-    const handleOnSubmit = (e) => {
-        e.preventDefault()
-        console.log(userInput);
+    const handleOnSubmit = async (e) => {
+        try {
+            e.preventDefault()
+            console.log(userInput);
 
-        // Reset the user input state
-        setUserInput({
-            name: '',
-            email: '',
-            password: '',
-            confirmPassword: ''
-        })
+            // Call signup-api-calling-function
+            const signUpResponse = await userSignUpApi(userInput);
+            console.log(signUpResponse);
+
+            // Store userId in localStorage
+            if (signUpResponse.success) {
+                localStorage.setItem('userId', signUpResponse.data.userId);
+            }
+        }
+        catch (e) {
+            if (e.signUpResponse) {
+                console.error(e.signUpResponse); 
+            } 
+            else {
+                console.error(e.message);
+            }
+        }
+        finally {
+            // Reset the user input state
+            setUserInput({
+                name: '',
+                email: '',
+                password: '',
+                confirmPassword: ''
+            })
+        }
     }
     // ---------------------------- ***************************** ---------------------------- \\
 
@@ -76,17 +97,17 @@ export default function Signup() {
                     <Form onSubmit={handleOnSubmit}>
                         <Form.Group className="mb-3" controlId="name">
                             <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" placeholder="Enter name" name='name' required onChange={handleOnChange} />
+                            <Form.Control type="text" placeholder="Enter name" name='name' required value={userInput.name} onChange={handleOnChange} />
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="email">
                             <Form.Label>Email address</Form.Label>
-                            <Form.Control type="email" placeholder="Enter email" name='email' onChange={handleOnChange} />
+                            <Form.Control type="email" placeholder="Enter email" name='email' value={userInput.email} onChange={handleOnChange} />
                         </Form.Group>
 
                         <Form.Group className="mb-3 relative" controlId="password">
                             <Form.Label>Password</Form.Label>
-                            <Form.Control type={hiddenFields.password ? "password" : "text"} placeholder="Enter password" name='password' required onChange={handleOnChange} />
+                            <Form.Control type={hiddenFields.password ? "password" : "text"} placeholder="Enter password" name='password' required value={userInput.password} onChange={handleOnChange} />
                             {/* Mask password eye */}
                             {!hiddenFields.password && <FaEye color="black" className='absolute right-[4%] bottom-[16%] cursor-pointer' onClick={() => { handleClickEye("password") }} />}
                             {hiddenFields.password && <FaEyeSlash color="black" className='absolute right-[4%] bottom-[16%] cursor-pointer' onClick={() => { handleClickEye("password") }} />}
@@ -94,7 +115,7 @@ export default function Signup() {
 
                         <Form.Group className="mb-3 relative" controlId="confimPassword">
                             <Form.Label>Confirm password</Form.Label>
-                            <Form.Control type={hiddenFields.confirmPassword ? "password" : "text"} placeholder="Confirm Password" name='confimPassword' required onChange={handleOnChange} />
+                            <Form.Control type={hiddenFields.confirmPassword ? "password" : "text"} placeholder="Confirm Password" name='confirmPassword' required value={userInput.confirmPassword} onChange={handleOnChange} />
                             {/* Mask password eye */}
                             {!hiddenFields.confirmPassword && <FaEye color="black" className='absolute right-[4%] bottom-[16%] cursor-pointer' onClick={() => { handleClickEye("confirmPassword") }} />}
                             {hiddenFields.confirmPassword && <FaEyeSlash color="black" className='absolute right-[4%] bottom-[16%] cursor-pointer' onClick={() => { handleClickEye("confirmPassword") }} />}
