@@ -10,13 +10,16 @@ const app = express()
 // Load environment variables from .env file
 dotenv.config();
 const port = process.env.PORT || 5000
-const cookieSecretKey = process.env.COOKIE_SECRET_KEY
+const cookieSecretKey = process.env.COOKEI_SECRET_KEY
 
 // Connect to MongoDB
 connectDB();
 
 // Enable cors
-app.use(cors())
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}))
 
 // Enable cookie-parser middleware
 app.use(cookieParser(cookieSecretKey));
@@ -32,6 +35,7 @@ app.get('/', (req, res) => {
 // Individual routes
 app.use('/api/auth', authRouter);
 
+// Route to check coockie deleted
 app.get("/check-cookie", (req, res) => {
     res.json({
         signedCookies: req.signedCookies,

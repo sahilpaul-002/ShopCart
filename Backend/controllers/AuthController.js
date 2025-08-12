@@ -11,6 +11,7 @@ const registerUser = async (req, res) => {
         // Check for validation errors
         const validationErrors = validationResult(req);
         if (!validationErrors.isEmpty()) {
+            console.log(validationErrors)
             validationErrors.throw();
         }
 
@@ -140,7 +141,7 @@ const loginUser = async (req, res) => {
 // ------------------------------------ ************ ------------------------------------ \\
 
 
-// ------------------------------------ User Log in ------------------------------------ \\
+// ------------------------------------ User Log out ------------------------------------ \\
 //http://localhost:5000/api/auth/logout
 const logoutUser = async (req, res) => {
     try {
