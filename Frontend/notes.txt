@@ -1,0 +1,1 @@
+Delete the user when clicked on sign up link from local storage

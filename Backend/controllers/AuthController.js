@@ -3,6 +3,12 @@ import User from '../models/User.js';
 import bcrypt from 'bcrypt';
 import generateToken from '../utils/GenerateTokn.js';
 import authenticateToken from '../utils/AuthenticateToken.js'
+import dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
+const environment = process.env.NODE_ENV
+console.log("Environment:", environment);
 
 // ------------------------------------ User Sign up ------------------------------------ \\
 // API URL - http://localhost:5000/api/auth/signup
@@ -11,7 +17,6 @@ const registerUser = async (req, res) => {
         // Check for validation errors
         const validationErrors = validationResult(req);
         if (!validationErrors.isEmpty()) {
-            console.log(validationErrors)
             validationErrors.throw();
         }
 
@@ -36,13 +41,20 @@ const registerUser = async (req, res) => {
         // Generate JWT token
         const jwtSToken = generateToken(user._id);
 
+        // Load environment variables from .env file
+        dotenv.config();
+        const environment = process.env.NODE_ENV
+        console.log("Environment:", environment);
+
         // Generate signed cookie of the JWT token
         // Send JWT in a cookie
         res.cookie('sToken', jwtSToken, {
             signed: true,    // Signed cookie for encryption
             httpOnly: true,  // Prevents client-side JS from accessing the cookie
-            secure: false,   // Set to true in production with HTTPS
-            sameSite: 'strict',
+            // secure: environment === "production", // Set to true in production with HTTPS
+            // sameSite: environment === "production" ? "none" : "lax",
+            secure: false, // Set to true in production with HTTPS
+            sameSite: "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
@@ -71,6 +83,7 @@ const registerUser = async (req, res) => {
 // ------------------------------------ User Log in ------------------------------------ \\
 //http://localhost:5000/api/auth/login
 const loginUser = async (req, res) => {
+    console.log(req.body);
     try {
         // Check for validation errors
         const validationErrors = validationResult(req);
@@ -152,7 +165,7 @@ const logoutUser = async (req, res) => {
             sameSite: 'strict',
             path: "/"
         });
-        res.status(200).json({success: true, message: "Logout successful"})
+        res.status(200).json({ success: true, message: "Logout successful" })
     }
     catch (e) {
         // Catch other error

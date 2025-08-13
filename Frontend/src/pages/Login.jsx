@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router'
 import Navbar from '../components/Navbar'
 import Form from 'react-bootstrap/Form';
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import WhitePrimaryButton from '../components/WhitePrimaryButton';
+import {userLogInApi} from '../apiCalls/userAuth';
 
 export default function Login() {
   // ---------------------------- Logic for password visibility ---------------------------- \\
@@ -29,18 +30,43 @@ export default function Login() {
   }
   // ---------------------------- ***************************** ---------------------------- \\
 
-  // ---------------------------- Logic to handle the form submission ---------------------------- \\
-  // Function handle on submission of form
-  const handleOnSubmit = (e) => {
-    e.preventDefault()
-    console.log(userInput);
+  // State to store the disable signup button
+  const [signUpDisable, setSignUpDisable] = useState(true);
 
-    // Reset the user input state
-    setUserInput({
-      name: '',
-      email: '',
-      password: ''
-    })
+  // ---------------------------- Logic to handle the form submission ---------------------------- \\
+  // UseEffect to change the disable button state
+  useEffect(() => {
+    const { email, password } = userInput;
+    if (email && password && email.includes("@") && password.length > 5) {
+      setSignUpDisable(false); // enable button
+    } else {
+      setSignUpDisable(true); // disable button
+    }
+  }, [userInput]);
+  // Function handle on submission of form
+  const handleOnSubmit = async (e) => {
+    try {
+      e.preventDefault()
+      console.log(userInput);
+
+      // Call signup-api-calling-function
+      const logInResponse = await userLogInApi(userInput);
+      console.log(logInResponse);
+
+      // Check API success
+      if (!logInResponse.success) {
+        throw new Error("Log in failed !")
+      }
+    } catch (e) {
+      console.log({ success: false, message: e.message });
+    } finally {
+      // Reset the user input state
+      setUserInput({
+        name: '',
+        email: '',
+        password: ''
+      })
+    }
   }
   // ---------------------------- ***************************** ---------------------------- \\
 
@@ -80,7 +106,7 @@ export default function Login() {
 
             {/* Submit button */}
             <div className="primary-button mx-[auto] w-[120px]">
-              <WhitePrimaryButton />
+              <WhitePrimaryButton disabled={signUpDisable} buttonText={"Log In"} />
             </div>
 
             {/* Login Link */}

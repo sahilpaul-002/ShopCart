@@ -1,14 +1,30 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router'
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router'
 import Navbar from '../components/Navbar'
 import Form from 'react-bootstrap/Form';
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import WhitePrimaryButton from '../components/WhitePrimaryButton';
 import GoogleLogo from '../assets/google-logo.png';
-import {userSignUpApi} from '../apiCalls/userAuth';
+import { userSignUpApi } from '../apiCalls/userAuth';
 
 export default function Signup() {
+    // ---------------------------- Logic redirect user to login page ---------------------------- \\
+    // Redirect to login page if sign up token is present
+    let navigate = useNavigate();
+    // UseEffect to redirect to login page if user Id exist in local storage
+    useEffect(() => {
+        // Get the current userId from the local storage
+        const userId = localStorage.getItem('currentUserId');
+        
+        // Check if current userId is set in local storage
+        if(userId) {
+            navigate('/auth/login');
+        }
+    })
+    // ---------------------------- ***************************** ---------------------------- \\
+
+
     // ---------------------------- Logic for password visibility ---------------------------- \\
     // Set state to store the password visibility state
     const [hiddenFields, setHiddenFields] = useState({
@@ -43,29 +59,55 @@ export default function Signup() {
     }
     // ---------------------------- ***************************** ---------------------------- \\
 
+    // State to store the disable signup button
+    const [signUpDisable, setSignUpDisable] = useState(true);
+
     // ---------------------------- Logic to handle the form submission ---------------------------- \\
+    // UseEffect to change the disable button state
+    useEffect(() => {
+        const { name, email, password, confirmPassword } = userInput;
+        if (name && email && password && confirmPassword && name.length > 2 && email.includes("@") && password.length > 5 && confirmPassword.length > 5) {
+            setSignUpDisable(false); // enable button
+        } else {
+            setSignUpDisable(true); // disable button
+        }
+    }, [userInput]);
     // Function handle on submission of form
     const handleOnSubmit = async (e) => {
         try {
             e.preventDefault()
             console.log(userInput);
 
+            // Check password and confirm password
+            if (userInput.password !== userInput.confirmPassword) {
+                throw new Error("Passwords should match. Please try again")
+            }
+
             // Call signup-api-calling-function
             const signUpResponse = await userSignUpApi(userInput);
             console.log(signUpResponse);
 
-            // Store userId in localStorage
-            if (signUpResponse.success) {
-                localStorage.setItem('userId', signUpResponse.data.userId);
+            // Check API success
+            if (!signUpResponse.success) {
+                throw new Error("Sign up failed !")
             }
+
+            // Get existing data from localStorage or create an empty array
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            // Create a new user object
+            const newUser = {
+                userId: signUpResponse.userId,
+                login: false
+            };
+            // Push the new user into the array
+            users.push(newUser);
+            // Save back to localStorage
+            localStorage.setItem('users', JSON.stringify(users));
+            // Store the current user id in local storage separately as current user
+            localStorage.setItem('currentUserId', signUpResponse.userId);
         }
         catch (e) {
-            if (e.signUpResponse) {
-                console.error(e.signUpResponse); 
-            } 
-            else {
-                console.error(e.message);
-            }
+            console.log({ success: false, message: e.message });
         }
         finally {
             // Reset the user input state
@@ -97,17 +139,17 @@ export default function Signup() {
                     <Form onSubmit={handleOnSubmit}>
                         <Form.Group className="mb-3" controlId="name">
                             <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" placeholder="Enter name" name='name' required value={userInput.name} onChange={handleOnChange} />
+                            <Form.Control type="text" placeholder="Enter name" name='name' value={userInput.name} required min={3} onChange={handleOnChange} />
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="email">
                             <Form.Label>Email address</Form.Label>
-                            <Form.Control type="email" placeholder="Enter email" name='email' value={userInput.email} onChange={handleOnChange} />
+                            <Form.Control type="email" placeholder="Enter email" name='email' value={userInput.email} required onChange={handleOnChange} />
                         </Form.Group>
 
                         <Form.Group className="mb-3 relative" controlId="password">
                             <Form.Label>Password</Form.Label>
-                            <Form.Control type={hiddenFields.password ? "password" : "text"} placeholder="Enter password" name='password' required value={userInput.password} onChange={handleOnChange} />
+                            <Form.Control type={hiddenFields.password ? "password" : "text"} placeholder="Enter password" name='password' value={userInput.password} required min={6} onChange={handleOnChange} />
                             {/* Mask password eye */}
                             {!hiddenFields.password && <FaEye color="black" className='absolute right-[4%] bottom-[16%] cursor-pointer' onClick={() => { handleClickEye("password") }} />}
                             {hiddenFields.password && <FaEyeSlash color="black" className='absolute right-[4%] bottom-[16%] cursor-pointer' onClick={() => { handleClickEye("password") }} />}
@@ -115,7 +157,7 @@ export default function Signup() {
 
                         <Form.Group className="mb-3 relative" controlId="confimPassword">
                             <Form.Label>Confirm password</Form.Label>
-                            <Form.Control type={hiddenFields.confirmPassword ? "password" : "text"} placeholder="Confirm Password" name='confirmPassword' required value={userInput.confirmPassword} onChange={handleOnChange} />
+                            <Form.Control type={hiddenFields.confirmPassword ? "password" : "text"} placeholder="Confirm Password" name='confirmPassword' value={userInput.confirmPassword} required min={6} onChange={handleOnChange} />
                             {/* Mask password eye */}
                             {!hiddenFields.confirmPassword && <FaEye color="black" className='absolute right-[4%] bottom-[16%] cursor-pointer' onClick={() => { handleClickEye("confirmPassword") }} />}
                             {hiddenFields.confirmPassword && <FaEyeSlash color="black" className='absolute right-[4%] bottom-[16%] cursor-pointer' onClick={() => { handleClickEye("confirmPassword") }} />}
@@ -123,7 +165,7 @@ export default function Signup() {
 
                         {/* Submit button */}
                         <div className="primary-button mx-[auto] w-[120px]">
-                            <WhitePrimaryButton />
+                            <WhitePrimaryButton disabled={signUpDisable} buttonText={"Sign Up"} />
                         </div>
                         {/* Or Separator */}
                         <div className="or-separator text-[14px] w-[20px] mx-[auto] my-[10px]">OR</div>
