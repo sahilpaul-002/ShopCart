@@ -33,7 +33,6 @@ const registerUser = async (req, res) => {
             email: email,
             password: hashedPassword
         };
-        console.log(newUser)
 
         // Save the new user to the database
         const user = await User.create(newUser);
@@ -83,7 +82,6 @@ const registerUser = async (req, res) => {
 // ------------------------------------ User Log in ------------------------------------ \\
 //http://localhost:5000/api/auth/login
 const loginUser = async (req, res) => {
-    console.log(req.body);
     try {
         // Check for validation errors
         const validationErrors = validationResult(req);
@@ -93,7 +91,6 @@ const loginUser = async (req, res) => {
 
         // Check token credentials
         const sToken = req.signedCookies.sToken;
-        console.log(sToken);
         const validateToken = authenticateToken(sToken);
         if (!validateToken) {
             validateToken.throw();
@@ -104,7 +101,6 @@ const loginUser = async (req, res) => {
 
         // Check if user exist
         const user = await User.findOne({ email });
-        console.log(user);
         if (!user) {
             throw new Error('User does not exist');
         }

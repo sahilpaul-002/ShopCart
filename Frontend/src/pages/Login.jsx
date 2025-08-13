@@ -5,32 +5,35 @@ import Form from 'react-bootstrap/Form';
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import WhitePrimaryButton from '../components/WhitePrimaryButton';
-import {userLogInApi} from '../apiCalls/userAuth';
+import { userLogInApi } from '../apiCalls/userAuth';
 
 export default function Login() {
   // ---------------------------- Logic redirect user to sign in page and home page ---------------------------- \\
-    // Redirect to login page if sign up token is present
-    let navigate = useNavigate();
-    // UseEffect to redirect to login page if user Id exist in local storage
-    useEffect(() => {
-        // Get the current userId from the local storage
-        const userId = localStorage.getItem('currentUserId');
+  // Redirect to login page if sign up token is present
+  let navigate = useNavigate();
+  // UseEffect to redirect to login page if user Id exist in local storage
+  useEffect(() => {
+    // Get the current userId from the local storage
+    const userId = localStorage.getItem('currentUserId');
+    // Get the user same as user input from the local storage
+    const users = JSON.parse(localStorage.getItem('users'));
 
-        // Check if current user id is present
-        if (!userId) {
-          navigate('/auth/signup')
-        }
-        
-        // Get the user same as user input from the local storage
-        const users = JSON.parse(localStorage.getItem('users'));
-        const user = users.filter((user) => {return (String(user.userId) === String(userId))});
-        // Check if the current user is logged in
-        if (user.length > 0 && user[0].login) {
-          navigate('/'); // Redirect to home
-        }
+    // Check if current user id is present
+    if (!userId && !users) {
+      navigate('/auth/signup')
+    }
 
-    })
-    // ---------------------------- ***************************** ---------------------------- \\
+    // check user logged in 
+    const user = users.filter((user) => {return (userId===user.userId)})
+    setTimeout(() => {
+      if (user.length > 0 && user[0].login) {
+      navigate('/');
+    }
+    }, 500);
+  })
+  // ---------------------------- ***************************** ---------------------------- \\
+
+
   // ---------------------------- Logic for password visibility ---------------------------- \\
   // Set state to store the password visibility state
   const [passwordHidden, setPasswordHidden] = useState(true);
@@ -70,15 +73,13 @@ export default function Login() {
   const handleOnSubmit = async (e) => {
     try {
       e.preventDefault()
-      console.log(userInput);
 
       // Call signup-api-calling-function
       const logInResponse = await userLogInApi(userInput);
-      console.log(logInResponse);
 
       // Check API success
       if (!logInResponse.success) {
-        throw new Error("Log in failed !")
+        throw logInResponse
       }
 
       // Get the userId from local strage similar to user input
@@ -86,16 +87,30 @@ export default function Login() {
       //  Udpadet the user login status
       users = users.map((user) => {
         return (
-          (user.userId===logInResponse.user.userId) ? {...user, login: true, name: logInResponse.user.userName, email:logInResponse.user.userEmail} : user
+          (user.userId === logInResponse.user.userId) ? { ...user, login: true, name: logInResponse.user.userName, email: logInResponse.user.userEmail } : user
         )
       });
-      console.log(users);
+      
       //  Save the changed user details back to local storage
       localStorage.setItem('users', JSON.stringify(users))
-    } 
+
+      // Update the current user id with the user input
+      localStorage.setItem('currentUserId', logInResponse.user.userId)
+
+      // Redirect the user to home pag
+      navigate('/');
+
+      // Success message
+      console.log({ success: true, message: logInResponse.message });
+    }
     catch (e) {
-      console.log({ success: false, message: e.message });
-    } 
+      if (Array.isArray(e.message)) {
+        console.error({ success: false, error: e.message, message: e.message[0]?.msg })
+      }
+      else {
+        console.error({ success: false, message: e.message });
+      }
+    }
     finally {
       // Reset the user input state
       setUserInput({

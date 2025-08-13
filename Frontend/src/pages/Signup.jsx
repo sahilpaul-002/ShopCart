@@ -9,19 +9,26 @@ import GoogleLogo from '../assets/google-logo.png';
 import { userSignUpApi } from '../apiCalls/userAuth';
 
 export default function Signup() {
-    // ---------------------------- Logic redirect user to login page ---------------------------- \\
     // Redirect to login page if sign up token is present
     let navigate = useNavigate();
+    // ---------------------------- Logic redirect user to login page ---------------------------- \\
+    // Redirect to login page if sign up token is present
+    //let navigate = useNavigate();
     // UseEffect to redirect to login page if user Id exist in local storage
-    useEffect(() => {
-        // Get the current userId from the local storage
-        const userId = localStorage.getItem('currentUserId');
-        
-        // Check if current userId is set in local storage
-        if(userId) {
-            navigate('/auth/login');
-        }
-    })
+    // useEffect(() => {
+    //     // Get the current userId from the local storage
+    //     const userId = localStorage.getItem('currentUserId');
+    //     // Get the user same as user input from the local storage
+    //     const users = JSON.parse(localStorage.getItem('users'));
+
+    //     // Check if current userId is set in local storage
+    //     // if (userId) {
+    //     //     navigate('/auth/login');
+    //     // }
+    //     if (users) {
+    //         navigate('/auth/login');
+    //     }
+    // })
     // ---------------------------- ***************************** ---------------------------- \\
 
 
@@ -76,7 +83,6 @@ export default function Signup() {
     const handleOnSubmit = async (e) => {
         try {
             e.preventDefault()
-            console.log(userInput);
 
             // Check password and confirm password
             if (userInput.password !== userInput.confirmPassword) {
@@ -85,11 +91,10 @@ export default function Signup() {
 
             // Call signup-api-calling-function
             const signUpResponse = await userSignUpApi(userInput);
-            console.log(signUpResponse);
 
             // Check API success
             if (!signUpResponse.success) {
-                throw new Error("Sign up failed !")
+                throw signUpResponse
             }
 
             // Get existing data from localStorage or create an empty array
@@ -105,9 +110,19 @@ export default function Signup() {
             localStorage.setItem('users', JSON.stringify(users));
             // Store the current user id in local storage separately as current user
             localStorage.setItem('currentUserId', signUpResponse.userId);
+
+            navigate('/auth/login');
+
+            // Success message
+            console.log({success: true, message: signUpResponse.message});
         }
         catch (e) {
-            console.log({ success: false, message: e.message });
+            if(Array.isArray(e.message)) {
+                console.error({success: false, error: e.message, message: e.message[0]?.msg})
+            }
+            else {
+                console.error({ success: false, message: e.message });
+            }
         }
         finally {
             // Reset the user input state

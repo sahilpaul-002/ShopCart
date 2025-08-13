@@ -25,11 +25,11 @@ const userSignUpApi = async (userInput) => {
     }
     catch (e) {
         if (e.response) {
-            console.log(e.response.data)
+            console.error(e.response.data)
             return (e.response.data);
         }
         else {
-            console.log(e.message)
+            console.error(e.message)
             return (e.message);
         }
     }
@@ -59,11 +59,11 @@ const userLogInApi = async (userInput) => {
     }
     catch (e) {
         if (e.response) {
-            console.log(e.response.data)
+            console.error(e.response.data)
             return (e.response.data);
         }
         else {
-            console.log(e.message)
+            console.error(e.message)
             return (e.message);
         }
     }
