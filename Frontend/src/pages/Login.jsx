@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import Navbar from '../components/Navbar'
 import Form from 'react-bootstrap/Form';
 import { FaEye } from "react-icons/fa";
@@ -8,6 +8,29 @@ import WhitePrimaryButton from '../components/WhitePrimaryButton';
 import {userLogInApi} from '../apiCalls/userAuth';
 
 export default function Login() {
+  // ---------------------------- Logic redirect user to sign in page and home page ---------------------------- \\
+    // Redirect to login page if sign up token is present
+    let navigate = useNavigate();
+    // UseEffect to redirect to login page if user Id exist in local storage
+    useEffect(() => {
+        // Get the current userId from the local storage
+        const userId = localStorage.getItem('currentUserId');
+
+        // Check if current user id is present
+        if (!userId) {
+          navigate('/auth/signup')
+        }
+        
+        // Get the user same as user input from the local storage
+        const users = JSON.parse(localStorage.getItem('users'));
+        const user = users.filter((user) => {return (String(user.userId) === String(userId))});
+        // Check if the current user is logged in
+        if (user.length > 0 && user[0].login) {
+          navigate('/'); // Redirect to home
+        }
+
+    })
+    // ---------------------------- ***************************** ---------------------------- \\
   // ---------------------------- Logic for password visibility ---------------------------- \\
   // Set state to store the password visibility state
   const [passwordHidden, setPasswordHidden] = useState(true);
@@ -57,9 +80,22 @@ export default function Login() {
       if (!logInResponse.success) {
         throw new Error("Log in failed !")
       }
-    } catch (e) {
+
+      // Get the userId from local strage similar to user input
+      let users = JSON.parse(localStorage.getItem('users'));
+      //  Udpadet the user login status
+      users = users.map((user) => {
+        return (
+          (user.userId===logInResponse.userId) ? {...user, login: true} : user
+        )
+      });
+      //  Save the changed user details back to local storage
+      localStorage.setItem('users', JSON.stringify(users))
+    } 
+    catch (e) {
       console.log({ success: false, message: e.message });
-    } finally {
+    } 
+    finally {
       // Reset the user input state
       setUserInput({
         name: '',
