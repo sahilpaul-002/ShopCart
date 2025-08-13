@@ -86,9 +86,10 @@ export default function Login() {
       //  Udpadet the user login status
       users = users.map((user) => {
         return (
-          (user.userId===logInResponse.userId) ? {...user, login: true} : user
+          (user.userId===logInResponse.user.userId) ? {...user, login: true, name: logInResponse.user.userName, email:logInResponse.user.userEmail} : user
         )
       });
+      console.log(users);
       //  Save the changed user details back to local storage
       localStorage.setItem('users', JSON.stringify(users))
     } 
