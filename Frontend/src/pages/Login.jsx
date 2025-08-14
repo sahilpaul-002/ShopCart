@@ -110,6 +110,9 @@ export default function Login() {
 
       // Success message
       console.log({ success: true, message: logInResponse.message });
+
+      // Redirect the user to home pag
+      navigate('/');
     }
     catch (e) {
       if (Array.isArray(e.message)) {

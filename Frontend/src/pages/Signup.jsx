@@ -140,6 +140,9 @@ export default function Signup() {
             // Call google sign in API
             const googleSignInResponse = await googleSignInApi(reqBody);
             console.log(googleSignInResponse)
+
+            // Redirect the user to home pag
+            navigate('/');
         }
         catch (e) {
             console.error(e);
