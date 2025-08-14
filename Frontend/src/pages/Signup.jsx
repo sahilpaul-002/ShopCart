@@ -6,30 +6,14 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import WhitePrimaryButton from '../components/WhitePrimaryButton';
 import GoogleLogo from '../assets/google-logo.png';
-import { userSignUpApi } from '../apiCalls/userAuth';
+import { googleSignInApi, userSignUpApi } from '../apiCalls/userAuth';
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from '../utils/Firebase';
+import generateRandomPassword from '../utils/RandomPasswordGenerator';
 
 export default function Signup() {
     // Redirect to login page if sign up token is present
     let navigate = useNavigate();
-    // ---------------------------- Logic redirect user to login page ---------------------------- \\
-    // Redirect to login page if sign up token is present
-    //let navigate = useNavigate();
-    // UseEffect to redirect to login page if user Id exist in local storage
-    // useEffect(() => {
-    //     // Get the current userId from the local storage
-    //     const userId = localStorage.getItem('currentUserId');
-    //     // Get the user same as user input from the local storage
-    //     const users = JSON.parse(localStorage.getItem('users'));
-
-    //     // Check if current userId is set in local storage
-    //     // if (userId) {
-    //     //     navigate('/auth/login');
-    //     // }
-    //     if (users) {
-    //         navigate('/auth/login');
-    //     }
-    // })
-    // ---------------------------- ***************************** ---------------------------- \\
 
 
     // ---------------------------- Logic for password visibility ---------------------------- \\
@@ -101,7 +85,7 @@ export default function Signup() {
             let users = JSON.parse(localStorage.getItem('users')) || [];
             // Create a new user object
             const newUser = {
-                userId: signUpResponse.userId,
+                id: signUpResponse.userId,
                 login: false
             };
             // Push the new user into the array
@@ -132,6 +116,33 @@ export default function Signup() {
                 password: '',
                 confirmPassword: ''
             })
+        }
+    }
+    // ---------------------------- ***************************** ---------------------------- \\
+
+
+    // ---------------------------- Logic to login using google auth ---------------------------- \\
+    const googleSignIn = async () => {
+        try {
+            const response = await signInWithPopup(auth, provider)
+            const user = response.user;
+
+            // Get th generated password
+            const generatedPassword = generateRandomPassword();
+
+            const reqBody = {
+                name: user.displayName,
+                email: user.email,
+                password: generatedPassword
+            }
+            console.log(reqBody);
+
+            // Call google sign in API
+            const googleSignInResponse = await googleSignInApi(reqBody);
+            console.log(googleSignInResponse)
+        }
+        catch (e) {
+            console.error(e);
         }
     }
     // ---------------------------- ***************************** ---------------------------- \\
@@ -185,13 +196,15 @@ export default function Signup() {
                         {/* Or Separator */}
                         <div className="or-separator text-[14px] w-[20px] mx-[auto] my-[10px]">OR</div>
                         {/* Google Sign In */}
-                        <div className='google-signin-box w-[80%] mx-[auto] px-[20px] py-[10px] bg-[#42656cae] border-[1px] border-[#96969635] rounded-[10px] flex justify-center items-center gap-[10px] cursor-[pointer]'>
-                            <div className="google-logo w-[30px] max-w-[60px] rounded-[20px]">
+                        <div className='google-signin-box w-[80%] mx-[auto] px-[20px] py-[10px] bg-[#42656cae] border-[1px] border-[#96969635] rounded-[10px] flex justify-center items-center gap-[10px] cursor-[pointer] hover:bg-[transparent]'>
+                            <button type='button' className='flex justify-center items-center gap-[10px]' onClick={googleSignIn}>
+                                <div className="google-logo w-[30px] max-w-[60px] rounded-[20px]">
                                 <img src={GoogleLogo} alt="Google Logo" />
                             </div>
                             <div className="google-text">
                                 <span className='text-[12px] sm:text-[24px] font-[600]'>Sign In with Google</span>
                             </div>
+                            </button>
                         </div>
                         {/* Login Link */}
                         <div className='login-link w-[80%] mx-[auto] px-[30px] py-[10px] bg-[transparent] text-[12px] flex justify-center items-center gap-[10px]'>

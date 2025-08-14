@@ -18,18 +18,13 @@ export default function Login() {
     // Get the user same as user input from the local storage
     const users = JSON.parse(localStorage.getItem('users'));
 
-    // Check if current user id is present
-    if (!userId && !users) {
-      navigate('/auth/signup')
-    }
-
     // check user logged in 
-    const user = users.filter((user) => {return (userId===user.userId)})
-    setTimeout(() => {
+    if (users && userId) {
+      const user = users.filter((user) => { return (userId === user.id) })
       if (user.length > 0 && user[0].login) {
-      navigate('/');
+        navigate('/');
+      }
     }
-    }, 500);
   })
   // ---------------------------- ***************************** ---------------------------- \\
 
@@ -83,21 +78,34 @@ export default function Login() {
       }
 
       // Get the userId from local strage similar to user input
-      let users = JSON.parse(localStorage.getItem('users'));
-      //  Udpadet the user login status
-      users = users.map((user) => {
-        return (
-          (user.userId === logInResponse.user.userId) ? { ...user, login: true, name: logInResponse.user.userName, email: logInResponse.user.userEmail } : user
-        )
-      });
-      
+      let users = JSON.parse(localStorage.getItem('users')) || [];
+      console.log(users);
+      // Check users detail is present in local storage
+      if (!users.find(user => user.id === logInResponse.user.userId)) {
+        // Create a new user object
+        const newUser = {
+          id: logInResponse.user.userId,
+          login: true,
+          name: logInResponse.user.userName,
+          email: logInResponse.user.userEmail
+        };
+        console.log(newUser)
+        // Push the new user into the array
+        users.push(newUser);
+      }
+      else {
+        //  Udpadet the user login status
+        users = users.map((user) => {
+          return (
+            (user.id === logInResponse.user.userId) ? { ...user, login: true, name: logInResponse.user.userName, email: logInResponse.user.userEmail } : user
+          )
+        });
+      }
       //  Save the changed user details back to local storage
       localStorage.setItem('users', JSON.stringify(users))
-
       // Update the current user id with the user input
       localStorage.setItem('currentUserId', logInResponse.user.userId)
-
-      // Redirect the user to home pag
+      // Redirect the user to home page
       navigate('/');
 
       // Success message
@@ -160,8 +168,18 @@ export default function Login() {
             <div className="primary-button mx-[auto] w-[120px]">
               <WhitePrimaryButton disabled={signUpDisable} buttonText={"Log In"} />
             </div>
-
-            {/* Login Link */}
+            {/* Google Sign In */}
+            <div className='google-signin-box w-[80%] mx-[auto] px-[20px] py-[10px] bg-[#42656cae] border-[1px] border-[#96969635] rounded-[10px] flex justify-center items-center gap-[10px] cursor-[pointer] hover:bg-[transparent]'>
+              <button type='button' className='flex justify-center items-center gap-[10px]' onClick={googleSignIn}>
+                <div className="google-logo w-[30px] max-w-[60px] rounded-[20px]">
+                  <img src={GoogleLogo} alt="Google Logo" />
+                </div>
+                <div className="google-text">
+                  <span className='text-[12px] sm:text-[24px] font-[600]'>Sign In with Google</span>
+                </div>
+              </button>
+            </div>
+            {/* Signup Link */}
             <div className='login-link w-[80%] mx-[auto] px-[30px] py-[10px] bg-[transparent] text-[12px] flex justify-center items-center gap-[10px]'>
               <span>
                 Create a new account -

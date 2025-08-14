@@ -71,4 +71,37 @@ const userLogInApi = async (userInput) => {
 }
 // ----------------------------------- ******************************* ----------------------------------- \\
 
-export { userSignUpApi, userLogInApi }
+// ----------------------------------- Log In  API Call Logic ----------------------------------- \\
+const googleSignInApi = async (userInput) => {
+    try {
+        // Destructure the user input
+        const { name, email, password } = userInput;
+
+        // Call sign up api
+        const response = await axios.post(`${API_BASE}/api/auth/googlesignin`, {
+            name, email, password
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true
+            }
+        )
+        return (response.data);
+    }
+    catch (e) {
+        if (e.response) {
+            console.error(e.response.data)
+            return (e.response.data);
+        }
+        else {
+            console.error(e.message)
+            return (e.message);
+        }
+    }
+
+}
+// ----------------------------------- ******************************* ----------------------------------- \\
+
+export { userSignUpApi, userLogInApi, googleSignInApi }

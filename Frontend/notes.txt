@@ -1,1 +1,2 @@
-Delete the user when clicked on sign up link from local storage
+check envirionment with cookie
+stoken will create problem if the cookies get deleted then user will not be able to sign in using the same email
