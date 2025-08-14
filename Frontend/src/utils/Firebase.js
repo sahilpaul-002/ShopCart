@@ -13,7 +13,6 @@ import { getAnalytics } from "firebase/analytics";
 // Load environment variables from .env file
 // dotenv.config();
 const firebaseApiKey = import.meta.env.VITE_FIREBASE_API_KEY;
-console.log(firebaseApiKey);
 
 const firebaseConfig = {
   apiKey: firebaseApiKey,

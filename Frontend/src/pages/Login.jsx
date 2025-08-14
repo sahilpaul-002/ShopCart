@@ -5,7 +5,11 @@ import Form from 'react-bootstrap/Form';
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import WhitePrimaryButton from '../components/WhitePrimaryButton';
-import { userLogInApi } from '../apiCalls/userAuth';
+import GoogleLogo from '../assets/google-logo.png';
+import { googleSignInApi, userSignUpApi } from '../apiCalls/userAuth';
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from '../utils/Firebase';
+import generateRandomPassword from '../utils/RandomPasswordGenerator';
 
 export default function Login() {
   // ---------------------------- Logic redirect user to sign in page and home page ---------------------------- \\
@@ -133,6 +137,64 @@ export default function Login() {
   }
   // ---------------------------- ***************************** ---------------------------- \\
 
+
+  // ---------------------------- Logic to login using google auth ---------------------------- \\
+  const googleSignIn = async () => {
+    try {
+      const response = await signInWithPopup(auth, provider)
+      const user = response.user;
+
+      // Get th generated password
+      const generatedPassword = generateRandomPassword();
+
+      const reqBody = {
+        name: user.displayName,
+        email: user.email,
+        password: generatedPassword
+      }
+      console.log(reqBody);
+
+      // Call google sign in API
+      const googleSignInResponse = await googleSignInApi(reqBody);
+      console.log(googleSignInResponse)
+
+      // Get the userId from local strage similar to user input
+      let users = JSON.parse(localStorage.getItem('users')) || [];
+      console.log(users);
+      // Check users detail is present in local storage
+      if (!users.find(user => user.id === googleSignInResponse.user.userId)) {
+        // Create a new user object
+        const newUser = {
+          id: googleSignInResponse.user.userId,
+          login: true,
+          name: googleSignInResponse.user.userName,
+          email: googleSignInResponse.user.userEmail
+        };
+        // Push the new user into the array
+        users.push(newUser);
+      }
+      else {
+        //  Udpadet the user login status
+        users = users.map((user) => {
+          return (
+            (user.id === googleSignInResponse.user.userId) ? { ...user, login: true, name: googleSignInResponse.user.userName, email: googleSignInResponse.user.userEmail } : user
+          )
+        });
+      }
+      //  Save the changed user details back to local storage
+      localStorage.setItem('users', JSON.stringify(users))
+      // Update the current user id with the user input
+      localStorage.setItem('currentUserId', googleSignInResponse.user.userId)
+
+      // Redirect the user to home pag
+      navigate('/');
+    }
+    catch (e) {
+      console.error(e);
+    }
+  }
+  // ---------------------------- ***************************** ---------------------------- \\
+
   return (
     <div className="w-[100vw] bg-gradient-to-l from-[#141414] to-[#0c2025] text-white flex flex-col items-center justify-start">
 
@@ -171,6 +233,8 @@ export default function Login() {
             <div className="primary-button mx-[auto] w-[120px]">
               <WhitePrimaryButton disabled={signUpDisable} buttonText={"Log In"} />
             </div>
+            {/* Or Separator */}
+            <div className="or-separator text-[14px] w-[20px] mx-[auto] my-[10px]">OR</div>
             {/* Google Sign In */}
             <div className='google-signin-box w-[80%] mx-[auto] px-[20px] py-[10px] bg-[#42656cae] border-[1px] border-[#96969635] rounded-[10px] flex justify-center items-center gap-[10px] cursor-[pointer] hover:bg-[transparent]'>
               <button type='button' className='flex justify-center items-center gap-[10px]' onClick={googleSignIn}>

@@ -38,7 +38,6 @@ const registerUser = async (req, res) => {
         // Load environment variables from .env file
         dotenv.config();
         const environment = process.env.NODE_ENV
-        console.log("Environment:", environment);
 
         // Generate signed cookie of the JWT token
         // Send JWT in a cookie
@@ -47,9 +46,6 @@ const registerUser = async (req, res) => {
             httpOnly: true,  // Prevents client-side JS from accessing the cookie
             secure: environment === "production", // Set to true in production with HTTPS
             sameSite: environment === "production" ? "none" : "lax",
-            // secure: false, // Set to true in production with HTTPS
-            // sameSite: "lax",
-            maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
         // Respond with success message and token
@@ -85,11 +81,11 @@ const loginUser = async (req, res) => {
         }
 
         // Check token credentials
-        const sToken = req.signedCookies.sToken;
-        const validateToken = authenticateToken(sToken);
-        if (!validateToken) {
-            validateToken.throw();
-        }
+        // const sToken = req.signedCookies.sToken;
+        // const validateToken = authenticateToken(sToken);
+        // if (!validateToken) {
+        //     validateToken.throw();
+        // }
 
         // Destructuring the request body
         const { email, password } = req.body
@@ -114,7 +110,6 @@ const loginUser = async (req, res) => {
         // Load environment variables from .env file
         dotenv.config();
         const environment = process.env.NODE_ENV
-        console.log("Environment:", environment);
 
         // Generate signed cookie of the JWT token
         // Send JWT in a cookie

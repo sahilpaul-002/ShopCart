@@ -98,11 +98,11 @@ export default function Signup() {
             navigate('/auth/login');
 
             // Success message
-            console.log({success: true, message: signUpResponse.message});
+            console.log({ success: true, message: signUpResponse.message });
         }
         catch (e) {
-            if(Array.isArray(e.message)) {
-                console.error({success: false, error: e.message, message: e.message[0]?.msg})
+            if (Array.isArray(e.message)) {
+                console.error({ success: false, error: e.message, message: e.message[0]?.msg })
             }
             else {
                 console.error({ success: false, message: e.message });
@@ -140,6 +140,32 @@ export default function Signup() {
             // Call google sign in API
             const googleSignInResponse = await googleSignInApi(reqBody);
             console.log(googleSignInResponse)
+
+            // Get existing data from localStorage or create an empty array
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            // Check users detail is present in local storage
+            if (!users.find(user => user.id === googleSignInResponse.user.userId)) {
+                // Create a new user object
+                const newUser = {
+                    id: googleSignInResponse.user.userId,
+                    login: true,
+                    name: googleSignInResponse.user.userName,
+                    email: googleSignInResponse.user.userEmail
+                };
+                // Push the new user into the array
+                users.push(newUser);
+            }
+            else {
+                //  Udpadet the user login status
+                users = users.map((user) => {
+                    return (
+                        (user.id === googleSignInResponse.user.userId) ? { ...user, login: true, name: googleSignInResponse.user.userName, email: googleSignInResponse.user.userEmail } : user
+                    )
+                });
+            }
+            localStorage.setItem('users', JSON.stringify(users));
+            // Store the current user id in local storage separately as current user
+            localStorage.setItem('currentUserId', googleSignInResponse.user.userId);
 
             // Redirect the user to home pag
             navigate('/');
@@ -202,11 +228,11 @@ export default function Signup() {
                         <div className='google-signin-box w-[80%] mx-[auto] px-[20px] py-[10px] bg-[#42656cae] border-[1px] border-[#96969635] rounded-[10px] flex justify-center items-center gap-[10px] cursor-[pointer] hover:bg-[transparent]'>
                             <button type='button' className='flex justify-center items-center gap-[10px]' onClick={googleSignIn}>
                                 <div className="google-logo w-[30px] max-w-[60px] rounded-[20px]">
-                                <img src={GoogleLogo} alt="Google Logo" />
-                            </div>
-                            <div className="google-text">
-                                <span className='text-[12px] sm:text-[24px] font-[600]'>Sign In with Google</span>
-                            </div>
+                                    <img src={GoogleLogo} alt="Google Logo" />
+                                </div>
+                                <div className="google-text">
+                                    <span className='text-[12px] sm:text-[24px] font-[600]'>Sign In with Google</span>
+                                </div>
                             </button>
                         </div>
                         {/* Login Link */}

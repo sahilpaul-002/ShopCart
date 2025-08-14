@@ -4,13 +4,14 @@ import dotenv from 'dotenv';
 import cors from 'cors'
 import cookieParser from 'cookie-parser';
 import { router as authRouter } from './routes/UserAuth.js';
+import {router as userRouter} from './routes/UserRoutes.js';
 
 const app = express()
 
 // Load environment variables from .env file
 dotenv.config();
 const port = process.env.PORT || 5000
-const cookieSecretKey = process.env.COOKIE_SECRET_KEY
+const cookieSecretKey = process.env.COOKEI_SECRET_KEY
 // const cookieSecretKey = undefined
 
 // Connect to MongoDB
@@ -35,6 +36,7 @@ app.get('/', (req, res) => {
 
 // Individual routes
 app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
 
 // Route to check coockie deleted
 app.get("/check-cookie", (req, res) => {
