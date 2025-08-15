@@ -2,15 +2,17 @@ import { useState } from 'react'
 import { Outlet } from "react-router-dom";
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import UserAuthState from './contextConponents/UserAuthState';
+import UserDetailState from './contextConponents/UserDetailState';
+import Nav from './components/Nav';
 
 function App() {
 
   return (
     <>
-    <UserAuthState>
-      <Outlet />
-    </UserAuthState>
+      <Nav />
+      <UserDetailState>
+        <Outlet />
+      </UserDetailState>
     </>
   )
 }

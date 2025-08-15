@@ -80,13 +80,6 @@ const loginUser = async (req, res) => {
             validationErrors.throw();
         }
 
-        // Check token credentials
-        // const sToken = req.signedCookies.sToken;
-        // const validateToken = authenticateToken(sToken);
-        // if (!validateToken) {
-        //     validateToken.throw();
-        // }
-
         // Destructuring the request body
         const { email, password } = req.body
 
