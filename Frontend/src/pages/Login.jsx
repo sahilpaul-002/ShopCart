@@ -6,7 +6,7 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import WhitePrimaryButton from '../components/WhitePrimaryButton';
 import GoogleLogo from '../assets/google-logo.png';
-import { googleSignInApi, userSignUpApi } from '../apiCalls/UserAuth';
+import { googleSignInApi, userLogInApi } from '../apiCalls/UserAuth';
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from '../utils/Firebase';
 import generateRandomPassword from '../utils/RandomPasswordGenerator';

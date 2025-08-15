@@ -9,8 +9,8 @@ function App() {
 
   return (
     <>
-      <Nav />
       <UserDetailState>
+        <Nav />
         <Outlet />
       </UserDetailState>
     </>
