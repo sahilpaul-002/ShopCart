@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Link, useNavigate } from 'react-router'
 import Navbar from '../components/Navbar'
 import Form from 'react-bootstrap/Form';
@@ -10,10 +10,14 @@ import { googleSignInApi, userSignUpApi } from '../apiCalls/UserAuth';
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from '../utils/Firebase';
 import generateRandomPassword from '../utils/RandomPasswordGenerator';
+import GetUserContext from '../contexts/GetUserContext';
 
 export default function Signup() {
     // Redirect to login page if sign up token is present
     let navigate = useNavigate();
+
+    // Destructure context value
+    const { setUserDetail } = useContext(GetUserContext);
 
 
     // ---------------------------- Logic for password visibility ---------------------------- \\
@@ -135,22 +139,20 @@ export default function Signup() {
                 email: user.email,
                 password: generatedPassword
             }
-            console.log(reqBody);
 
             // Call google sign in API
             const googleSignInResponse = await googleSignInApi(reqBody);
-            console.log(googleSignInResponse)
 
             // Get existing data from localStorage or create an empty array
             let users = JSON.parse(localStorage.getItem('users')) || [];
             // Check users detail is present in local storage
-            if (!users.find(user => user.id === googleSignInResponse.user.userId)) {
+            if (!users.find(user => user.id === googleSignInResponse.user._id)) {
                 // Create a new user object
                 const newUser = {
-                    id: googleSignInResponse.user.userId,
+                    id: googleSignInResponse.user._id,
                     login: true,
-                    name: googleSignInResponse.user.userName,
-                    email: googleSignInResponse.user.userEmail
+                    name: googleSignInResponse.user.name,
+                    email: googleSignInResponse.user.email
                 };
                 // Push the new user into the array
                 users.push(newUser);
@@ -159,13 +161,16 @@ export default function Signup() {
                 //  Udpadet the user login status
                 users = users.map((user) => {
                     return (
-                        (user.id === googleSignInResponse.user.userId) ? { ...user, login: true, name: googleSignInResponse.user.userName, email: googleSignInResponse.user.userEmail } : user
+                        (user.id === googleSignInResponse.user._id) ? { ...user, login: true, name: googleSignInResponse.user.name, email: googleSignInResponse.user.email } : user
                     )
                 });
             }
             localStorage.setItem('users', JSON.stringify(users));
             // Store the current user id in local storage separately as current user
-            localStorage.setItem('currentUserId', googleSignInResponse.user.userId);
+            localStorage.setItem('currentUserId', googleSignInResponse.user._id);
+
+            // Set the userDetail context state 
+            setUserDetail(googleSignInResponse);
 
             // Redirect the user to home pag
             navigate('/');

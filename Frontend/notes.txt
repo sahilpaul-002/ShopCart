@@ -1,3 +1,5 @@
 check envirionment with cookie
 stoken will create problem if the cookies get deleted then user will not be able to sign in using the same email
 signup login navbar adjust the padding of the logo and brand name by adding h-[100%]
+rethink the auto redirect logic in the log in page
+redesign the the menu section for mobile version (do it with icons)

@@ -37,7 +37,7 @@ const registerUser = async (req, res) => {
 
         // Load environment variables from .env file
         dotenv.config();
-        const environment = process.env.NODE_ENV
+        const environment = process.env.NODE_ENV || "development"
 
         // Generate signed cookie of the JWT token
         // Send JWT in a cookie
@@ -102,7 +102,7 @@ const loginUser = async (req, res) => {
 
         // Load environment variables from .env file
         dotenv.config();
-        const environment = process.env.NODE_ENV
+        const environment = process.env.NODE_ENV || "development"
 
         // Generate signed cookie of the JWT token
         // Send JWT in a cookie
@@ -116,14 +116,19 @@ const loginUser = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
+        // res.status(200).json({
+        //     success: true,
+        //     message: "User log in successfull",
+        //     user: {
+        //         userId: user._id,
+        //         userName: user.name,
+        //         userEmail: user.email
+        //     }
+        // })
         res.status(200).json({
             success: true,
             message: "User log in successfull",
-            user: {
-                userId: user._id,
-                userName: user.name,
-                userEmail: user.email
-            }
+            user: user
         })
     }
     catch (e) {
@@ -191,8 +196,7 @@ const googleUserSignIn = async (req, res) => {
 
             // Load environment variables from .env file
             dotenv.config();
-            const environment = process.env.NODE_ENV
-            console.log("Environment:", environment);
+            const environment = process.env.NODE_ENV || "development"
 
             // Generate signed cookie of the JWT token
             // Send JWT in a cookie
@@ -206,24 +210,55 @@ const googleUserSignIn = async (req, res) => {
                 maxAge: 7 * 24 * 60 * 60 * 1000
             });
 
+            // Generate JWT token
+            const jwtLToken = generateToken(user._id);
+
+            // Generate signed cookie of the JWT token
+            // Send JWT in a cookie
+            res.cookie('lToken', jwtLToken, {
+                signed: true,    // Signed cookie for encryption
+                httpOnly: true,  // Prevents client-side JS from accessing the cookie
+                // secure: false,   // Set to true in production with HTTPS
+                // sameSite: 'strict',
+                secure: environment === "production", // Set to true in production with HTTPS
+                sameSite: environment === "production" ? "none" : "lax",
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
+
             // Respond with success message
             res.status(200).json({
                 success: true,
                 message: "User signin successful.",
-                userId: user._id
+                user: user
             });
         }
         else {
+
+            // Generate JWT token
+            const jwtLToken = generateToken(user._id);
+
+            // Load environment variables from .env file
+            dotenv.config();
+            const environment = process.env.NODE_ENV || "development"
+
+            // Generate signed cookie of the JWT token
+            // Send JWT in a cookie
+            res.cookie('lToken', jwtLToken, {
+                signed: true,    // Signed cookie for encryption
+                httpOnly: true,  // Prevents client-side JS from accessing the cookie
+                // secure: false,   // Set to true in production with HTTPS
+                // sameSite: 'strict',
+                secure: environment === "production", // Set to true in production with HTTPS
+                sameSite: environment === "production" ? "none" : "lax",
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
+
             // User exist thus sign in the user
             // Respond with success message
             res.status(200).json({
                 success: true,
                 message: "User login successfull",
-                user: {
-                    userId: user._id,
-                    userName: user.name,
-                    userEmail: user.email
-                }
+                user: user
             });
         }
 

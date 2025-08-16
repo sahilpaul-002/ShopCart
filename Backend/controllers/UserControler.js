@@ -5,7 +5,6 @@ const getUserDetails = async (req, res) => {
     try {
         // Destructure the request body
         const userId = req.userId;
-        console.log(userId);
 
         // Check if user exist
         const user = await User.findById(userId).select("-password -__v");

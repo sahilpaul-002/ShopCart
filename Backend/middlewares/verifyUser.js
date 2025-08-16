@@ -13,9 +13,7 @@ const verifyUser = (req, res, next) => {
         }
 
         // Add the user id retrieved from the signed token to the api params
-        console.log(validateToken);
         req.userId = validateToken.userId;
-        console.log(req.userId);
 
         next();
     }
