@@ -60,16 +60,16 @@ export default function Login() {
   // ---------------------------- ***************************** ---------------------------- \\
 
   // State to store the disable signup button
-  const [signUpDisable, setSignUpDisable] = useState(true);
+  const [loginDisable, setLoginDisable] = useState(true);
 
   // ---------------------------- Logic to handle the form submission ---------------------------- \\
   // UseEffect to change the disable button state
   useEffect(() => {
     const { email, password } = userInput;
     if (email && password && email.includes("@") && password.length > 5) {
-      setSignUpDisable(false); // enable button
+      setLoginDisable(false); // enable button
     } else {
-      setSignUpDisable(true); // disable button
+      setLoginDisable(true); // disable button
     }
   }, [userInput]);
   // Function handle on submission of form
@@ -157,6 +157,11 @@ export default function Login() {
 
       // Call google sign in API
       const googleSignInResponse = await googleSignInApi(reqBody);
+      console.log(googleSignInResponse)
+      // Check api response
+      if (!googleSignInResponse.success) {
+        throw new Error("Internal server error");
+      }
 
       // Get the userId from local strage similar to user input
       let users = JSON.parse(localStorage.getItem('users')) || [];
@@ -203,14 +208,14 @@ export default function Login() {
       {/* NavBar */}
       <Navbar />
 
-      {/* Sign Up Box */}
+      {/* login Box */}
       <div className='signUp-box m-5 w-[80%] max-w-[600px] px-[5px] py-[20px] bg-[#00000025] border-[1px] border-[#96969635] rounded-[10px] backdrop-blur-xs flex flex-col justify-center items-center gap-[20px]'>
-        {/* Sign up Text */}
+        {/* login Text */}
         <div className='signup-text-box flex flex-col justify-center items-center gap-[5px]'>
           <span className='signup-text text-[48px] font-[600]'>Log In</span>
           <span className='text-[12px] font-[400]'>Log in to explore amazing deals and offers !</span>
         </div>
-        {/* Sign up Form */}
+        {/* Login Form */}
         <div className='form-box m-3 w-[80%] px-[20px] py-[20px] bg-[#00000025]  rounded-[10px]'>
           <Form onSubmit={handleOnSubmit}>
             <Form.Group className="mb-3" controlId="name">
@@ -233,7 +238,7 @@ export default function Login() {
 
             {/* Submit button */}
             <div className="primary-button mx-[auto] w-[120px]">
-              <WhitePrimaryButton disabled={signUpDisable} buttonText={"Log In"} />
+              <WhitePrimaryButton disabled={loginDisable} buttonText={"Log In"} />
             </div>
             {/* Or Separator */}
             <div className="or-separator text-[14px] w-[20px] mx-[auto] my-[10px]">OR</div>

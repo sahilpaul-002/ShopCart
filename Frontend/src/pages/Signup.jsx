@@ -143,6 +143,11 @@ export default function Signup() {
             // Call google sign in API
             const googleSignInResponse = await googleSignInApi(reqBody);
 
+            // Check api response
+            if (!googleSignInResponse.success) {
+                throw new Error("Internal server error");
+            }
+
             // Get existing data from localStorage or create an empty array
             let users = JSON.parse(localStorage.getItem('users')) || [];
             // Check users detail is present in local storage

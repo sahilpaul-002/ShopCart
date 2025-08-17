@@ -144,14 +144,14 @@ const loginAdminUser = async (req, res) => {
         }
 
         // Destructuring the request body
-        const { email, password } = req.body
+        const { name, email, password } = req.body
 
         // Load environment variables from .env file
         dotenv.config();
         const adminUsers = JSON.parse(process.env.ADMIN_USERS)
 
         // Check if user is authorized
-        const user = adminUsers.find(u => u.email === email && u.password === password);
+        const user = adminUsers.find(u => u.name === name && u.email === email && u.password === password);
         if (!user) {
             throw new Error('User not authorized to login');
         }
@@ -176,7 +176,10 @@ const loginAdminUser = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "Admin user log in successfull",
-            user: user
+            user: {
+                name: user.name,
+                email: user.email
+            }
         })
     }
     catch (e) {
@@ -192,4 +195,24 @@ const loginAdminUser = async (req, res) => {
 }
 // ----------------------------------- ***************** ----------------------------------- \\
 
-export {loginAdminUser};
+// ------------------------------------ Admin user Log out ------------------------------------ \\
+//http://localhost:5000/api/admin/logout
+const logoutAdminUser = async (req, res) => {
+    try {
+        res.clearCookie("adminLToken", {
+            signed: true,    // Signed cookie for encryption
+            httpOnly: true,  // Prevents client-side JS from accessing the cookie
+            secure: false,   // Set to true in production with HTTPS
+            sameSite: 'strict',
+            path: "/"
+        });
+        res.status(200).json({ success: true, message: "Logout successful" })
+    }
+    catch (e) {
+        // Catch other error
+        res.status(500).json({ success: false, message: e.message });
+    }
+}
+// ------------------------------------ ************ ------------------------------------ \\
+
+export {loginAdminUser, logoutAdminUser};

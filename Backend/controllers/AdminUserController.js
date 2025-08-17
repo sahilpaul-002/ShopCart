@@ -20,7 +20,10 @@ const getAdminUserDetails = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "User login authorized !",
-            user: user
+            user: {
+                name: user.name,
+                email: user.email
+            }
         });
     }
     catch (e) {

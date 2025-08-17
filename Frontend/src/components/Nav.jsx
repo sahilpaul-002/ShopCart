@@ -34,27 +34,35 @@ export default function Nav() {
 
     // ------------------------------------- Logic to handle log out click ------------------------------------- \\
     const handleLogOut = async () => {
-        //  Update the state of the userDetail
-        setUserDetail({ success: false, message: "", user: null })
+        try {
+            //  Update the state of the userDetail
+            setUserDetail({ success: false, message: "", user: null })
 
-        // Logged the user from local storage
-        // Get the userId from local strage similar to user input
-        let users = JSON.parse(localStorage.getItem('users'));
-        // Check if the user is present
-        if (users) {
-            //  Udpadet the user login status
-            users = users.map((user) => {
-                return (
-                    (user.id === userDetail.user._id) ? { ...user, login: false } : user
-                )
-            });
+            // Logged the user from local storage
+            // Get the userId from local strage similar to user input
+            let users = JSON.parse(localStorage.getItem('users'));
+            // Check if the user is present
+            if (users) {
+                //  Udpadet the user login status
+                users = users.map((user) => {
+                    return (
+                        (user.id === userDetail.user._id) ? { ...user, login: false } : user
+                    )
+                });
+            }
+
+            // Save back to localStorage
+            localStorage.setItem("users", JSON.stringify(users));
+
+            // Call log out api
+            const logOutResponse = await userLogOutApi();
+
+            // Succes message
+            console.log(logOutResponse);
         }
-
-        // Save back to localStorage
-        localStorage.setItem("users", JSON.stringify(users));
-
-        // Call log out api
-        const logOutResponse = await userLogOutApi();
+        catch (e) {
+            console.error({ success: false, message: e.message });
+        }
     }
     // ------------------------------------- **************************** ------------------------------------- \\
 

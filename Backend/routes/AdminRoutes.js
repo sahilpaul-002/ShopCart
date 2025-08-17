@@ -1,8 +1,8 @@
 import express from 'express'
-import { loginValidations } from '../validations/UserValidations.js'
-import { loginAdminUser } from '../controllers/AdminAuthController.js'
+import { loginAdminUser, logoutAdminUser } from '../controllers/AdminAuthController.js'
 import { getAdminUserDetails } from '../controllers/AdminUserController.js';
 import verifyAdminUser from '../middlewares/verifyAdminUser.js';
+import {adminLoginValidations} from "../validations/UserValidations.js"
 
 const router = express.Router();
 
@@ -11,7 +11,11 @@ const router = express.Router();
 // ------------------------------------ ************ ------------------------------------ \\
 
 // ------------------------------------ Admin user Log in ------------------------------------ \\
-router.post('/login',loginValidations,loginAdminUser)
+router.post('/login',adminLoginValidations,loginAdminUser)
+// ------------------------------------ ************ ------------------------------------ \\
+
+// ------------------------------------ Admin user Log in ------------------------------------ \\
+router.get('/logout',verifyAdminUser,logoutAdminUser)
 // ------------------------------------ ************ ------------------------------------ \\
 
 // ------------------------------------ Admin user details ------------------------------------ \\

@@ -63,4 +63,11 @@ const loginValidations = [
     userPasswordValidation()
 ]
 
-export { registerValidation, loginValidations };
+// Admin login validation
+const adminLoginValidations = [
+  userNameValidation(),
+  userEmailValidation(),
+  userPasswordValidation()
+]
+
+export { registerValidation, loginValidations, adminLoginValidations };
