@@ -5,10 +5,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 const jwtSecretKey = process.env.JWT_SECRET_KEY;
 
-const generateToken = (userId) => {
+const generateToken = (userData) => {
     try {
         // Generate a JWT token with user ID and secret key
-        const jwtToken = JWT.sign({id: userId}, jwtSecretKey, {expiresIn: '7d'});
+        const jwtToken = JWT.sign({input: userData}, jwtSecretKey, {expiresIn: '7d'});
         return jwtToken;
     } catch (error) {
         // console.error("Error generating JWT token:", error);

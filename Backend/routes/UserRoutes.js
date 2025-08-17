@@ -4,7 +4,7 @@ import {getUserDetails} from '../controllers/UserControler.js'
 
 const router = express.Router();
 
-// ------------------------------------ User Sign up ------------------------------------ \\
+// ------------------------------------ User login verfication ------------------------------------ \\
 router.get('/getuser', verifyUser, getUserDetails)
 // ------------------------------------ ************ ------------------------------------ \\
 

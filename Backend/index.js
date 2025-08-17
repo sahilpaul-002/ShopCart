@@ -5,6 +5,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser';
 import { router as authRouter } from './routes/UserAuth.js';
 import {router as userRouter} from './routes/UserRoutes.js';
+import {router as adminRouter} from './routes/AdminRoutes.js';
 
 const app = express()
 
@@ -19,7 +20,7 @@ connectDB();
 
 // Enable cors
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'http://localhost:5174'],
   credentials: true
 }))
 
@@ -37,6 +38,7 @@ app.get('/', (req, res) => {
 // Individual routes
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
+app.use('/api/admin', adminRouter);
 
 // Route to check coockie deleted
 app.get("/check-cookie", (req, res) => {
