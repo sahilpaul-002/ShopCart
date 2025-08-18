@@ -18,6 +18,7 @@ export default function () {
     // Destructure admin user context
     const { userDetail, setUserDetail } = useContext(AdminUserContext);
     const {navbarCollapse, setNavbarcollapse} = useContext(AppNavContext);
+    console.log(navbarCollapse)
 
     // ------------------------------ Logic to handle logout ------------------------------ \\
     const handleLogout = async () => {
@@ -55,9 +56,9 @@ export default function () {
                             style={{ maxHeight: '100px' }}
                             navbarScroll
                         >
-                            <Nav.Link className={`AppNav-links ${navbarCollapse ? "hidden" : "block"}`} href="/addproduct">Add Products</Nav.Link>
-                            <Nav.Link className={`AppNav-links ${navbarCollapse ? "hidden" : "block"}`} href="/itemlist">List Items</Nav.Link>
-                            <Nav.Link className={`AppNav-links ${navbarCollapse ? "hidden" : "block"}`} href="/orders">Orders</Nav.Link>
+                            <Nav.Link className={`AppNav-links ${navbarCollapse ? "!hidden" : "!block"}`} href="/addproduct">Add Products</Nav.Link>
+                            <Nav.Link className={`AppNav-links ${navbarCollapse ? "!hidden" : "!block"}`} href="/itemlist">List Items</Nav.Link>
+                            <Nav.Link className={`AppNav-links ${navbarCollapse ? "!hidden" : "!block"}`} href="/orders">Orders</Nav.Link>
                         </Nav>
                         <Form className="d-flex">
                             <Form.Control

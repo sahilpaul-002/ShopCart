@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import { router as authRouter } from './routes/UserAuth.js';
 import {router as userRouter} from './routes/UserRoutes.js';
 import {router as adminRouter} from './routes/AdminRoutes.js';
+import {router as productRouter} from './routes/ProductRoutes.js';
 
 const app = express()
 
@@ -39,6 +40,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/admin/product', productRouter);
 
 // Route to check coockie deleted
 app.get("/check-cookie", (req, res) => {

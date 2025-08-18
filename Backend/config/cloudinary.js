@@ -15,9 +15,9 @@ const uploadOnCloudinary = async (filePath) => {
     try {
         // Configuration
         cloudinary.config({
-            cloud_name: 'dvxvmzbln',
-            api_key: '279867376778432',
-            api_secret: '<your_api_secret>' // Click 'View API Keys' above to copy your API secret
+            cloud_name: cloudinaryName,
+            api_key: cloudinaryApiKey,
+            api_secret: cloudinaryApiSecret 
         });
 
         if (!filePath) {
@@ -28,6 +28,7 @@ const uploadOnCloudinary = async (filePath) => {
         const uploadResult = await cloudinary.uploader
             .upload(
                 filePath, {
+                folder: "products",      // optional: organize in folder
                 public_id: 'shoes',
             }
             )
@@ -39,13 +40,12 @@ const uploadOnCloudinary = async (filePath) => {
         fs.unlinkSync(filePath);
 
         console.log(uploadResult);
-
         return uploadResult.secure_url
     }
     catch (e) {
         // Delete the file fromo the system after upload
         fs.unlinkSync(filePath);
-
+        
         console.error({ success: false, message: e.message });
         return ({ success: false, message: e.message })
     }

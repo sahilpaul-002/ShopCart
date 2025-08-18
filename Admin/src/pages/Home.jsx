@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { useContext } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router';
 import AdminUserContext from '../context/AdminUserContext';
 import { getAdminUserDetail } from '../apiCalls/AdminUserDetails';
@@ -33,7 +32,7 @@ export default function Home() {
   return (
     <div className="home-container w-[100vw] h-[100vh] bg-gradient-to-l from-[#141414] to-[#0c2025] pt-[70px] md:px-[80px] px-[20px]">
       {/* Transparent div to manage the navbar collapsing action */}
-      {!navbarCollapse && <div className="transparent-navbar w-[100%] h-[250px] bg-amber-300"></div>}
+      {!navbarCollapse && <div className="transparent-navbar w-[100%] h-[250px]"></div>}
 
       {/* Sidebar */}
       <Sidebar />

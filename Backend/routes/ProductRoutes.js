@@ -1,10 +1,15 @@
 import express from 'express'
-import { addProduct } from '../controllers/ProductController';
+import { addProduct } from '../controllers/ProductController.js';
+import upload from '../middlewares/multer.js';
 
 const router = express.Router();
 
 // ------------------------------------ Add product ------------------------------------ \\
-router.post("/addProduct", upload.fields([{name: "image1", maxCount: 1}, {name: "image2", maxCount: 1}, {name: "image3", maxCount: 1}, {name: "image4", maxCount: 1}]), addProduct);
+router.post("/addProduct", upload.fields([{name: "image1", maxCount: 1},
+                {name: "image2", maxCount: 1},
+                {name: "image3", maxCount: 1},
+                {name: "image4", maxCount: 1}
+            ]), addProduct);
 // ------------------------------------ ************ ------------------------------------ \\
 
 // ------------------------------------ Update product ------------------------------------ \\

@@ -25,7 +25,7 @@ export default function Sidebar() {
     return (
         <>
             {sidebarCollapse ? (
-                <div className='side-bar w-[60px] min-h-[calc(100vh-80px)] border-r-[1px] rounded-r-[20px] py-[20px] text-white fixed bottom-0 left-0 transition-all duration-[0.5s] ease-in-out' onMouseOver={handleSidebarHover} onMouseOut={handleSidebarHover}>
+                <div className='side-bar w-[60px] min-h-[calc(100vh-80px)] border-r-[1px] rounded-r-[20px] py-[20px] my-[5px] text-white fixed bottom-0 left-0 transition-all duration-[0.5s] ease-in-out' onMouseOver={handleSidebarHover} onMouseOut={handleSidebarHover}>
                     <div className="sidebar-items flex flex-col gap-4 py-[40px] ">
                         <Link className="sidebar-item-link !no-underline !text-white" to="/addproduct">
                             <div className='flex justify-center items-center md:justify-start gap-3 border-r-0 px-3 py-2 cursor-pointer hover:bg-[#2c7b89]'>
@@ -45,7 +45,7 @@ export default function Sidebar() {
                     </div>
                 </div>
             ) : (
-                <div className='side-bar w-[18%] min-h-[calc(100vh-80px)] border-r-[1px] rounded-r-[20px] py-[20px] text-white fixed bottom-0 left-0 transition-all duration-[0.5s] ease-in-out' onMouseOver={handleSidebarHover} onMouseOut={handleSidebarHover}>
+                <div className='side-bar w-[18%] min-h-[calc(100vh-80px)] border-r-[1px] rounded-r-[20px] py-[20px] my-[5px] text-white fixed bottom-0 left-0 transition-all duration-[0.5s] ease-in-out' onMouseOver={handleSidebarHover} onMouseOut={handleSidebarHover}>
                     <div className="sidebar-items flex flex-col gap-4 py-[40px] md:pl-[20%] ">
                         <Link className="sidebar-item-link !no-underline !text-white" to="/addproduct">
                             <div className='flex justify-center items-center md:justify-start gap-3 md:border md:border-gray-300 border-r-0 px-3 py-2 cursor-pointer hover:bg-[#2c7b89]'>
