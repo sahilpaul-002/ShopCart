@@ -24,7 +24,7 @@ const router = createBrowserRouter([
                 Component: Orders
             },
             {
-                path: "list",
+                path: "itemlist",
                 Component: List
             },
             {

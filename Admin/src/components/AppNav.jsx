@@ -41,11 +41,11 @@ export default function () {
             <Navbar expand="lg" className={`bg-body-tertiary w-[100vw] ${navbarCollapse ? "h-[80px] ease-in duration-[0.2s]" : "h-[300px]  ease-in duration-[0.2s]"} z-10 !px-[30px] shadow-xl shadow-black`} fixed='top'>
                 <Container fluid>
                     {/* Brand Logo */}
-                    <Link className='!no-underline me-5' to='/'>
+                    <Link className='!no-underline md:me-5' to='/'>
                         <div className="brand-logo w-[100%] max-w-[380px] h-[100%] flex justify-start items-center gap-[20px] py-[auto]">
                             <img className="h-[8vh] rounded-[20px] object-cover" src={Logo} alt="Brnad logo" />
                             {/* <span className="brand-name text-[24px] font-[600] text-[white]">ShopCart</span> */}
-                            <Navbar.Brand>ShopCart</Navbar.Brand>
+                            <Navbar.Brand className='!text-[18px] md:!text-[24px]'>ShopCart Admin</Navbar.Brand>
                         </div>
                     </Link>
                     <Navbar.Toggle aria-controls="navbarScroll" onClick={() => { setNavbarcollapse(prev => !prev) }} />
@@ -55,21 +55,9 @@ export default function () {
                             style={{ maxHeight: '100px' }}
                             navbarScroll
                         >
-                            <Nav.Link href="#action1">Home</Nav.Link>
-                            <Nav.Link href="#action2">Link</Nav.Link>
-                            <NavDropdown title="Link" id="navbarScrollingDropdown">
-                                <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-                                <NavDropdown.Item href="#action4">
-                                    Another action
-                                </NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action5">
-                                    Something else here
-                                </NavDropdown.Item>
-                            </NavDropdown>
-                            <Nav.Link href="#" disabled>
-                                Link
-                            </Nav.Link>
+                            <Nav.Link className={`AppNav-links ${navbarCollapse ? "hidden" : "block"}`} href="/addproduct">Add Products</Nav.Link>
+                            <Nav.Link className={`AppNav-links ${navbarCollapse ? "hidden" : "block"}`} href="/itemlist">List Items</Nav.Link>
+                            <Nav.Link className={`AppNav-links ${navbarCollapse ? "hidden" : "block"}`} href="/orders">Orders</Nav.Link>
                         </Nav>
                         <Form className="d-flex">
                             <Form.Control
