@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import './App.css'
 import AdminUserDetailState from "./contextComponents/AdminUserDetailState";
 import AppNav from './components/AppNav';
+import AppNavState from './contextComponents/AppNavState';
 
 function App() {
   const location = useLocation();
@@ -15,8 +16,10 @@ App
   return (
     <>
       <AdminUserDetailState>
-        {!hideNav && <AppNav />}
-        <Outlet />
+        <AppNavState>
+          {!hideNav && <AppNav />}
+          <Outlet />
+        </AppNavState>
       </AdminUserDetailState>
     </>
   )

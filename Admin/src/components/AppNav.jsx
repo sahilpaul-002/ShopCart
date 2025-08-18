@@ -10,15 +10,14 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { adminUserLogoutApi } from '../apiCalls/AdminUserAuth';
 import AdminUserContext from '../context/AdminUserContext'
 import { useState } from 'react';
+import AppNavContext from '../context/AppNavContext';
 
 export default function () {
     const navigate = useNavigate();
 
     // Destructure admin user context
     const { userDetail, setUserDetail } = useContext(AdminUserContext);
-
-    // State to store the navbar collapse state
-    const [navbarCollapse, setNavbarcollapse] = useState(true);
+    const {navbarCollapse, setNavbarcollapse} = useContext(AppNavContext);
 
     // ------------------------------ Logic to handle logout ------------------------------ \\
     const handleLogout = async () => {
@@ -39,7 +38,7 @@ export default function () {
 
     return (
         <>
-            <Navbar expand="lg" className={`bg-body-tertiary w-[100vw] z-10 !px-[30px] shadow-xl shadow-black`} fixed='top'>
+            <Navbar expand="lg" className={`bg-body-tertiary w-[100vw] ${navbarCollapse ? "h-[80px] ease-in duration-[0.2s]" : "h-[300px]  ease-in duration-[0.2s]"} z-10 !px-[30px] shadow-xl shadow-black`} fixed='top'>
                 <Container fluid>
                     {/* Brand Logo */}
                     <Link className='!no-underline me-5' to='/'>
