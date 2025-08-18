@@ -7,10 +7,6 @@ import {adminLoginValidations} from "../validations/UserValidations.js"
 const router = express.Router();
 
 // ------------------------------------ Admin user Log in ------------------------------------ \\
-// router.post('/signup',loginValidations,registerAdminUser)
-// ------------------------------------ ************ ------------------------------------ \\
-
-// ------------------------------------ Admin user Log in ------------------------------------ \\
 router.post('/login',adminLoginValidations,loginAdminUser)
 // ------------------------------------ ************ ------------------------------------ \\
 
