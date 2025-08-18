@@ -12,7 +12,7 @@ const app = express()
 // Load environment variables from .env file
 dotenv.config();
 const port = process.env.PORT || 5000
-const cookieSecretKey = process.env.COOKEI_SECRET_KEY
+const cookieSecretKey = process.env.COOKIE_SECRET_KEY
 // const cookieSecretKey = undefined
 
 // Connect to MongoDB
