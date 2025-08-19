@@ -27,7 +27,10 @@ export default function () {
 
             // Call logout api
             const logoutResponse = await adminUserLogoutApi()
+
+            // Success message
             console.log(logoutResponse);
+            
             navigate('/admin/login');
         }
         catch (e) {

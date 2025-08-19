@@ -4,6 +4,7 @@ const verifyUser = (req, res, next) => {
     try {
         // Get the login token from the request cookie
         const adminLToken = req.signedCookies.adminLToken
+
         if (!adminLToken) {
             throw new Error("Token credentials invalid");
         }

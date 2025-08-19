@@ -64,7 +64,6 @@ const registerUser = async (req, res) => {
             // Catch other errors
             res.status(500).json({ success: false, message: e.message });
         }
-
     }
 }
 // ------------------------------------ ************ ------------------------------------ \\
@@ -109,22 +108,11 @@ const loginUser = async (req, res) => {
         res.cookie('lToken', jwtLToken, {
             signed: true,    // Signed cookie for encryption
             httpOnly: true,  // Prevents client-side JS from accessing the cookie
-            // secure: false,   // Set to true in production with HTTPS
-            // sameSite: 'strict',
             secure: environment === "production", // Set to true in production with HTTPS
             sameSite: environment === "production" ? "none" : "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
-        // res.status(200).json({
-        //     success: true,
-        //     message: "User log in successfull",
-        //     user: {
-        //         userId: user._id,
-        //         userName: user.name,
-        //         userEmail: user.email
-        //     }
-        // })
         res.status(200).json({
             success: true,
             message: "User log in successfull",

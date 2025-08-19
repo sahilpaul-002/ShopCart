@@ -34,9 +34,9 @@ const Product = new Schema({
         type: String,
         required: true,
     },
-    sies: {
+    sizes: {
         type: Array,
-        required: true,
+        default: []
     },
     date: {
         type: Number,

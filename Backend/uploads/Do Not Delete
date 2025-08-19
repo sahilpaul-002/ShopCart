@@ -1,0 +1,1 @@
+Temp folder to store the uploaded images through multer before uploading them to cloud and then deleting the files from this folder
