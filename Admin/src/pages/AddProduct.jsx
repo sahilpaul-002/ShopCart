@@ -113,10 +113,6 @@ export default function AddProduct() {
   }
   // -------------------------- ********************************** -------------------------- \\ 
 
-  useEffect(() => {
-    console.log(productDetails);
-  }, [productDetails]);
-
   return (
     <div className={`home-container w-[100vw] ${navbarCollapse ? "h-[100%]" : ""} bg-gradient-to-l from-[#141414] to-[#0c2025] pt-[70px] md:px-[80px] px-[20px]`}>
       {/* Transparent div to manage the navbar collapsing action */}

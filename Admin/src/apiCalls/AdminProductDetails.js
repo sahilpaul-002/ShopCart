@@ -23,9 +23,10 @@ const addProductDetails = async (productDetails) => {
         if (productDetails.image3) formData.append("image3", productDetails.image3);
         if (productDetails.image4) formData.append("image4", productDetails.image4);
 
-        for (let pair of formData.entries()) {
-            console.log(pair[0], pair[1]);
-        }
+        // Test the formData
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0], pair[1]);
+        // }
 
         // Call sign up api
         const response = await axios.post(`${API_BASE}/api/admin/product/add`,
