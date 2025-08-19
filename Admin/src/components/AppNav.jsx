@@ -18,7 +18,6 @@ export default function () {
     // Destructure admin user context
     const { userDetail, setUserDetail } = useContext(AdminUserContext);
     const {navbarCollapse, setNavbarcollapse} = useContext(AppNavContext);
-    console.log(navbarCollapse)
 
     // ------------------------------ Logic to handle logout ------------------------------ \\
     const handleLogout = async () => {
