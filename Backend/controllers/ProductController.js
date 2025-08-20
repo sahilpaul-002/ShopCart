@@ -7,21 +7,46 @@ const addProduct = async (req, res) => {
     try {
         // Check for validation errors
         const validationErrors = validationResult(req);
+        const imageValidationErrors = req.validationErrors
+
         if (!validationErrors.isEmpty()) {
-            validationErrors.throw();
+            const mergedErrors = {
+                success: false,
+                message: "Validation failed",
+                errors: [
+                    ...(validationErrors.errors || []),   // from express-validator
+                    ...(req.validationErrors?.errors || []) // from your custom validation
+                ]
+            };
+            throw {
+                array: () => mergedErrors.errors
+            };
+        }
+        else if (imageValidationErrors && imageValidationErrors?.errors?.length > 0) {
+            throw {
+                array: () => imageValidationErrors.errors
+            };
         }
 
         // Destructure the request body parameters
         const { name, description, price, category, subCategory, sizes, bestSeller } = req.body
 
-        console.log("Req body", req.body);
-        console.log("Req files", req.files);
-
         // Store images to cloud using cloudinary api
-        const image1 = await uploadOnCloudinary(req.files.image1[0].path, req.body.category, req.body.subCategory)
-        const image2 = await uploadOnCloudinary(req.files.image2[0].path, req.body.category, req.body.subCategory)
-        const image3 = await uploadOnCloudinary(req.files.image3[0].path, req.body.category, req.body.subCategory)
-        const image4 = await uploadOnCloudinary(req.files.image4[0].path, req.body.category, req.body.subCategory)
+        const image1 = req.files?.image1?.[0]
+            ? (await uploadOnCloudinary(req.files.image1[0].path, req.body.category, req.body.subCategory))?.secure_url
+            : null;
+
+        const image2 = req.files?.image2?.[0]
+            ? (await uploadOnCloudinary(req.files.image2[0].path, req.body.category, req.body.subCategory))?.secure_url
+            : null;
+
+        const image3 = req.files?.image3?.[0]
+            ? (await uploadOnCloudinary(req.files.image3[0].path, req.body.category, req.body.subCategory))?.secure_url
+            : null;
+
+        const image4 = req.files?.image4?.[0]
+            ? (await uploadOnCloudinary(req.files.image4[0].path, req.body.category, req.body.subCategory))?.secure_url
+            : null;
 
         // Testing
         // const image1 = req.files?.image1 ? req.files.image1[0].filename : null;
@@ -38,7 +63,6 @@ const addProduct = async (req, res) => {
             subCategory: subCategory,
             sizes: JSON.parse(sizes),
             bestSeller: bestSeller,
-            date: Date.now(),
             image1: image1,     // Store the secure_url from the cloudinary response
             image2: image2,     // Store the secure_url from the cloudinary response
             image3: image3,     // Store the secure_url from the cloudinary response
@@ -52,7 +76,7 @@ const addProduct = async (req, res) => {
     }
     catch (e) {
         // Catch validation errors
-        if (e.array) {
+        if (e.array && e.array().length > 0) {
             res.status(400).json({ success: false, message: e.array() });
         }
         else {
@@ -70,7 +94,7 @@ const addProduct = async (req, res) => {
 // --------------------------- Deletes Product ---------------------------  \\
 const deleteProduct = async (req, res) => {
     try {
-        const {productId} = req.params;
+        const { productId } = req.params;
 
         // Check params fetch
         if (!productId) {
@@ -86,7 +110,7 @@ const deleteProduct = async (req, res) => {
         }
 
         res.status(200).json({
-            success: true, 
+            success: true,
             message: "Product deleted",
             product: deletedProduct
         })

@@ -8,26 +8,26 @@ const Product = new Schema({
     },
     image1: {
         type: String,
-        required: true,
+        default: null
     },
     image2: {
         type: String,
-        required: true,
+        default: null
     },
     image3: {
         type: String,
-        required: true,
+        default: null
     },
     image4: {
         type: String,
-        required: true,
+        default: null
     },
     description: {
         type: String,
         required: true,
     },
     price: {
-        type: String,
+        type: Number,
         required: true,
     },
     category: {
@@ -41,10 +41,6 @@ const Product = new Schema({
     sizes: {
         type: Array,
         default: []
-    },
-    date: {
-        type: Number,
-        required: true,
     },
     bestSeller: {
         type: Boolean,

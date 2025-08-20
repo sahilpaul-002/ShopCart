@@ -8,12 +8,6 @@ const uploadOnCloudinary = async (filePath, category, subCategory) => {
     const cloudinaryName = process.env.COULDINARY_NAME
     const cloudinaryApiKey = process.env.COULDINARY_API_KEY
     const cloudinaryApiSecret = process.env.COULDINARY_API_SECRET
-    console.log(cloudinaryName)
-    console.log(cloudinaryApiKey)
-    console.log(cloudinaryApiSecret)
-    console.log(filePath)
-    console.log(category)
-    console.log(subCategory)
 
     try {
         // Configuration
@@ -50,7 +44,6 @@ const uploadOnCloudinary = async (filePath, category, subCategory) => {
             fs.unlinkSync(filePath);
         }
         
-        console.error({ success: false, message: e.message });
         return ({ success: false, message: e.message })
     }
 }
