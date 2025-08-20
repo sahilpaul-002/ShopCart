@@ -1,5 +1,5 @@
 import express from 'express'
-import { addProduct } from '../controllers/ProductController.js';
+import { addProduct, deleteProduct, getAllProducts } from '../controllers/ProductController.js';
 import upload from '../middlewares/multer.js';
 import verifyAdminUser from '../middlewares/verifyAdminUser.js';
 import { addProductValidations,  productImagesValidations } from '../validations/ProductValidations.js';
@@ -19,7 +19,11 @@ router.post("/add", verifyAdminUser, upload.fields([{name: "image1", maxCount: 1
 // ------------------------------------ ************ ------------------------------------ \\
 
 // ------------------------------------ Delete product ------------------------------------ \\
+router.post("/delete/:productId", verifyAdminUser, deleteProduct)
+// ------------------------------------ ************ ------------------------------------ \\
 
+// ------------------------------------ Get All Products ------------------------------------ \\
+router.get("/allproducts", verifyAdminUser, getAllProducts);
 // ------------------------------------ ************ ------------------------------------ \\
 
 // ------------------------------------ Get product details ------------------------------------ \\

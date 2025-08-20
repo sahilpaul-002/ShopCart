@@ -30,6 +30,10 @@ const Product = new Schema({
         type: String,
         required: true,
     },
+    category: {
+        type: String,
+        required: true,
+    },
     subCategory: {
         type: String,
         required: true,

@@ -2,7 +2,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
 import fs from "fs";
 
-const uploadOnCloudinary = async (filePath) => {
+const uploadOnCloudinary = async (filePath, category, subCategory) => {
     // Load environment variables from .env file
     dotenv.config();
     const cloudinaryName = process.env.COULDINARY_NAME
@@ -11,6 +11,9 @@ const uploadOnCloudinary = async (filePath) => {
     console.log(cloudinaryName)
     console.log(cloudinaryApiKey)
     console.log(cloudinaryApiSecret)
+    console.log(filePath)
+    console.log(category)
+    console.log(subCategory)
 
     try {
         // Configuration
@@ -24,27 +27,28 @@ const uploadOnCloudinary = async (filePath) => {
             throw new Error('File not found');
         }
 
-        // Upload an image
+        // // Upload an image
         const uploadResult = await cloudinary.uploader
             .upload(
                 filePath, {
-                folder: "products",      // optional: organize in folder
-                public_id: 'shoes',
+                folder: `products/${category}/${subCategory}`,      // optional: organize in folder
+                overwrite: true
             }
             )
-            .catch((error) => {
-                console.log(error);
-            });
 
-        // Delete the file fromo the system after upload
-        fs.unlinkSync(filePath);
+        // Delete the file from the system after upload
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
 
-        console.log(uploadResult);
+        console.log(uploadResult.secure_url);
         return uploadResult.secure_url
     }
     catch (e) {
-        // Delete the file fromo the system after upload
-        fs.unlinkSync(filePath);
+        // Delete the file from the system
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
         
         console.error({ success: false, message: e.message });
         return ({ success: false, message: e.message })
