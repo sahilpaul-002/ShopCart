@@ -1,15 +1,53 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
+import { MdOutlineDelete } from "react-icons/md";
+import { FaRegEdit } from "react-icons/fa";
+import { deleteProductDetails } from '../apiCalls/AdminProductDetails.js'
 
 export default function WomensCategory(props) {
     // Destructure props
     const { womenProducts } = props;
     console.log(womenProducts)
+
+    // Local state to manage products
+    const [products, setProducts] = useState(womenProducts);
+
+    // ----------------------------- Logic update the local state of products list  ----------------------------- \\
+    useEffect(() => {
+        setProducts(womenProducts);
+    }, [womenProducts]);
+    // ----------------------------- *********************** ----------------------------- \\
+
+    // ----------------------------- Logic to handle delete product logic ----------------------------- \\
+    const handleProductDelete = async (product) => {
+        try {
+            const productId = product._id;
+
+            // Call delet API to delete from database
+            const deletedProduct = await deleteProductDetails(product);
+
+            // Check api response
+            if (!deletedProduct.success) {
+                throw deletedProduct
+            }
+
+            // Remove the item from the local state to update the UI
+            setProducts(products.filter(product => product._id !== productId));
+
+            console.log({ success: true, message: deletedProduct.message, deletedProduct: deletedProduct.product })
+
+        }
+        catch (e) {
+            console.error({ success: false, message: e.message });
+        }
+    }
+    // ----------------------------- *************************** ----------------------------- \\
+
     return (
         <>
-            {womenProducts && womenProducts.length > 0 ? (
-                womenProducts.map((product, idx) => {
+            {products && products.length > 0 ? (
+                products.map((product, idx) => {
                     return (
                         <Card key={idx} className="!w-[300px] mb-2">
                             <Card.Img
@@ -28,7 +66,7 @@ export default function WomensCategory(props) {
                             </Card.Body>
 
                             <ListGroup className="list-group-flush">
-                                <ListGroup.Item>{product.price}</ListGroup.Item>
+                                <ListGroup.Item>₹ {product.price}</ListGroup.Item>
                                 <ListGroup.Item>{product.subCategory}</ListGroup.Item>
                                 <ListGroup.Item className="!flex !justify-start !items-center !gap-[4%]">
                                     {product.sizes.map((size, id) => {
@@ -44,8 +82,14 @@ export default function WomensCategory(props) {
                                 </ListGroup.Item>
                             </ListGroup>
 
-                            <Card.Body>
+                            <Card.Body className='!flex !justify-start !items-center !gap-[20px]'>
                                 {/* Buttons or links can go here */}
+                                <div className="delete-button w-[25px] h-[25px] !px-[4px] !py-[2px] bg-gray-300 rounded-[6px] flex justify-center items-center hover:bg-red-400 cursor-pointer">
+                                    <MdOutlineDelete onClick={() => { handleProductDelete(product) }} />
+                                </div>
+                                <div className="edit-button w-[25px] h-[25px] !px-[4px] !py-[2px] bg-gray-300 rounded-[6px] flex justify-center items-center hover:bg-green-300 cursor-pointer">
+                                    <FaRegEdit />
+                                </div>
                             </Card.Body>
                         </Card>
                     );

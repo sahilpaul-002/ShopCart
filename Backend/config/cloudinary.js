@@ -14,19 +14,23 @@ const uploadOnCloudinary = async (filePath, category, subCategory) => {
         cloudinary.config({
             cloud_name: cloudinaryName,
             api_key: cloudinaryApiKey,
-            api_secret: cloudinaryApiSecret 
+            api_secret: cloudinaryApiSecret
         });
 
-        if (!filePath) {
-            throw new Error('File not found');
+        // Check file exist in the re files and in the local system
+        if (!filePath || !fs.existsSync(filePath)) {
+            return { success: false, secure_url: null, message: "File not found" };
         }
 
-        // // Upload an image
-        const uploadResult = await cloudinary.uploader
+        let uploadResult = null
+        // Check if the file exist in the system
+        // Upload an image
+        uploadResult = await cloudinary.uploader
             .upload(
                 filePath, {
-                folder: `products/${category}/${subCategory}`,      // optional: organize in folder
-                overwrite: true
+                folder: `products/${category}/${subCategory}`,
+                overwrite: true,
+                timeout: 60000
             }
             )
 
@@ -35,16 +39,15 @@ const uploadOnCloudinary = async (filePath, category, subCategory) => {
             fs.unlinkSync(filePath);
         }
 
-        console.log(uploadResult.secure_url);
-        return uploadResult.secure_url
+        return { success: true, secure_url: uploadResult.secure_url };
     }
     catch (e) {
         // Delete the file from the system
-        if (fs.existsSync(filePath)) {
+        if (filePath && fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
         }
-        
-        return ({ success: false, message: e.message })
+
+        return { success: false, secure_url: null, message: e.message };
     }
 }
 

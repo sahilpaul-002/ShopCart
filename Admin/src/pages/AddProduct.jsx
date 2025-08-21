@@ -75,7 +75,8 @@ export default function AddProduct() {
       if (!addProductResponse.success) {
         throw addProductResponse
       }
-      console.log(addProductResponse);
+
+      console.log({ success: true, message: addProductResponse.message, product: addProductResponse.product })
     }
     catch (e) {
       if (Array.isArray(e.message)) {

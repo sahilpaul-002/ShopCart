@@ -1,6 +1,7 @@
 import { validationResult } from 'express-validator';
 import uploadOnCloudinary from "../config/cloudinary.js"
 import Product from '../models/Product.js';
+import deleteFromCloudinary from '../config/cloudinary.delete.js';
 
 // --------------------------- Add Product ---------------------------  \\
 const addProduct = async (req, res) => {
@@ -33,20 +34,13 @@ const addProduct = async (req, res) => {
 
         // Store images to cloud using cloudinary api
         const image1 = req.files?.image1?.[0]
-            ? (await uploadOnCloudinary(req.files.image1[0].path, req.body.category, req.body.subCategory))?.secure_url
-            : null;
-
+            ? (await uploadOnCloudinary(req.files.image1[0].path, req.body.category, req.body.subCategory))?.secure_url : null;
         const image2 = req.files?.image2?.[0]
-            ? (await uploadOnCloudinary(req.files.image2[0].path, req.body.category, req.body.subCategory))?.secure_url
-            : null;
-
+            ? (await uploadOnCloudinary(req.files.image2[0].path, req.body.category, req.body.subCategory))?.secure_url : null;
         const image3 = req.files?.image3?.[0]
-            ? (await uploadOnCloudinary(req.files.image3[0].path, req.body.category, req.body.subCategory))?.secure_url
-            : null;
-
+            ? (await uploadOnCloudinary(req.files.image3[0].path, req.body.category, req.body.subCategory))?.secure_url : null;
         const image4 = req.files?.image4?.[0]
-            ? (await uploadOnCloudinary(req.files.image4[0].path, req.body.category, req.body.subCategory))?.secure_url
-            : null;
+            ? (await uploadOnCloudinary(req.files.image4[0].path, req.body.category, req.body.subCategory))?.secure_url : null;
 
         // Testing
         // const image1 = req.files?.image1 ? req.files.image1[0].filename : null;
@@ -94,7 +88,10 @@ const addProduct = async (req, res) => {
 // --------------------------- Deletes Product ---------------------------  \\
 const deleteProduct = async (req, res) => {
     try {
-        const { productId } = req.params;
+        const product = req.body;
+        const productId = product._id;
+        console.log(product)
+        console.log(productId)
 
         // Check params fetch
         if (!productId) {
@@ -106,8 +103,56 @@ const deleteProduct = async (req, res) => {
 
         // Check product deleted
         if (!deletedProduct) {
-            throw new Error("Product deletion failed.")
+            throw new Error("Product deletion failed from database.")
         }
+
+        // Logic to delete the item from cloudinary
+        // Remove base URL and version
+        const imageUrls = [product.image1, product.image2, product.image3, product.image4];
+
+        for (const [index, url] of imageUrls.entries()) {
+            // Filter out null or undefined URLs
+            const validUrls = imageUrls.filter(url => url);
+
+            if (validUrls.length === 0) {
+                throw new Error("No product secure URLs found for any image.");
+            }
+
+            if (url !== null) {
+                // Split the Cloudinary URL to get public_id
+                const parts = url.split('/');
+                const uploadIndex = parts.findIndex(part => part === 'upload');
+                if (uploadIndex === -1) throw new Error("Invalid Cloudinary URL");
+
+                // Retrieve everything after 'upload/v<version>/' and remove file extension
+                const publicId = parts.slice(uploadIndex + 2).join('/').replace(/\.[^/.]+$/, "");
+                console.log("Deleting Cloudinary public_id:", publicId);
+
+                // Delete from Cloudinary
+                const result = await deleteFromCloudinary(publicId);
+                console.log(result);
+
+                if (!result.success) {
+                    throw new Error(`Product deletion failed from Cloudinary for imageUrl${index + 1} but deleted from database`);
+                }
+            }
+        }
+        // if (!url) {
+        //     throw new Error("Product secure url not found.");
+        // }
+        // const parts = url.split('/');
+        // const uploadIndex = parts.findIndex(part => part === 'upload');
+        // if (uploadIndex === -1) throw new Error("Invalid Cloudinary URL");
+        // // Retrieve everything  after 'upload/v<version>/' and remove file extension
+        // const publicId = parts.slice(uploadIndex + 2).join('/').replace(/\.[^/.]+$/, "");
+        // console.log("Deleting Cloudinary public_id:", publicId);
+        // const result = await deleteFromCloudinary(publicId);
+        // console.log(result)
+
+        // // Check file deleted from cloudinary
+        // if (result.result !== "ok") {
+        //     throw new Error("Product deletion failed from cloudinary but file deleted from database");
+        // }
 
         res.status(200).json({
             success: true,

@@ -81,4 +81,33 @@ const getAllProducts = async (productDetails) => {
 }
 // ----------------------------------- ******************************* ----------------------------------- \\
 
-export { addProductDetails, getAllProducts };
+// ----------------------------------- Delete product API Call Logic ----------------------------------- \\
+const deleteProductDetails = async (product) => {
+    try {
+        console.log(product);
+        // Call sign up api
+        const response = await axios.post(`${API_BASE}/api/admin/product/delete`,
+            product ,
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                withCredentials: true
+            },
+        )
+        return (response.data);
+    }
+    catch (e) {
+        if (e.response) {
+            console.error(e.response.data)
+            return (e.response.data);
+        }
+        else {
+            console.error(e.message)
+            return (e.message);
+        }
+    }
+}
+// ----------------------------------- ******************************* ----------------------------------- \\
+
+export { addProductDetails, getAllProducts, deleteProductDetails };

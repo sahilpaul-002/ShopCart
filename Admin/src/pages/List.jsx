@@ -73,23 +73,23 @@ export default function List() {
       <Sidebar />
 
       {/* List body */}
-      <div className="page-body w-[80%] h-[100%] bg-amber-300 ml-[16%] px-[10px] md:px-[20px] pt-[30px] pb-[20px] flex flex-col justify-start items-start gap-[20px]">
+      <div className="page-body w-[80%] h-[100%] ml-[16%] px-[10px] md:px-[20px] pt-[30px] pb-[20px] flex flex-col justify-start items-start gap-[20px]">
         {/* Products Category Buttons */}
-        <div className="w-[60%] px-[40px] md:px-[10px] bg-amber-900 md:flex justify-center items-center gap-[1%] lg:gap-[5%] hidden ">
+        <div className="w-[60%] px-[40px] md:px-[10px]  md:flex justify-center items-center gap-[1%] lg:gap-[5%] hidden ">
           <Button className='mx-2 !rounded-full w-[120px] lg:w-[30%]' size="lg" variant={categoryButtons.men ? "info" : "secondary"} onClick={() => setCagtegoryButton({ men: true, women: false, kid: false })}>Mens</Button>
           <Button className='mx-2 !rounded-full w-[120px] lg:w-[30%]' size="lg" variant={categoryButtons.women ? "info" : "secondary"} onClick={() => setCagtegoryButton({ men: false, women: true, kid: false })}>Womens</Button>
           <Button className='mx-2 !rounded-full w-[120px] lg:w-[30%]' size="lg" variant={categoryButtons.kid ? "info" : "secondary"} onClick={() => setCagtegoryButton({ men: false, women: false, kid: true })}>Kids</Button>
         </div>
-        <div className="w-[60%] px-[40px] md:px-[10px] bg-amber-900 flex justify-center items-center gap-[1%] lg:gap-[5%] md:hidden">
+        <div className="w-[60%] px-[40px] md:px-[10px]  flex justify-center items-center gap-[1%] lg:gap-[5%] md:hidden">
           <Button className='mx-2 !rounded-full w-[120px] lg:w-[30%]' size="lg" variant={categoryButtons.men ? "info" : "secondary"} onClick={() => setCagtegoryButton({ men: true, women: false, kid: false })}>M</Button>
           <Button className='mx-2 !rounded-full w-[120px] lg:w-[30%]' size="lg" variant={categoryButtons.women ? "info" : "secondary"} onClick={() => setCagtegoryButton({ men: false, women: true, kid: false })}>W</Button>
           <Button className='mx-2 !rounded-full w-[120px] lg:w-[30%]' size="lg" variant={categoryButtons.kid ? "info" : "secondary"} onClick={() => setCagtegoryButton({ men: false, women: false, kid: true })}>K</Button>
         </div>
         {/* Product cards */}
-        <div className="product-cards w-[100%] px-[40px] md:px-[10px] py-[20px] bg-amber-900 flex justify-center gap-[30px] items-center flex-wrap">
-          {categoryButtons.men ? <MensCategory menProducts={allProducts.men}/> : null};
-          {categoryButtons.women ? <WomensCategory womenProducts={allProducts.women}/> : null};
-          {categoryButtons.kid ? <KidsCategory kidProducts={allProducts.kid}/> : null};
+        <div className="product-cards w-[100%] px-[40px] md:px-[10px] py-[20px]  flex justify-start gap-[30px] items-center flex-wrap">
+          {categoryButtons.men ? <MensCategory menProducts={allProducts.men}/> : null}
+          {categoryButtons.women ? <WomensCategory womenProducts={allProducts.women}/> : null}
+          {categoryButtons.kid ? <KidsCategory kidProducts={allProducts.kid}/> : null}
         </div>
       </div>
     </div>

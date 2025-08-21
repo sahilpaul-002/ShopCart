@@ -19,7 +19,7 @@ router.post("/add", verifyAdminUser, upload.fields([{name: "image1", maxCount: 1
 // ------------------------------------ ************ ------------------------------------ \\
 
 // ------------------------------------ Delete product ------------------------------------ \\
-router.post("/delete/:productId", verifyAdminUser, deleteProduct)
+router.post("/delete", verifyAdminUser, deleteProduct)
 // ------------------------------------ ************ ------------------------------------ \\
 
 // ------------------------------------ Get All Products ------------------------------------ \\
