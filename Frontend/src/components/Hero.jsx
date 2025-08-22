@@ -11,7 +11,7 @@ export default function Hero(props) {
             <p className='backdrop-blur-md xl:backdrop-blur-none pb-[10px]'>{heroData.text1}</p>
             <p className='backdrop-blur-md xl:backdrop-blur-none pt-[10px]'>{heroData.text2}</p>
         </div>
-        <div className='bottom-[100px] left-[10%] absolute md:left-[50px] md:top-[300px] flex items-center justify-center gap-[10px]'>
+        <div className='bottom-[100px] left-[10%] absolute md:left-[50px] md:top-[400px] flex items-center justify-center gap-[10px]'>
             <FaCircle className={`w-[14px] cursor-pointer ${heroCount===0 ? 'fill-orange-400' : 'fill-white'}`} onClick={() => {setHeroCount(0)}}/>
             <FaCircle className={`w-[14px] cursor-pointer ${heroCount===1 ? 'fill-orange-400' : 'fill-white'}`} onClick={() => {setHeroCount(1)}}/>
             <FaCircle className={`w-[14px] cursor-pointer ${heroCount===2 ? 'fill-orange-400' : 'fill-white'}`} onClick={() => {setHeroCount(2)}}/>

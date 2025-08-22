@@ -24,11 +24,13 @@ export default function Home() {
 
   return (
     <>
-      <div className="home-container w-[100vw] h-[100vh] bg-gradient-to-l from-[#141414] to-[#0c2025] pt-[70px] md:px-[80px] px-[20px]">
+      <div className="home-container w-[100vw] min-h-screen bg-gradient-to-l from-[#141414] to-[#0c2025] pt-[70px] md:px-[80px] px-[20px]">
+        {/* Transparent div to manage the searchbar display action */}
+        <div className="transparent-navbar w-[100%] h-[65px] mb-[5px] bg-amber-400"></div>
+
         <Background heroCount={heroCount} />
         <Hero heroCount={heroCount} setHeroCount={setHeroCount} heroData={heroData[heroCount]} />
       </div>
-      <div>Hello</div>
     </>
   )
 }

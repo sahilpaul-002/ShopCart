@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
-import { Link } from 'react-router';
+import { Link, NavLink } from 'react-router';
 import { useLocation } from "react-router-dom";
 import Logo from '../assets/logo-wo-background-c.png';
 import ItemsButtonLarge from './ItemsButtonLarge';
@@ -104,10 +104,18 @@ export default function Nav() {
             {/* Navbar items */}
             <div className="navbar-items w-[60%] h-[100%] hidden md:flex">
                 <ul className="w-[100%] h-[100%] flex items-center justify-center gap-[2%] lg:gap-[4%] text-white ps-0">
-                    <li> <ItemsButtonLarge text={'Home'} /> </li>
-                    <li> <ItemsButtonLarge text={'Collections'} /> </li>
-                    <li> <ItemsButtonLarge text={'About'} /> </li>
-                    <li> <ItemsButtonLarge text={'Contact'} /> </li>
+                    <NavLink className={"!no-underline text-white"} to='/'>
+                        <li> <ItemsButtonLarge text={'Home'} /> </li>
+                    </NavLink>
+                    <NavLink className={"!no-underline text-white"} to='/collections'>
+                        <li> <ItemsButtonLarge text={'Collections'} /> </li>
+                    </NavLink>
+                    <NavLink className={"!no-underline text-white"} to='/About'>
+                        <li> <ItemsButtonLarge text={'About'} /> </li>
+                    </NavLink>
+                    <NavLink className={"!no-underline text-white"} to='/contact'>
+                        <li> <ItemsButtonLarge text={'Contact'} /> </li>
+                    </NavLink>
                 </ul>
             </div>
 
@@ -135,12 +143,12 @@ export default function Nav() {
                 <div className="profile-display-list absolute top-[69px] right-[2%] w-[200px] bg-[#000000d7] border-[1px] border-[#aaa9a9] rounded-[10px] z-10" ref={profileDropDownRef}>
                     {userDetail.success ? (
                         <ul className='profile-list w-[100%] h-[100%] flex flex-col justify-around items-start text-[17px] py-[10px] ps-0 m-0 text-white'>
-                            <Link className='profile-list-item-link w-[100%] !no-underline !text-inherit' to="/">
+                            <Link className='profile-list-item-link w-[100%] !no-underline !text-inherit' to="/orders">
                                 <li className='profile-list-item w-[100%] hover:bg-[#2f2f2f] px-[15px] py-[10px] cursor-pointer'>
                                     Orders
                                 </li>
                             </Link>
-                            <Link className='profile-list-item-link w-[100%] !no-underline !text-inherit' to="/">
+                            <Link className='profile-list-item-link w-[100%] !no-underline !text-inherit' to="/about">
                                 <li className='profile-list-item w-[100%] hover:bg-[#2f2f2f] px-[15px] py-[10px] cursor-pointer'>
                                     About
                                 </li>
@@ -168,10 +176,18 @@ export default function Nav() {
                 {/* Navbar items */}
                 <div className="navbar-items w-full h-[100%] pt-[15px] overflow-x-auto overflow-y-hidden">
                     <ul className="w-[100%] h-[100%] m-[auto] flex items-center justify-evenly gap-[6px] text-white ps-0 no-scrollbar">
-                        <li className="flex-shrink-0"> <ItemsButtonSmall text={'Home'} /> </li>
-                        <li className="flex-shrink-0"> <ItemsButtonSmall text={'Collections'} /> </li>
-                        <li className="flex-shrink-0"> <ItemsButtonSmall text={'About'} /> </li>
-                        <li className="flex-shrink-0"> <ItemsButtonSmall text={'Contact'} /> </li>
+                        <NavLink to='/'>
+                            <li className="flex-shrink-0"> <ItemsButtonSmall text={'Home'} to='/'/> </li>
+                        </NavLink>
+                        <NavLink to='/collections'>
+                            <li className="flex-shrink-0"> <ItemsButtonSmall text={'Collections'} to='/collections'/> </li>
+                        </NavLink>
+                        <NavLink to='/about'>
+                            <li className="flex-shrink-0"> <ItemsButtonSmall text={'About'} to='/about'/> </li>
+                        </NavLink>
+                        <NavLink to='/contact'>
+                            <li className="flex-shrink-0"> <ItemsButtonSmall text={'Contact'} to='/contact'/> </li>
+                        </NavLink>
                     </ul>
                 </div>
             </div>
