@@ -6,10 +6,24 @@ export default function Loader(props) {
   const { loaderVariant } = props;
 
   return (
-    <>
-      {loaderVariant === "addProduct" && (
-        <Spinner animation="grow" variant="light" className="!w-[80px] !h-[80px] !z-50" />
-      )}
-    </>
-  )
+      <>
+        {loaderVariant === "pageLoading" && (
+          <div className="spinner w-[100vw] h-[100vh] flex justify-center items-center">
+            <Spinner animation="grow" variant="white" className='!w-[80px] !h-[80px]'/>
+          </div>
+        )}
+  
+        {(loaderVariant === "addProduct" || loaderVariant === "editProduct") && (
+          <div className="spinner w-[100vw] h-[100vh] flex justify-center items-center">
+            <Spinner animation="grow" variant="success" className='!w-[80px] !h-[80px]'/>
+          </div>
+        )}
+  
+        {(loaderVariant === "deleteProduct") && (
+          <div className="spinner w-[100vw] h-[100vh] flex justify-center items-center">
+            <Spinner animation="grow" variant="danger" className='!w-[80px] !h-[80px]'/>
+          </div>
+        )}
+      </>
+    )
 }

@@ -7,7 +7,7 @@ import { deleteProductDetails } from '../apiCalls/AdminProductDetails.js'
 
 export default function KidsCategory(props) {
     // Destructure props
-    const { kidProducts } = props;
+    const { kidProducts, loading, setLoading } = props;
     console.log(kidProducts)
 
     // Local state to manage products
@@ -20,29 +20,47 @@ export default function KidsCategory(props) {
     // ----------------------------- *********************** ----------------------------- \\
 
     // ----------------------------- Logic to handle delete product logic ----------------------------- \\
-        const handleProductDelete = async (product) => {
-            try {
-                const productId = product._id;
-    
-                // Call delet API to delete from database
-                const deletedProduct = await deleteProductDetails(product);
-    
-                // Check api response
-                if (!deletedProduct.success) {
-                    throw deletedProduct
-                }
-    
-                // Remove the item from the local state to update the UI
-                setProducts(products.filter(product => product._id !== productId));
-    
-                console.log({ success: true, message: deletedProduct.message, deletedProduct: deletedProduct.product })
-    
+    const handleProductDelete = async (product) => {
+        try {
+            // Update deleteProduct Loading state
+            setLoading((prev) => ({
+                ...prev,
+                deleteProductLoading: true
+            }));
+
+            const productId = product._id;
+
+            // Call delet API to delete from database
+            const deletedProduct = await deleteProductDetails(product);
+
+            // Check api response
+            if (!deletedProduct.success) {
+                throw deletedProduct
             }
-            catch (e) {
-                console.error({ success: false, message: e.message });
-            }
+
+            // Remove the item from the local state to update the UI
+            setProducts(products.filter(product => product._id !== productId));
+
+            console.log({ success: true, message: deletedProduct.message, deletedProduct: deletedProduct.product })
+
+            // Reset deleteProduct Loading state
+            setLoading((prev) => ({
+                ...prev,
+                deleteProductLoading: false
+            }));
+
         }
-        // ----------------------------- *************************** ----------------------------- \\
+        catch (e) {
+            // Reset deleteProduct Loading state
+            setLoading((prev) => ({
+                ...prev,
+                deleteProductLoading: false
+            }));
+
+            console.error({ success: false, message: e.message });
+        }
+    }
+    // ----------------------------- *************************** ----------------------------- \\
 
     return (
         <>
@@ -89,7 +107,7 @@ export default function KidsCategory(props) {
                     </Card>
                 ))
             ) : (
-                <h3 className='text-white'>No products found. Please add products</h3>
+                <h3 className='w-[100vw] my-[auto] text-white '>No products found. Please add products</h3>
             )}
         </>
     )

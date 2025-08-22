@@ -1,7 +1,10 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router';
+import AdminUserContext from '../context/AdminUserContext';
 import AppNavContext from '../context/AppNavContext';
 import Sidebar from '../components/Sidebar';
 import Button from 'react-bootstrap/Button';
+import { getAdminUserDetail } from '../apiCalls/AdminUserDetails';
 import { addProductDetails } from '../apiCalls/AdminProductDetails';
 import Loader from '../components/Loader';
 
@@ -9,9 +12,45 @@ import Loader from '../components/Loader';
 
 export default function AddProduct() {
   // Destructure admin user context
+  const { userDetail, setUserDetail } = useContext(AdminUserContext);
   const { navbarCollapse, setNavbarCollapse } = useContext(AppNavContext);
+  const navigate = useNavigate();
+
+  // ---------------------- Logic to check if user is authorized else redirect to login ---------------------- \\
+  // UseEffect to cal the the user detail api on render
+  useEffect(() => {
+    // Function to get user detail from API
+    const fetchUser = async () => {
+      const user = await getAdminUserDetail();
+      console.log(user);
+      setUserDetail(user);
+      // Check user autorized
+      if (!user.success) {
+        navigate('/admin/login');
+      }
+    };
+
+    fetchUser();
+  }, []);
+  //  ----------------------------------- ****************** ----------------------------------- \\
+
   // Loading state for added product
-  const [loading, setLoading] = useState(false);
+  const [addProductloading, setAddProductLoading] = useState(false);
+
+  // --------------------------- Logic to disable page scrolling when loadinig --------------------------- \\
+  useEffect(() => {
+    if (addProductloading) {
+      document.body.style.overflow = "hidden"; // disable scroll
+    } else {
+      document.body.style.overflow = "auto"; // enable scroll
+    }
+
+    // Cleanup when component unmounts
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [addProductloading]);
+  // --------------------------- ************** --------------------------- \\
 
   // Refs for file inputs
   const image1Ref = useRef(null);
@@ -71,7 +110,7 @@ export default function AddProduct() {
   const handleAddProduct = async (e) => {
     try {
       // Update add product loading state
-      setLoading(prev => !prev);
+      setAddProductLoading(true);
 
       e.preventDefault()
 
@@ -119,6 +158,8 @@ export default function AddProduct() {
       if (bestSellerRef.current) bestSellerRef.current.value = false;
 
       // Rest the add product loading state
+      setAddProductLoading(false);
+
     }
   }
   // -------------------------- ********************************** -------------------------- \\ 
@@ -126,9 +167,9 @@ export default function AddProduct() {
   return (
     <>
       {/* Spinner */}
-      {loading && (
-        <div className="w-[100vw] h-[100vh] flex justify-center items-center absolute bg-gray-900/60 backdrop-blur-sm z-50 ">
-          <Loader loaderVariant={"addProduct"} />
+      {addProductloading && (
+        <div className="w-[100vw] h-[100vh] flex justify-center items-center fixed bg-gray-900/60 backdrop-blur-sm z-50 ">
+          <Loader loaderVariant="addProduct" />
         </div>
       )}
 

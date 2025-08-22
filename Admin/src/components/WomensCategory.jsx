@@ -7,7 +7,7 @@ import { deleteProductDetails } from '../apiCalls/AdminProductDetails.js'
 
 export default function WomensCategory(props) {
     // Destructure props
-    const { womenProducts } = props;
+    const { womenProducts, loading, setLoading } = props;
     console.log(womenProducts)
 
     // Local state to manage products
@@ -22,6 +22,12 @@ export default function WomensCategory(props) {
     // ----------------------------- Logic to handle delete product logic ----------------------------- \\
     const handleProductDelete = async (product) => {
         try {
+            // Update deleteProduct Loading state
+            setLoading((prev) => ({
+                ...prev,
+                deleteProductLoading: true
+            }));
+
             const productId = product._id;
 
             // Call delet API to delete from database
@@ -37,8 +43,19 @@ export default function WomensCategory(props) {
 
             console.log({ success: true, message: deletedProduct.message, deletedProduct: deletedProduct.product })
 
+            // Reset deleteProduct Loading state
+            setLoading((prev) => ({
+                ...prev,
+                deleteProductLoading: false
+            }));
         }
         catch (e) {
+            // Reset deleteProduct Loading state
+            setLoading((prev) => ({
+                ...prev,
+                deleteProductLoading: false
+            }));
+
             console.error({ success: false, message: e.message });
         }
     }
@@ -95,7 +112,7 @@ export default function WomensCategory(props) {
                     );
                 })
             ) : (
-                <h3 className="text-white">No products found. Please add products</h3>
+                <h3 className='w-[100vw] my-[auto] text-white '>No products found. Please add products</h3>
             )}
         </>
     );

@@ -7,7 +7,7 @@ import { deleteProductDetails } from '../apiCalls/AdminProductDetails.js'
 
 export default function MensCategory(props) {
     // Destructure props
-    const { menProducts } = props;
+    const { menProducts, loading, setLoading } = props;
     console.log(menProducts)
 
     // Local state to manage products
@@ -22,6 +22,12 @@ export default function MensCategory(props) {
     // ----------------------------- Logic to handle delete product logic ----------------------------- \\
     const handleProductDelete = async (product) => {
         try {
+            // Update deleteProduct Loading state
+            setLoading((prev) => ({
+                ...prev,
+                deleteProductLoading: true
+            }));
+
             const productId = product._id;
 
             // Call delet API to delete from database
@@ -37,8 +43,20 @@ export default function MensCategory(props) {
 
             console.log({ success: true, message: deletedProduct.message, deletedProduct: deletedProduct.product })
 
+            // Reset deleteProduct Loading state
+            setLoading((prev) => ({
+                ...prev,
+                deleteProductLoading: false
+            }));
+
         }
         catch (e) {
+            // Reset deleteProduct Loading state
+            setLoading((prev) => ({
+                ...prev,
+                deleteProductLoading: false
+            }));
+            
             console.error({ success: false, message: e.message });
         }
     }
@@ -89,7 +107,7 @@ export default function MensCategory(props) {
                     </Card>
                 ))
             ) : (
-                <h3 className='text-white'>No products found. Please add products</h3>
+                <h3 className='w-[100vw] h-[100vh] text-white'>No products found. Please add products</h3>
             )}
         </>
     )
