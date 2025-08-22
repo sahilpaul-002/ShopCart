@@ -10,19 +10,20 @@ import { FaCartShopping } from "react-icons/fa6";
 import GetUserContext from '../contexts/GetUserContext';
 import { getUserDetail } from '../apiCalls/UserDetail';
 import { userLogOutApi } from '../apiCalls/UserAuth';
+import SearchCollapseContext from '../contexts/SearchCollapseContext';
 
 export default function Nav() {
     const location = useLocation();
 
     // Destructure context value
     const { userDetail, setUserDetail } = useContext(GetUserContext);
+    const { searchbarCollapse, setSearchbarCollapse } = useContext(SearchCollapseContext);
 
     // State to store the search display state
     const [searchDisplay, setSearchDisplay] = useState(false);
 
     // State to store the profile display state
     const [profileDisplay, setProfileDisplay] = useState(false)
-
 
     // ------------------------------------- Logic to reset the UI while navigating ------------------------------------- \\
     useEffect(() => {
@@ -92,8 +93,17 @@ export default function Nav() {
     // ------------------------------------- **************************** ------------------------------------- \\
 
 
+    const handleSearchbarDisplay = () => {
+        // Show transparent div
+        setSearchbarCollapse(prev => !prev);
+
+        // Show searchbar
+        setSearchDisplay(prev => !prev)
+    }
+
+
     return (
-        <div className='w-[100vw] h-[70px] bg-[#628f8f] z-10 fixed top-0 flex items-center justify-between px-[30px] shadow-xl shadow-black '>
+        <div className='w-[100vw] h-[80px] bg-[#628f8f] z-[100] fixed top-0 flex items-center justify-between px-[30px] shadow-xl shadow-black '>
             {/* Brand Logo */}
             <Link className='!no-underline' to='/'>
                 <div className="brand-logo w-[100%] max-w-[380px] h-[100%] flex justify-start items-center gap-[20px] py-[auto]">
@@ -120,7 +130,7 @@ export default function Nav() {
             </div>
 
             <div className="navbar-items w-[40%] md:w-[15%] flex items-center justify-end gap-[2%] relative">
-                <FaSearch className='search-icon w-[50px] h-[25px] cursor-pointer' onClick={() => { setSearchDisplay(prev => !prev) }} />
+                <FaSearch className='search-icon w-[50px] h-[25px] cursor-pointer' onClick={handleSearchbarDisplay} />
                 {userDetail.success ? (
                     <div className="profile-loggedin-icon w-[38px] h-[35px]  aspect-square bg-[#414141] text-white font-bold rounded-[50%] flex items-center justify-center cursor-pointer" onClick={() => { setProfileDisplay(prev => !prev) }}>{userDetail.user.name[0]}</div>
                 ) : (
@@ -177,16 +187,16 @@ export default function Nav() {
                 <div className="navbar-items w-full h-[100%] pt-[15px] overflow-x-auto overflow-y-hidden">
                     <ul className="w-[100%] h-[100%] m-[auto] flex items-center justify-evenly gap-[6px] text-white ps-0 no-scrollbar">
                         <NavLink to='/'>
-                            <li className="flex-shrink-0"> <ItemsButtonSmall text={'Home'} to='/'/> </li>
+                            <li className="flex-shrink-0"> <ItemsButtonSmall text={'Home'} to='/' /> </li>
                         </NavLink>
                         <NavLink to='/collections'>
-                            <li className="flex-shrink-0"> <ItemsButtonSmall text={'Collections'} to='/collections'/> </li>
+                            <li className="flex-shrink-0"> <ItemsButtonSmall text={'Collections'} to='/collections' /> </li>
                         </NavLink>
                         <NavLink to='/about'>
-                            <li className="flex-shrink-0"> <ItemsButtonSmall text={'About'} to='/about'/> </li>
+                            <li className="flex-shrink-0"> <ItemsButtonSmall text={'About'} to='/about' /> </li>
                         </NavLink>
                         <NavLink to='/contact'>
-                            <li className="flex-shrink-0"> <ItemsButtonSmall text={'Contact'} to='/contact'/> </li>
+                            <li className="flex-shrink-0"> <ItemsButtonSmall text={'Contact'} to='/contact' /> </li>
                         </NavLink>
                     </ul>
                 </div>

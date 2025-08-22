@@ -1,9 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Background from '../components/Background';
 import Hero from '../components/Hero';
+import SearchCollapseContext from '../contexts/SearchCollapseContext';
+import Products from '../components/Products';
 
 export default function Home() {
-  // Hero data texts
+  // Destruct the context props
+  const { searchbarCollapse } = useContext(SearchCollapseContext);
+
+
+  // ---------------------------- Logic for carosol display ---------------------------- \\
   const heroData = [
     { text1: "Discover fashion you’ll love.", text2: "Shop the latest trends now" },
     { text1: "Top-rated styles, handpicked for you.", text2: "Curated just for your needs" },
@@ -17,19 +23,29 @@ export default function Home() {
 
   // UseEffect to auto rotate the images
   useEffect(() => {
-    setInterval(() => {
+    const interval = setInterval(() => {
       setHeroCount(prev => (prev === 4 ? 0 : prev + 1))
     }, 5000);
+
+    return () => clearInterval(interval); // cleanup on unmount
   }, []);
+  // ------------------------ ********** ------------------------ \\
 
   return (
     <>
-      <div className="home-container w-[100vw] min-h-screen bg-gradient-to-l from-[#141414] to-[#0c2025] pt-[70px] md:px-[80px] px-[20px]">
+      <div className="home-container w-[100vw] min-h-screen bg-gradient-to-l from-[#141414] to-[#0c2025] pt-[70px] pb-[100px] md:px-[80px] px-[20px]">
         {/* Transparent div to manage the searchbar display action */}
-        <div className="transparent-navbar w-[100%] h-[65px] mb-[5px] bg-amber-400"></div>
+        {!searchbarCollapse && <div className="transparent-navbar w-[100%] h-[75px] mb-[5px]"></div>}
 
-        <Background heroCount={heroCount} />
-        <Hero heroCount={heroCount} setHeroCount={setHeroCount} heroData={heroData[heroCount]} />
+        <div className="w-[100%] h-[100%] px-[20px] flex justify-between items-start gap-[10%] pb-[50px]">
+          <Hero heroCount={heroCount} setHeroCount={setHeroCount} heroData={heroData[heroCount]} />
+          <Background heroCount={heroCount} />
+        </div>
+
+        {/* Products */}
+        <div className='w-[100%] py-[50px]'>
+          <Products />
+        </div>
       </div>
     </>
   )

@@ -5,7 +5,7 @@ import Signup from '../pages/Signup';
 import Login from '../pages/Login';
 import Collections from "../pages/Collections";
 import Orders from "../pages/Orders";
-import Product from "../pages/Product";
+import Products from "../components/Products"
 import Contact from "../pages/Contact";
 import About from "../pages/About";
 
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
       },
       {
         path: "product", 
-        Component: Product
+        Component: Products
       },
       {
         path: "contact", 

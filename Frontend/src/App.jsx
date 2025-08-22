@@ -4,6 +4,8 @@ import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import UserDetailState from './contextConponents/UserDetailState';
 import Nav from './components/Nav';
+import SearchCollapseState from './contextConponents/SearchCollapseState';
+import AllProductsState from './contextConponents/AllProductsState';
 
 function App() {
   const location = useLocation();
@@ -16,8 +18,12 @@ function App() {
   return (
     <>
       <UserDetailState>
-        {!hideNav && <Nav />}
-        <Outlet />
+        <AllProductsState>
+          <SearchCollapseState>
+            {!hideNav && <Nav />}
+            <Outlet />
+          </SearchCollapseState>
+        </AllProductsState>
       </UserDetailState>
     </>
   )

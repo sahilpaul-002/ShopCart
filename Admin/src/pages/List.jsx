@@ -75,12 +75,6 @@ export default function List() {
 
   useEffect(() => {
     try {
-      // // Update the pageLoading state
-      // setLoading((prev) => ({
-      //   ...prev,
-      //   pageLoading: true
-      // }));
-
       const fetchProducts = async () => {
         const allCategoryProducts = await getAllProducts();
         // Check if the all products are fetched
@@ -104,32 +98,13 @@ export default function List() {
 
         // Success message
         console.log({ success: true, message: "List of all products fetched." })
-
-        // // Reset pageLoading state
-        // setLoading((prev) => ({
-        //   ...prev,
-        //   pageLoading: false
-        // }));
       }
 
       setTimeout(() => {
         fetchProducts();
       }, 2000)
-
-      // return () => {
-      //   // Reset pageLoading state
-      //   setLoading((prev) => ({
-      //     ...prev,
-      //     pageLoading: false
-      //   }));
-      // }
     }
     catch (e) {
-      // // Reset pageLoading state
-      // setLoading((prev) => ({
-      //   ...prev,
-      //   pageLoading: false
-      // }));
       console.error({ success: false, message: e.message });
     }
   }, [])

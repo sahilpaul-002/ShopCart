@@ -11,24 +11,24 @@ export default function Background(props) {
 
   return (
     <>
-      <div className="w-[100%] min-h-screen bg-amber-400 p-[20px]">
+      <div className="w-[600px]  relative">
         {heroCount === 0 && (
-          <img src={fashionHeroImages[randomNumbers[heroCount]]} alt="" className='w-[600px] h-[100%] float-right  object-fill' />
+          <img src={fashionHeroImages[randomNumbers[heroCount]]} alt="Fashion Image" className='w-[600px] h-[700px] float-right  object-fill' />
         )}
         {heroCount === 1 && (
-          <img src={fashionHeroImages[randomNumbers[heroCount]]} alt="" className='w-[600px] h-[100%] float-right  object-fill' />
+          <img src={fashionHeroImages[randomNumbers[heroCount]]} alt="Fashion Image" className='w-[600px] h-[700px] float-right  object-fill' />
         )}
         {heroCount === 2 && (
-          <img src={fashionHeroImages[randomNumbers[heroCount]]} alt="" className='w-[600px] h-[100%] float-right  object-fill' />
+          <img src={fashionHeroImages[randomNumbers[heroCount]]} alt="Fashion Image" className='w-[600px] h-[700px] float-right  object-fill' />
         )}
         {heroCount === 3 && (
-          <img src={fashionHeroImages[randomNumbers[heroCount]]} alt="" className='w-[600px] h-[100%] float-right  object-fill' />
+          <img src={fashionHeroImages[randomNumbers[heroCount]]} alt="Fashion Image" className='w-[600px] h-[700px] float-right  object-fill' />
         )}
         {heroCount === 4 && (
-          <img src={fashionHeroImages[randomNumbers[heroCount]]} alt="" className='w-[600px] h-[100%] float-right  object-fill' />
+          <img src={fashionHeroImages[randomNumbers[heroCount]]} alt="Fashion Image" className='w-[600px] h-[700px] float-right  object-fill' />
         )}
         {heroCount === 5 && (
-          <img src={fashionHeroImages[randomNumbers[heroCount]]} alt="" className='w-[600px] h-[100%] float-right  object-fill' />
+          <img src={fashionHeroImages[randomNumbers[heroCount]]} alt="Fashion Image" className='w-[600px] h-[700px] float-right  object-fill' />
         )}
       </div>
     </>
