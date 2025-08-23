@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Horizontal Scroll with Flex</title>
+  <style>
+    .scroll-container {
+      width: 100vw;
+      height: 300px;
+      display: flex;
+      gap: 20px; /* spacing between containers */
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 10px;
+      border: 2px solid black;
+    }
+
+    .container {
+      flex: 0 0 auto; /* prevents shrinking, keeps fixed width */
+      width: 300px;
+      height: 250px;
+      border-radius: 12px;
+      color: white;
+      font-size: 22px;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .c1 { background: #e74c3c; }
+    .c2 { background: #3498db; }
+    .c3 { background: #2ecc71; }
+    .c4 { background: #9b59b6; }
+    .c5 { background: #f39c12; }
+    .c6 { background: #1abc9c; }
+    .c7 { background: #34495e; }
+    .c8 { background: #e67e22; }
+
+    /* Hide scrollbar (optional) */
+    .scroll-container::-webkit-scrollbar {
+      display: none;
+    }
+    .scroll-container {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-container">
+    <div class="container c1">Container 1</div>
+    <div class="container c2">Container 2</div>
+    <div class="container c3">Container 3</div>
+    <div class="container c4">Container 4</div>
+    <div class="container c5">Container 5</div>
+    <div class="container c6">Container 6</div>
+    <div class="container c7">Container 7</div>
+    <div class="container c8">Container 8</div>
+  </div>
+</body>
+</html>

@@ -9,6 +9,27 @@
   min-height: 100vh;
 }
 
+/* Works in Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  height: 4px;  /* horizontal scrollbar height */
+  width: 4px;   /* vertical scrollbar width */
+  margin: 0 auto
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* track color */
+  border-radius: 100%;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ec4899; /* pink */
+  border-radius: 100%;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #db2777; /* darker pink on hover */
+}
+
 /* .logo {
   height: 6em;
   padding: 1.5em;
