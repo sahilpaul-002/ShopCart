@@ -17,7 +17,6 @@ export default function LatestCollections() {
 
     useEffect(() => {
         if (!allProducts) return;
-        console.log(allProducts)
 
         const latestMensProducts = allProducts.men
             ? [...allProducts.men]
