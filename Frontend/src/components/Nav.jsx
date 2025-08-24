@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
-import { Link, NavLink } from 'react-router';
+import { Link, NavLink, useNavigate } from 'react-router';
 import { useLocation } from "react-router-dom";
 import Logo from '../assets/logo-wo-background-c.png';
 import ItemsButtonLarge from './ItemsButtonLarge';
@@ -13,11 +13,12 @@ import { userLogOutApi } from '../apiCalls/UserAuth';
 import SearchCollapseContext from '../contexts/SearchCollapseContext';
 
 export default function Nav() {
+    let navigate = useNavigate();
     const location = useLocation();
 
     // Destructure context value
     const { userDetail, setUserDetail } = useContext(GetUserContext);
-    const { searchbarCollapse, setSearchbarCollapse } = useContext(SearchCollapseContext);
+    const { searchbarCollapse, setSearchbarCollapse, search, setSearch } = useContext(SearchCollapseContext);
 
     // State to store the search display state
     const [searchDisplay, setSearchDisplay] = useState(false);
@@ -92,7 +93,7 @@ export default function Nav() {
 
     // ------------------------------------- **************************** ------------------------------------- \\
 
-
+    // Handle searchbar display
     const handleSearchbarDisplay = () => {
         // Show transparent div
         setSearchbarCollapse(prev => !prev);
@@ -101,6 +102,22 @@ export default function Nav() {
         setSearchDisplay(prev => !prev)
     }
 
+    // Logic to handle search user input
+    const handleSearchOnEnter = (e) => {
+        // Navigate on pressing enter
+        if (e.key === "Enter") {
+            // Reset search value
+            setSearch("")
+            
+            navigate(`/collections?search=${search}`);
+        }
+    }
+    const handleSearchOnClick = (e) => {
+        // Reset search value
+        setSearch("")
+
+        navigate(`/collections?search=${search}`)
+    }
 
     return (
         <div className='w-[100vw] h-[80px] bg-[#628f8f] z-[100] fixed top-0 flex items-center justify-between px-[30px] shadow-xl shadow-black '>
@@ -144,7 +161,12 @@ export default function Nav() {
             {/* Search Bar */}
             <div className="search-bar w-[100%] h-[70px] bg-[transparent] absolute top-[100%] left-0 flex items-center justify-center">
                 {searchDisplay ? (
-                    <input type="text" className='w-[50%] h-[60%] bg-[#4d6a67] rounded-[30px] px-[50px] placeholder:text-white text-white text-[18px]' placeholder='Search' />
+                    <>
+                        <input type="text" className='w-[50%] h-[60%] bg-[#4d6a67] rounded-[30px] px-[50px] placeholder:text-white text-white text-[18px]' placeholder='Search' value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={handleSearchOnEnter} />
+                        <div className="absolute right-[28%]" onClick={handleSearchOnClick}>
+                            <FaSearch fill='white' />
+                        </div>
+                    </>
                 ) : (
                     null
                 )}

@@ -6,16 +6,30 @@ import Title from '../components/Title';
 import AllProductsContext from '../contexts/AllProductsContext';
 import ProductCard from '../components/ProductCard';
 import HorizontalProductCard from '../components/HorizontalProductCard';
+import SearchCollapseContext from '../contexts/SearchCollapseContext';
 
 export default function Collections() {
   // Destructure context props
   const { products } = useContext(AllProductsContext);
+  const { search } = useContext(SearchCollapseContext);
+
+  // Retrieve search term from the url
+  const query = new URLSearchParams(location.search);
+  const searchTerm = query.get("search");
 
   // Statet to handle display filters in small device
   const [showFilters, setShowFilters] = useState(false);
 
   // State to store the filtered products
   const [filteredProducts, setFilteredProducts] = useState(products || null);
+
+  // State to stroe the searched item
+  const [searchedItem, setSearchedItem] = useState(null);
+
+  // UseEffect to store the searchedItem
+  useEffect(() => {
+    setSearchedItem(search);
+  }, [search]);
 
   // UseEffect to update filteredProducts with products
   useEffect(() => {
@@ -81,56 +95,47 @@ export default function Collections() {
     setProductFilters((prev) => ({ ...prev, sortBy: e.target.value }))
   }
 
-  // Fucntion to apply the filter
-  const applyFilter = () => {
-    let filterProducts = products;
-    // Check filters applied
-    if (productFilters.categories.length > 0 && productFilters.subCategories.length > 0) {
-      // Filter based on category
-      filterProducts = products.filter((product) => {
-        return (
-          productFilters.categories.includes(product.category)
-        )
-      });
-      // Filter based on subCategory on filterProducts
-      filterProducts = filterProducts.filter((product) => {
-        return (
-          productFilters.subCategories.includes(product.subCategory)
-        )
-      });
-    }
-    else if (productFilters.categories.length > 0) {
-      // Filter based on category
-      filterProducts = products.filter((product) => {
-        return (
-          productFilters.categories.includes(product.category)
-        )
-      });
-    }
-    else if (productFilters.subCategories.length > 0) {
-      // Filter based on subCategory 
-      filterProducts = products.filter((product) => {
-        return (
-          productFilters.subCategories.includes(product.subCategory)
-        )
-      });
-    }
-
-    // Sort logic (if needed)
-    if (productFilters.sortBy === "low-high") {
-      filterProducts = [...filterProducts].sort((a, b) => a.price - b.price);
-    } else if (productFilters.sortBy === "high-low") {
-      filterProducts = [...filterProducts].sort((a, b) => b.price - a.price);
-    }
-
-    // Update the filterProducts state
-    setFilteredProducts(filterProducts);
-  }
-
-  // UseEffect to apply filters
+  // UseEffect to change products UI based on criteria
   useEffect(() => {
-    applyFilter()
-  }, [productFilters])
+    if (!products) return;
+
+    let filtered = products;
+
+    // URL search
+    if (searchTerm) {
+      filtered = filtered.filter((product) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Context search (from SearchCollapseContext)
+    if (searchedItem) {
+      filtered = filtered.filter((product) =>
+        product.name.toLowerCase().includes(searchedItem.toLowerCase())
+      );
+    }
+
+    // Apply category / subCategory filters
+    if (productFilters.categories.length > 0) {
+      filtered = filtered.filter((product) =>
+        productFilters.categories.includes(product.category)
+      );
+    }
+    if (productFilters.subCategories.length > 0) {
+      filtered = filtered.filter((product) =>
+        productFilters.subCategories.includes(product.subCategory)
+      );
+    }
+
+    // Sorting
+    if (productFilters.sortBy === "low-high") {
+      filtered = [...filtered].sort((a, b) => a.price - b.price);
+    } else if (productFilters.sortBy === "high-low") {
+      filtered = [...filtered].sort((a, b) => b.price - a.price);
+    }
+
+    setFilteredProducts(filtered);
+  }, [products, searchTerm, searchedItem, productFilters]);
   // ---------------------------- ************************ ---------------------------- \\
 
   // ------------------------ Logic to handle reset filter ------------------------ \\

@@ -1,12 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { useLocation } from "react-router-dom";
 import Background from '../components/Background';
 import Hero from '../components/Hero';
 import SearchCollapseContext from '../contexts/SearchCollapseContext';
 import Products from '../components/Products';
 
 export default function Home() {
+  const location = useLocation();
+
   // Destruct the context props
-  const { searchbarCollapse } = useContext(SearchCollapseContext);
+  const { searchbarCollapse, setSearchbarCollapse } = useContext(SearchCollapseContext);
 
 
   // ---------------------------- Logic for carosol display ---------------------------- \\
@@ -30,6 +33,12 @@ export default function Home() {
     return () => clearInterval(interval); // cleanup on unmount
   }, []);
   // ------------------------ ********** ------------------------ \\
+
+  // ------------------------------------- Logic to reset the UI while navigating ------------------------------------- \\
+  useEffect(() => {
+    setSearchbarCollapse(true);
+  }, [location]);
+  // ------------------------------------- **************************** ------------------------------------- \\
 
   return (
     <>
