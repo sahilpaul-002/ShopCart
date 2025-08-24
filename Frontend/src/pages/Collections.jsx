@@ -104,14 +104,16 @@ export default function Collections() {
     // URL search
     if (searchTerm) {
       filtered = filtered.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     // Context search (from SearchCollapseContext)
     if (searchedItem) {
       filtered = filtered.filter((product) =>
-        product.name.toLowerCase().includes(searchedItem.toLowerCase())
+        product.name.toLowerCase().includes(searchedItem.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchedItem.toLowerCase())
       );
     }
 
