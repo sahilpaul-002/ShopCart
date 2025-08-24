@@ -142,7 +142,7 @@ export default function Nav() {
                 </div>
             </div>
             {/* Search Bar */}
-            <div className="search-bar w-[100%] h-[80px] bg-[transparent] absolute top-[100%] left-0 flex items-center justify-center">
+            <div className="search-bar w-[100%] h-[70px] bg-[transparent] absolute top-[100%] left-0 flex items-center justify-center">
                 {searchDisplay ? (
                     <input type="text" className='w-[50%] h-[60%] bg-[#4d6a67] rounded-[30px] px-[50px] placeholder:text-white text-white text-[18px]' placeholder='Search' />
                 ) : (

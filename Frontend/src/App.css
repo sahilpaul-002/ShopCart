@@ -30,6 +30,12 @@
   background: #db2777; /* darker pink on hover */
 }
 
+select option {
+  font-size: 12px;   /* force smaller text */
+  color: white;      /* if you want consistent text color */
+  background-color: #475569; /* matches bg-slate-600 */
+}
+
 /* .logo {
   height: 6em;
   padding: 1.5em;

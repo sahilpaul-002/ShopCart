@@ -1,33 +1,246 @@
-import React, {useContext} from 'react'
-import SearchCollapseContext from '../contexts/SearchCollapseContext';
+import React, { useContext, useEffect, useState } from 'react'
+import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowUp } from "react-icons/io";
+import Separator90 from '../components/Separator90';
+import Title from '../components/Title';
+import AllProductsContext from '../contexts/AllProductsContext';
+import ProductCard from '../components/ProductCard';
+import HorizontalProductCard from '../components/HorizontalProductCard';
 
 export default function Collections() {
-  // Destruct the context props
-  const { searchbarCollapse } = useContext(SearchCollapseContext);
+  // Destructure context props
+  const { products } = useContext(AllProductsContext);
+
+  // Statet to handle display filters in small device
+  const [showFilters, setShowFilters] = useState(false);
+
+  // State to store the filtered products
+  const [filteredProducts, setFilteredProducts] = useState(products || null);
+
+  // UseEffect to update filteredProducts with products
+  useEffect(() => {
+    if (products) {
+      setFilteredProducts(products);
+    }
+  }, [products])
+
+  // ---------------------------- Logic to handle product filters ---------------------------- \\
+  // State to store the applied filters
+  const [productFilters, setProductFilters] = useState({
+    categories: [],
+    subCategories: [],
+    sortBy: "relevant"
+  });
+
+  // Logic to handle the adding or removing category filter
+  const toggleCategory = (e) => {
+    if (productFilters.categories.includes(e.target.value)) {
+      const appliedCategories = productFilters.categories.filter((category) => {
+        return (
+          category !== e.target.value
+        )
+      })
+      setProductFilters((prev) => ({
+        ...prev,
+        categories: appliedCategories
+      }))
+    }
+    else {
+      const appliedCategories = [...productFilters.categories, e.target.value];
+      setProductFilters((prev) => ({
+        ...prev,
+        categories: appliedCategories
+      }));
+    }
+  }
+
+  // Logic to handle adding or removing the subCategory filters
+  const toggleSubCategory = (e) => {
+    if (productFilters.subCategories.includes(e.target.value)) {
+      const appliedSubCategories = productFilters.subCategories.filter((subCategory) => {
+        return (
+          subCategory !== e.target.value
+        )
+      })
+      setProductFilters((prev) => ({
+        ...prev,
+        subCategories: appliedSubCategories
+      }))
+    }
+    else {
+      const appliedSubCategories = [...productFilters.subCategories, e.target.value];
+      setProductFilters((prev) => ({
+        ...prev,
+        subCategories: appliedSubCategories
+      }));
+    }
+  }
+
+  // Logic to handle changing the sorting category
+  const toggleSorting = (e) => {
+    setProductFilters((prev) => ({ ...prev, sortBy: e.target.value }))
+  }
+
+  // Fucntion to apply the filter
+  const applyFilter = () => {
+    let filterProducts = products;
+    // Check filters applied
+    if (productFilters.categories.length > 0 && productFilters.subCategories.length > 0) {
+      // Filter based on category
+      filterProducts = products.filter((product) => {
+        return (
+          productFilters.categories.includes(product.category)
+        )
+      });
+      // Filter based on subCategory on filterProducts
+      filterProducts = filterProducts.filter((product) => {
+        return (
+          productFilters.subCategories.includes(product.subCategory)
+        )
+      });
+    }
+    else if (productFilters.categories.length > 0) {
+      // Filter based on category
+      filterProducts = products.filter((product) => {
+        return (
+          productFilters.categories.includes(product.category)
+        )
+      });
+    }
+    else if (productFilters.subCategories.length > 0) {
+      // Filter based on subCategory 
+      filterProducts = products.filter((product) => {
+        return (
+          productFilters.subCategories.includes(product.subCategory)
+        )
+      });
+    }
+
+    // Sort logic (if needed)
+    if (productFilters.sortBy === "low-high") {
+      filterProducts = [...filterProducts].sort((a, b) => a.price - b.price);
+    } else if (productFilters.sortBy === "high-low") {
+      filterProducts = [...filterProducts].sort((a, b) => b.price - a.price);
+    }
+
+    // Update the filterProducts state
+    setFilteredProducts(filterProducts);
+  }
+
+  // UseEffect to apply filters
+  useEffect(() => {
+    applyFilter()
+  }, [productFilters])
+  // ---------------------------- ************************ ---------------------------- \\
+
+  // ------------------------ Logic to handle reset filter ------------------------ \\
+  const handleResetFilters = () => {
+    setProductFilters({
+      categories: [],
+      subCategories: [],
+      sortBy: "relevant"
+    })
+  }
+  // ----------------------------- ********************* ----------------------------- \\
 
   return (
-    <div className="home-container w-[100vw] min-h-screen bg-gradient-to-l from-[#141414] to-[#0c2025] pt-[70px] pb-[100px] flex fles-col md:fles-row justify-start items-start overflow-x-hidden z-[2]">
-      {/* Transparent div to manage the searchbar display action */}
-      {!searchbarCollapse && <div className="transparent-navbar w-[100%] h-[75px] mb-[5px]"></div>}
+    <div className="collections-page-container w-[100vw] min-h-screen bg-gradient-to-l from-[#141414] to-[#0c2025] pt-[70px] ">
 
-      <div className="w-[100vw] md:w-[30vw] lg:[20vw] md:min-h-screen px-[20px] py-[40px] border-r-[1px] border-gray-400 text-[#aaf5fa] lg:fixed bg-amber-400">
-        <p className="txt-[25px] font-semibold flex  justify-start items-center gap-[5px]">FILTERS</p>
+      <div className="w-[100%] h-[100%] flex flex-col md:flex-row justify-start items-stretch">
+        {/* Filters */}
+        <div className={`filters w-[100vw] md:w-[40vw] lg:w-[30vw]  ${showFilters ? "h-[320px]" : "h-[50px]"} md:h-auto px-[10px] md:pl-[20px] pb-[40px] pt-[80px] md:pt-[70px] border-r-[1px] border-gray-400 text-[#aaf5fa]`}>
+          <div className="flex justify-between items-center">
+            <p className="text-[24px] font-semibold flex justify-start items-center gap-[5px] cursor-pointer md:cursor-default" onClick={() => { setShowFilters(prev => !prev) }}>
+              FILTERS
+              {!showFilters ? <IoIosArrowDown className='inline-block md:hidden' /> : <IoIosArrowUp className='inline-block md:hidden' />}
+            </p>
+            <span className="!px-[4px] !py-[1px] !mb-[0.5rem] !rounded-[2px] border-gray-400 border-1 text-white !text-[12px] hover:bg-red-400 cursor-pointer" onClick={handleResetFilters}>
+              Reset
+            </span>
+          </div>
 
-        <div className="border-[2px] border-[#dedcdc] pl-5 py-3 lt-6 rounded-md bg-slate-600">
-          <p className="text-[18px] text-[#f8fafa]">CATEGORIES</p>
-          <div className="w-[230px] h-[120px] flex flex-col justify-start items-start gap-[5px] pl-[5px]">
-            <p className="flesx justify-center items-center gap-[10px] text-[16px] font-light ">
-              <input type="checkbox" value={"men"} className='w-3 px-[10px]'/>
-              Men
-            </p>
-            <p className="flesx justify-center items-center gap-[10px] text-[16px] font-light">
-              <input type="checkbox" value={"women"} className='w-3 px-[10px]'/>
-              Women
-            </p>
-            <p className="flesx justify-center items-center gap-[10px] text-[16px] font-light">
-              <input type="checkbox" value={"Kid"} className='w-3 px-[10px]'/>
-              Kid
-            </p>
+          <div className={`w-[100%] ${showFilters ? "flex" : "hidden"} md:flex md:flex-col justify-start items-start gap-[10px] md:pl-0 pl-4`}>
+            {/* Categories */}
+            <div className="w-[95%] border-[2px] border-[#dedcdc] pl-2 md:pl-5 py-3 rounded-md bg-slate-600">
+              <p className="text-[18px] text-[#f8fafa]">CATEGORIES</p>
+              <div className="w-[140px] md:w-[100%] h-[90px] flex flex-col justify-start items-start gap-[2px] pl-[10px]">
+                <p className="flex justify-center items-center gap-[10px] text-[16px] font-light mb-0">
+                  <input type="checkbox" value={"Men"} className='w-3 px-[10px]' checked={productFilters.categories.includes("Men")} onChange={toggleCategory} />
+                  Men
+                </p>
+                <p className="flex justify-center items-center gap-[10px] text-[16px] font-light mb-0">
+                  <input type="checkbox" value={"Women"} className='w-3 px-[10px]' checked={productFilters.categories.includes("Women")} onChange={toggleCategory} />
+                  Women
+                </p>
+                <p className="flex justify-center items-center gap-[10px] text-[16px] font-light mb-0">
+                  <input type="checkbox" value={"Kids"} className='w-3 px-[10px]' checked={productFilters.categories.includes("Kids")} onChange={toggleCategory} />
+                  Kid
+                </p>
+              </div>
+            </div>
+
+            {/* Sub-category */}
+            <div className="w-[95%] border-[2px] border-[#dedcdc] pl-2 md:pl-5 py-3  rounded-md bg-slate-600">
+              <p className="text-[18px] text-[#f8fafa]">SUB - CATEGORIES</p>
+              <div className="w-[140px] md:w-[100%] h-[90px] flex flex-col justify-start items-start gap-[2px] pl-[10px]">
+                <p className="flex justify-center items-center gap-[10px] text-[16px] font-light mb-0">
+                  <input type="checkbox" value={"TopWear"} className='w-3 px-[10px]' checked={productFilters.subCategories.includes("TopWear")} onChange={toggleSubCategory} />
+                  Top Wear
+                </p>
+                <p className="flex justify-center items-center gap-[10px] text-[16px] font-light mb-0">
+                  <input type="checkbox" value={"BottomWear"} className='w-3 px-[10px]' checked={productFilters.subCategories.includes("BottomWear")} onChange={toggleSubCategory} />
+                  Bottom Wear
+                </p>
+                <p className="flex justify-center items-center gap-[10px] text-[16px] font-light mb-0">
+                  <input type="checkbox" value={"Winterwear"} className='w-3 px-[10px]' checked={productFilters.subCategories.includes("Winterwear")} onChange={toggleSubCategory} />
+                  Winter Wear
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Separator for small screen */}
+        <div className="w-[100vw] md:hidden">
+          <Separator90 />
+        </div>
+        {/* Collectionz */}
+        <div className="collections w-[100vw] min-h-screen pb-[40px] md:pt-[70px] px-[20px] my-[20px]">
+          <div className="w-[90vw] md:w-[70vw] lg:w-[80vw] flex  justify-between items-start lg:items-center">
+            <Title text1={"All"} text2={"Collections"} />
+            {/* w-[60%] */}
+            <select name="" id="" className='bg-slate-600  w-[140px] h-[40px] px-[10px] text-white !text-[12px] rounded-lg hover:border-[#46d1f7] border-[2px]' value={productFilters.sortBy} onChange={toggleSorting}>
+              <option value="relevant" className="w-[100%] h-[100%] !text-[12px]">
+                Sort: Relevant
+              </option>
+              <option value="low-high" className="w-[100%] h-[100%] !text-[12px]">
+                Sort: Low to High
+              </option>
+              <option value="high-low" className="w-[100%] h-[100%] !text-[12px]">
+                Sort: High to Low
+              </option>
+            </select>
+          </div>
+          <div className="lg:w-[80vw] md:w-[70vw] w-[90vw] min-h-[70vh] pt-[20px] hidden lg:flex justify-center items-center gap-[30px] flex-wrap">
+            {filteredProducts ? filteredProducts.map(product => {
+              return (
+                <div className="mb-[20px]">
+                  <ProductCard product={product} />
+                </div>
+              )
+            }) : (
+              <div className="w-[100%]">"No products available currently</div>
+            )
+            }
+          </div>
+          <div className="lg:w-[80vw] md:w-[70vw] w-[90vw] min-h-[70vh] pt-[20px] flex justify-center items-center gap-[30px] flex-wrap lg:hidden">
+            {filteredProducts ? filteredProducts.map(product => {
+              return (
+                <HorizontalProductCard product={product} />
+              )
+            }) : (
+              <div className="w-[100%]">"No products available currently</div>
+            )
+            }
           </div>
         </div>
       </div>

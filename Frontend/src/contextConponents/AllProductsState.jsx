@@ -7,6 +7,9 @@ export default function AllProductsState(props) {
     const currency = "₹";
     const deliveryCharge = 50;
 
+    // State to store all products
+    const [products, setProducts] = useState(null);
+
     // State to store the list of products based on category
     const [allProducts, setAllProducts] = useState({
         mens: null,
@@ -24,6 +27,9 @@ export default function AllProductsState(props) {
           throw new Error("Unable to fetch all products");
         }
         console.log(allCategoryProducts);
+
+        // Update the products state
+        setProducts(allCategoryProducts.products)
 
         // Categorize list of products based on their category
         const menProducts = allCategoryProducts.products.filter((product) => { return (product.category === "Men") })
@@ -53,7 +59,7 @@ export default function AllProductsState(props) {
   }, [])
     // ------------------------------------- ********************* ------------------------------------- \\
 
-    const value = {allProducts, setAllProducts, currency, deliveryCharge};
+    const value = {products, setProducts, allProducts, setAllProducts, currency, deliveryCharge};
 
   return (
     <AllProductsContext value={value}>{props.children}</AllProductsContext>
