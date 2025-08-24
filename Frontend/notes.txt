@@ -4,3 +4,4 @@ signup login navbar adjust the padding of the logo and brand name by adding h-[1
 rethink the auto redirect logic in the log in page
 redesign the the menu section for mobile version (do it with icons)
 remove timer from admin and frontend
+Add news letter box - 8:30 hour

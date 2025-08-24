@@ -163,7 +163,7 @@ export default function Nav() {
                 {searchDisplay ? (
                     <>
                         <input type="text" className='w-[50%] h-[60%] bg-[#4d6a67] rounded-[30px] px-[50px] placeholder:text-white text-white text-[18px]' placeholder='Search' value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={handleSearchOnEnter} />
-                        <div className="absolute right-[28%]" onClick={handleSearchOnClick}>
+                        <div className="absolute right-[28%] cursor-pointer" onClick={handleSearchOnClick}>
                             <FaSearch fill='white' />
                         </div>
                     </>

@@ -4,6 +4,7 @@ import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import UserDetailState from './contextConponents/UserDetailState';
 import Nav from './components/Nav';
+import Footer from './components/Footer'
 import SearchCollapseState from './contextConponents/SearchCollapseState';
 import AllProductsState from './contextConponents/AllProductsState';
 
@@ -22,6 +23,7 @@ function App() {
           <SearchCollapseState>
             {!hideNav && <Nav />}
             <Outlet />
+            <Footer />
           </SearchCollapseState>
         </AllProductsState>
       </UserDetailState>

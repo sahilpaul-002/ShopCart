@@ -4,6 +4,8 @@ import Background from '../components/Background';
 import Hero from '../components/Hero';
 import SearchCollapseContext from '../contexts/SearchCollapseContext';
 import Products from '../components/Products';
+import OurPolicy from '../components/OurPolicy';
+import NewLetterBox from '../components/NewLetterBox';
 
 export default function Home() {
   const location = useLocation();
@@ -42,7 +44,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="home-container w-[100vw] min-h-screen bg-gradient-to-l from-[#141414] to-[#0c2025] pt-[70px] pb-[100px] md:px-[80px] px-[20px]">
+      <div className="home-container w-[100vw] min-h-screen bg-gradient-to-l from-[#141414] to-[#0c2025] pt-[70px] pb-[20px] md:px-[80px] px-[20px]">
         {/* Transparent div to manage the searchbar display action */}
         {!searchbarCollapse && <div className="transparent-navbar w-[100%] h-[75px] mb-[5px]"></div>}
 
@@ -55,6 +57,16 @@ export default function Home() {
         <div className='w-[100%] py-[50px]'>
           <Products />
         </div>
+
+        {/* Policies */}
+        <div className='w-[100%] py-[50px]'>
+          <OurPolicy />
+        </div>
+
+        {/* New Letter Box */}
+        {/* <div className='w-[100%] py-[50px]'>
+          <NewLetterBox />
+        </div> */}
       </div>
     </>
   )
