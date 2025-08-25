@@ -1,7 +1,9 @@
 import React, { useContext } from 'react'
 import AllProductsContext from '../contexts/AllProductsContext';
+import { useNavigate } from 'react-router';
 
 export default function ProductCard(props) {
+    let navigate = useNavigate();
     // Destructure props
     // const {name, image, id, price} = props;
     const { product } = props;
@@ -9,7 +11,7 @@ export default function ProductCard(props) {
     // Destructue context props
     const { currency } = useContext(AllProductsContext)
     return (
-        <div className='w-[70vw] max-w-[90%] h-[130px] bg-[#ffffff0a] backdrop-blur-lg rounded-lg hover:scale-[110%] flex items-start justify-between shrink-0 p-[10px] cursor-pointer border-[2px] border-[#80808049] transition-all ease-in-out' id={product._id}>
+        <div className='w-[70vw] max-w-[90%] h-[130px] bg-[#ffffff0a] backdrop-blur-lg rounded-lg hover:scale-[110%] flex items-start justify-between shrink-0 p-[10px] cursor-pointer border-[2px] border-[#80808049] transition-all ease-in-out' key={product._id} onClick={() => {navigate(`/productdetails/${product._id}`)}}>
             <div className="flex justify-start items-start gap-[20px] relative">
                 <img src={product.image1} alt="Product Image" className='w-[60px] h-[100px] rounded-sm object-cover' />
                 <div className="flex flex-col justify-start items-start gap-[5px]">

@@ -230,7 +230,7 @@ export default function Collections() {
           <div className="lg:w-[80vw] md:w-[70vw] w-[90vw] min-h-[70vh] pt-[20px] hidden lg:flex justify-center items-center gap-[30px] flex-wrap">
             {filteredProducts ? filteredProducts.map(product => {
               return (
-                <div className="mb-[20px]">
+                <div key={product._id} className="mb-[20px]">
                   <ProductCard product={product} />
                 </div>
               )
@@ -242,7 +242,9 @@ export default function Collections() {
           <div className="lg:w-[80vw] md:w-[70vw] w-[90vw] min-h-[70vh] pt-[20px] flex justify-center items-center gap-[30px] flex-wrap lg:hidden">
             {filteredProducts ? filteredProducts.map(product => {
               return (
-                <HorizontalProductCard product={product} />
+                <div key={product._id}>
+                  <HorizontalProductCard product={product} />
+                </div>
               )
             }) : (
               <div className="w-[100%]">"No products available currently</div>

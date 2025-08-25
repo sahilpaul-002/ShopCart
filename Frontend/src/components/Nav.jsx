@@ -11,6 +11,7 @@ import GetUserContext from '../contexts/GetUserContext';
 import { getUserDetail } from '../apiCalls/UserDetail';
 import { userLogOutApi } from '../apiCalls/UserAuth';
 import SearchCollapseContext from '../contexts/SearchCollapseContext';
+import AllProductsContext from '../contexts/AllProductsContext';
 
 export default function Nav() {
     let navigate = useNavigate();
@@ -19,6 +20,7 @@ export default function Nav() {
     // Destructure context value
     const { userDetail, setUserDetail } = useContext(GetUserContext);
     const { searchbarCollapse, setSearchbarCollapse, search, setSearch } = useContext(SearchCollapseContext);
+    const {getCartCount} = useContext(AllProductsContext);
 
     // State to store the search display state
     const [searchDisplay, setSearchDisplay] = useState(false);
@@ -155,7 +157,7 @@ export default function Nav() {
                 )}
                 <FaCartShopping className='car-icon w-[60px] h-[30px] cursor-pointer' />
                 <div className='w-[16px] h-[16px] bg-red-500 text-[8px] text-white rounded-full flex justify-center items-center absolute top-[-10%] right-[-2%]' >
-                    <span>10</span>
+                    <span>{getCartCount()}</span>
                 </div>
             </div>
             {/* Search Bar */}

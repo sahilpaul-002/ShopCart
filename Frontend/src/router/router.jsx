@@ -8,6 +8,7 @@ import Orders from "../pages/Orders";
 import Products from "../components/Products"
 import Contact from "../pages/Contact";
 import About from "../pages/About";
+import ProductDetail from "../pages/ProductDetail";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "collections", 
         Component: Collections
+      },
+      {
+        path: "productdetails/:productId", 
+        Component: ProductDetail
       },
       {
         path: "orders", 
