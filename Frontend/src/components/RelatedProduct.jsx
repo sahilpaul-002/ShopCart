@@ -3,37 +3,54 @@ import AllProductsContext from '../contexts/AllProductsContext';
 import Title from './Title'
 import ProductCard from './ProductCard'
 
-function RelatedProduct({category,subCategory,currentProductId }) {
+function RelatedProduct({ category, subCategory, currentProductId }) {
+    console.log(category, subCategory, currentProductId)
 
-    let {allProducts} = useContext(AllProductsContext)
-    let [related,setRelated] = useState([])
+    let { products } = useContext(AllProductsContext)
+    let [related, setRelated] = useState([])
 
-    useEffect(()=>{
-     if(allProducts.length > 0){
+    useEffect(() => {
+        if (products && products.length > 0) {
+            let productsCopy = [...products];
 
-        let productsCopy = allProducts.slice()
-        productsCopy = productsCopy.filter((item) => category === item.category)
-        productsCopy = productsCopy.filter((item) => subCategory === item.subCategory)
-        productsCopy = productsCopy.filter((item) => currentProductId  !== item._id)
-        setRelated(productsCopy.slice(0,4))
+            productsCopy = productsCopy.filter(
+                (product) => product.category.toLowerCase() === category.toLowerCase()
+            );
+            console.log("After category filter:", productsCopy);
+            productsCopy = productsCopy.filter(
+                (product) => product.subCategory.toLowerCase() === subCategory.toLowerCase()
+            );
+            console.log("After sub-category filter:", productsCopy);
+            productsCopy = productsCopy.filter(
+                (product) => product._id !== currentProductId
+            );
+            console.log("After id filter:", productsCopy);
 
-     }
-    },[allProducts,category,subCategory,currentProductId])
-  return (
-    <div className='my-[130px] md:my-[40px]  md:px-[60px] '>
-        <div className='ml-[20px] lg:ml-[80px]'>
-            <Title text1={'RELATED'} text2={'PRODUCTS'}/>
+            setRelated(productsCopy);
+        }
+    }, [products, category, subCategory, currentProductId]);
+    useEffect(() => {
+        console.log(related);
+    }, [related])
+    useEffect(() => {
+        console.log("products from context:", products);
+    }, [products]);
+
+    return (
+        <div className='my-[130px] md:my-[40px]  md:px-[60px] '>
+            <div className='ml-[20px] lg:ml-[80px]'>
+                <Title text1={'RELATED'} text2={'PRODUCTS'} />
+            </div>
+            <div className="w-[80vw] xl:w-[86vw] flex justify-start items-center gap-[20px] py-[40px] px-[20px] m-[auto] overflow-x-scroll overflow-y-hidden scrollbar-hide">
+                {
+                    related.length > 0 ? related.map((product) => (
+                        <div className="" key={product._id}><ProductCard product={product} /></div>
+                    )) : null
+                }
+            </div>
+
         </div>
-        <div className='w-[100%]  mt-[30px] flex items-center justify-center flex-wrap gap-[50px]'>
-            {
-                related.map((item,index)=>(
-                    <ProductCard key={index} id={item._id} name={item.name } price={item.price} image={item.image1} />
-                ))
-            }
-        </div>
-      
-    </div>
-  )
+    )
 }
 
 export default RelatedProduct

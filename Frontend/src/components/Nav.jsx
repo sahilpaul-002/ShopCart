@@ -11,7 +11,7 @@ import GetUserContext from '../contexts/GetUserContext';
 import { getUserDetail } from '../apiCalls/UserDetail';
 import { userLogOutApi } from '../apiCalls/UserAuth';
 import SearchCollapseContext from '../contexts/SearchCollapseContext';
-import AllProductsContext from '../contexts/AllProductsContext';
+import UserCartContext from '../contexts/UserCartContext';
 
 export default function Nav() {
     let navigate = useNavigate();
@@ -20,7 +20,7 @@ export default function Nav() {
     // Destructure context value
     const { userDetail, setUserDetail } = useContext(GetUserContext);
     const { searchbarCollapse, setSearchbarCollapse, search, setSearch } = useContext(SearchCollapseContext);
-    const {getCartCount} = useContext(AllProductsContext);
+    const {getCartCount} = useContext(UserCartContext);
 
     // State to store the search display state
     const [searchDisplay, setSearchDisplay] = useState(false);

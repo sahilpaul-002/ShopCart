@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import AllProductsContext from '../contexts/AllProductsContext.jsx';
 import { getAllProducts } from '../apiCalls/ProductDetails';
+import {addProductToCart} from '../apiCalls/UserCartDetail.js';
 
 export default function AllProductsState(props) {
   // Constants
@@ -17,8 +18,11 @@ export default function AllProductsState(props) {
     kids: null
   })
 
-  // State to store product in cart
-  const [cartProducts, setCartProducts] = useState({});
+  // // State to store product in cart
+  // const [cartProducts, setCartProducts] = useState({});
+
+  // // State to store the loading annimation
+  // const [loading, setLoading] = useState(false);
 
   // ------------------------------ Logic to fetch all products ------------------------------ \\
   useEffect(() => {
@@ -63,57 +67,81 @@ export default function AllProductsState(props) {
   // ------------------------------------- ********************* ------------------------------------- \\
 
   // ----------------------------------- Logic to add product to cart ----------------------------------- \\
-  const addToCart = (productId, productSize) => {
-    try {
-      if (!size) {
-        throw new Error("Aelect size to add the product to cart");
-      }
+  // const addToCart = async (productId, productSize) => {
+  //   try {
+  //     // Update the loading state
+  //     setLoading(true);
 
-      let cartData = cartProducts;
+  //     // Check if size is selected
+  //     if (!productSize) {
+  //       throw new Error("Select size to add the product to cart");
+  //     }
 
-      if (cartData[productId]) {
-        if(cartData[productId][productSize]) {
-          cartData[productId][productSize] +=1;
-        }
-        else {
-          cartData[productId][productSize] = 1
-        }
-      }
-      else {
-        cartData[productId] = {};
-        cartData[productId][productSize] = 1
-      }
+  //     // Nested copy
+  //     setCartProducts(prevCart => {
+  //       const cartData = { ...prevCart };
 
-      setCartProducts(cartData);
+  //       // Logic to add product to cart
+  //       if (cartData[productId]) {
+  //         if (cartData[productId][productSize]) {
+  //           // Check sie already present
+  //           cartData[productId][productSize] += 1;
+  //         }
+  //         else {
+  //           // Check size not present
+  //           cartData[productId][productSize] = 1
+  //         }
+  //       }
+  //       else {
+  //         // Product not present in the cart
+  //         cartData[productId] = {};
+  //         cartData[productId][productSize] = 1
+  //       }
 
-      // Success message
-      console.log({success: true, message: "Product added to cart"});
-    }
-    catch (e) {
-      console.error({ success: false, message: e.message });
-    }
-  }
+  //       return cartData;
+  //     });
+
+  //     // Update the cart in database
+  //     const result = await addProductToCart(productId, productSize)
+
+  //     // Update the loading state
+  //     setLoading(false);
+
+  //     // Success message
+  //     console.log(result);
+  //   }
+  //   catch (e) {
+  //     // Update the loading state
+  //     setLoading(false);
+
+  //     console.error({ success: false, message: e.message, user: null });
+  //   }
+  // }
   // ------------------------------------- ********************* ------------------------------------- \\
+  // useEffect(() => {
+  //   console.log(cartProducts);
+  // }, [cartProducts])
 
   // ------------------------------------- Logic to get the cart count ------------------------------------- \\
-  const getCartCount = () => {
-    let totalCount = 0;
-    for (const items in cartProducts) {
-      for (const item in cartProducts[items]) {
-        try {
-          if (cartProducts[items][item] > 0) {
-            totalCount += cartProducts[items][item]
-          }
-        } catch (error) {
-          console.error({success: false, message: e.message})
-        }
-      }
-    }
-    return totalCount
-  }
+  // const getCartCount = () => {
+  //   let totalCount = 0;
+  //   for (const items in cartProducts) {
+  //     for (const item in cartProducts[items]) {
+  //       try {
+  //         if (cartProducts[items][item] > 0) {
+  //           totalCount += cartProducts[items][item]
+  //         }
+  //       } catch (error) {
+  //         console.error({ success: false, message: e.message })
+  //       }
+  //     }
+  //   }
+  //   return totalCount
+  // }
   // ------------------------------------- ********************* ------------------------------------- \\
 
-  const value = { products, setProducts, allProducts, setAllProducts, currency, deliveryCharge, cartProducts, setCartProducts, addToCart, getCartCount};
+  // const value = { products, setProducts, allProducts, setAllProducts, currency, deliveryCharge, cartProducts, setCartProducts, addToCart, getCartCount };
+  const value = { products, setProducts, allProducts, setAllProducts, currency, deliveryCharge };
 
   return (
     <AllProductsContext value={value}>{props.children}</AllProductsContext>
