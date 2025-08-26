@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import UserCartContext from '../contexts/UserCartContext'
 import { addProductToCart, getUserCartProducts, updateCartProducts } from '../apiCalls/UserCartDetail.js';
+import AllProductsContext from '../contexts/AllProductsContext.jsx';
+import GetUserContext from '../contexts/GetUserContext.jsx';
 
 export default function UserCartState(props) {
+    // Destructure context props
+    const {products} = useContext(AllProductsContext)
+    const { userDetail } = useContext(GetUserContext);
+
     // State to store product in cart
     const [cartProducts, setCartProducts] = useState({});
 
@@ -67,7 +73,7 @@ export default function UserCartState(props) {
     }
     // ------------------------------------- ********************* ------------------------------------- \\
     useEffect(() => {
-        console.log(cartProducts);
+        console.log("cartProducts",cartProducts);
     }, [cartProducts])
 
     // ------------------------------------- Logic to get user cart details ------------------------------------- \\
@@ -92,7 +98,7 @@ export default function UserCartState(props) {
         }
 
         fetchUserCart();
-    }, []);
+    }, [userDetail]);
     // ------------------------------------- ********************* ------------------------------------- \\
 
     // ------------------------------------- Logic to get the cart count ------------------------------------- \\
@@ -114,9 +120,9 @@ export default function UserCartState(props) {
     // ------------------------------------- ********************* ------------------------------------- \\
 
     // ------------------------------------- Logic to get user cart details ------------------------------------- \\
-    const updateCartDetails = async () => {
+    const updateCartDetails = async (productId, productSize, quatity) => {
         try {
-            const result = await updateCartProducts();
+            const result = await updateCartProducts(productId, productSize, quatity);
 
             if (!result) {
                 throw new Error(result);
@@ -134,7 +140,27 @@ export default function UserCartState(props) {
     }
     // ------------------------------------- ********************* ------------------------------------- \\
 
-    const value = { cartProducts, setCartProducts, addToCart, getCartCount, updateCartDetails }
+    // ------------------------------------- Get total amount from user cart ------------------------------------- \\
+    const getCartAmount = async () => {
+        let totalAmount = 0;
+        for(const cartProduct in cartProducts) {
+            let productInfo = products.find((product) => product._id === cartProduct);
+            for (const size in cartProducts[cartProduct]) {
+                try {
+                    if (cartProducts[cartProduct][size] > 0) {
+                        totalAmount += productInfo.price * cartProducts[cartProduct[cartProduct][size]];
+                    }
+                }
+                catch (e) {
+                    console.error({success: false, message: e.message});
+                }
+            }
+        }
+        return totalAmount;
+    }
+    // ------------------------------------- ********************* ------------------------------------- \\
+
+    const value = { cartProducts, setCartProducts, addToCart, getCartCount, updateCartDetails, getCartAmount }
     return (
         <UserCartContext value={value}>{props.children}</UserCartContext>
     )

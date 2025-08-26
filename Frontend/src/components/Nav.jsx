@@ -20,13 +20,16 @@ export default function Nav() {
     // Destructure context value
     const { userDetail, setUserDetail } = useContext(GetUserContext);
     const { searchbarCollapse, setSearchbarCollapse, search, setSearch } = useContext(SearchCollapseContext);
-    const {getCartCount} = useContext(UserCartContext);
+    const {getCartCount, cartProducts, setCartProducts} = useContext(UserCartContext);
 
     // State to store the search display state
     const [searchDisplay, setSearchDisplay] = useState(false);
 
     // State to store the profile display state
     const [profileDisplay, setProfileDisplay] = useState(false)
+
+    // State to strote the total cart products
+    const [totalCartProducts, setTotalCartProducts] = useState(0);
 
     // ------------------------------------- Logic to reset the UI while navigating ------------------------------------- \\
     useEffect(() => {
@@ -60,6 +63,10 @@ export default function Nav() {
 
             // Call log out api
             const logOutResponse = await userLogOutApi();
+
+            // Update the totalCartProducts
+            setTotalCartProducts(0);
+            setCartProducts({});
 
             // Succes message
             console.log(logOutResponse);
@@ -121,6 +128,13 @@ export default function Nav() {
         navigate(`/collections?search=${search}`)
     }
 
+    // UseEffect to update the user cart products number on render
+    useEffect(() => {
+        const cartProductsNumber = getCartCount();
+        console.log("cartProductsNumber",cartProductsNumber)
+        setTotalCartProducts(cartProductsNumber);
+    },  [cartProducts, userDetail]);
+
     return (
         <div className='w-[100vw] h-[80px] bg-[#628f8f] z-[100] fixed top-0 flex items-center justify-between px-[30px] shadow-xl shadow-black '>
             {/* Brand Logo */}
@@ -155,9 +169,12 @@ export default function Nav() {
                 ) : (
                     <FaUserCircle className='profile-icon w-[70px] h-[35px] cursor-pointer' onClick={() => { setProfileDisplay(prev => !prev) }} />
                 )}
-                <FaCartShopping className='car-icon w-[60px] h-[30px] cursor-pointer' />
+                <Link to='/cart' className='no-underline !text-[#414141]'>
+                    <FaCartShopping className='car-icon w-[60px] h-[30px] cursor-pointer' />
+                </Link>
                 <div className='w-[16px] h-[16px] bg-red-500 text-[8px] text-white rounded-full flex justify-center items-center absolute top-[-10%] right-[-2%]' >
-                    <span>{getCartCount()}</span>
+                    {/* <span>{getCartCount()}</span> */}
+                    <span>{totalCartProducts}</span>
                 </div>
             </div>
             {/* Search Bar */}
