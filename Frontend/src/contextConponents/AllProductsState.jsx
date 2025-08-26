@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import AllProductsContext from '../contexts/AllProductsContext.jsx';
 import { getAllProducts } from '../apiCalls/ProductDetails';
-import {addProductToCart} from '../apiCalls/UserCartDetail.js';
+import { addProductToCart } from '../apiCalls/UserCartDetail.js';
 
 export default function AllProductsState(props) {
   // Constants
@@ -26,8 +26,8 @@ export default function AllProductsState(props) {
 
   // ------------------------------ Logic to fetch all products ------------------------------ \\
   useEffect(() => {
-    try {
-      const fetchProducts = async () => {
+    const fetchProducts = async () => {
+      try {
         const allCategoryProducts = await getAllProducts();
         // Check if the all products are fetched
         if (!allCategoryProducts.success) {
@@ -54,15 +54,14 @@ export default function AllProductsState(props) {
         // Success message
         console.log({ success: true, message: "List of all products fetched." })
       }
-
-      //   setTimeout(() => {
-      //     fetchProducts();
-      //   }, 2000)
-      fetchProducts();
+      catch (e) {
+        console.error({ success: false, message: e.message });
+      }
     }
-    catch (e) {
-      console.error({ success: false, message: e.message });
-    }
+    //   setTimeout(() => {
+    //     fetchProducts();
+    //   }, 2000)
+    fetchProducts();
   }, [])
   // ------------------------------------- ********************* ------------------------------------- \\
 

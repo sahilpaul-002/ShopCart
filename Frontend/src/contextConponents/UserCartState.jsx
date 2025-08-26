@@ -6,7 +6,7 @@ import GetUserContext from '../contexts/GetUserContext.jsx';
 
 export default function UserCartState(props) {
     // Destructure context props
-    const {products} = useContext(AllProductsContext)
+    const { products } = useContext(AllProductsContext)
     const { userDetail } = useContext(GetUserContext);
 
     // State to store product in cart
@@ -14,6 +14,9 @@ export default function UserCartState(props) {
 
     // State to store the loading annimation
     const [loading, setLoading] = useState(false);
+
+    // State to store the total cart amount
+    const [totalCartAmount, setTotalCartAmount] = useState(null);
 
     // ----------------------------------- Logic to add product to cart ----------------------------------- \\
     const addToCart = async (productId, productSize) => {
@@ -73,7 +76,7 @@ export default function UserCartState(props) {
     }
     // ------------------------------------- ********************* ------------------------------------- \\
     useEffect(() => {
-        console.log("cartProducts",cartProducts);
+        console.log("cartProducts", cartProducts);
     }, [cartProducts])
 
     // ------------------------------------- Logic to get user cart details ------------------------------------- \\
@@ -120,9 +123,12 @@ export default function UserCartState(props) {
     // ------------------------------------- ********************* ------------------------------------- \\
 
     // ------------------------------------- Logic to get user cart details ------------------------------------- \\
-    const updateCartDetails = async (productId, productSize, quatity) => {
+    const updateCartDetails = async (productId, productSize, quantity) => {
         try {
-            const result = await updateCartProducts(productId, productSize, quatity);
+            if(quantity === "") {
+                throw new Error({success: false, message: "Minimun 1 quantity required", userCart: null});
+            }
+            const result = await updateCartProducts(productId, productSize, quantity);
 
             if (!result) {
                 throw new Error(result);
@@ -141,26 +147,34 @@ export default function UserCartState(props) {
     // ------------------------------------- ********************* ------------------------------------- \\
 
     // ------------------------------------- Get total amount from user cart ------------------------------------- \\
-    const getCartAmount = async () => {
-        let totalAmount = 0;
-        for(const cartProduct in cartProducts) {
-            let productInfo = products.find((product) => product._id === cartProduct);
-            for (const size in cartProducts[cartProduct]) {
-                try {
-                    if (cartProducts[cartProduct][size] > 0) {
-                        totalAmount += productInfo.price * cartProducts[cartProduct[cartProduct][size]];
+    useEffect(() => {
+        const getCartAmount = () => {
+            let totalAmount = 0;
+            if (cartProducts) {
+                for (const cartProduct in cartProducts) {
+                    let productInfo = products ? products.find((product) => product._id === cartProduct) : null;
+                    if (productInfo) {
+                        for (const size in cartProducts[cartProduct]) {
+                            // try {
+
+                            // }
+                            // catch (e) {
+                            //     console.error({ success: false, message: e.message });
+                            // }
+                            if (cartProducts[cartProduct][size] > 0) {
+                                totalAmount += productInfo.price * cartProducts[cartProduct][size];
+                            }
+                        }
                     }
                 }
-                catch (e) {
-                    console.error({success: false, message: e.message});
-                }
             }
+            return totalAmount;
         }
-        return totalAmount;
-    }
+        setTotalCartAmount(getCartAmount);
+    }, [cartProducts, products])
     // ------------------------------------- ********************* ------------------------------------- \\
 
-    const value = { cartProducts, setCartProducts, addToCart, getCartCount, updateCartDetails, getCartAmount }
+    const value = { cartProducts, setCartProducts, addToCart, getCartCount, updateCartDetails, totalCartAmount, setTotalCartAmount }
     return (
         <UserCartContext value={value}>{props.children}</UserCartContext>
     )

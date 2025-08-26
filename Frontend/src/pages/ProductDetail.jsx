@@ -14,7 +14,7 @@ function ProductDetail() {
     let { productId } = useParams()
     // let { products, currency, addToCart, loading } = useContext(AllProductsContext)
     let { products, currency } = useContext(AllProductsContext)
-    const {addToCart, loading} = useContext(UserCartContext);
+    const { addToCart, loading } = useContext(UserCartContext);
     let [productData, setProductData] = useState(false)
 
     const [image, setImage] = useState('')
@@ -64,16 +64,16 @@ function ProductDetail() {
     // ------------------------------ Logic to handle click on add to cart ------------------------------ \\
     const handleAddClick = async (productId, productSize) => {
         try {
-            const result = await  addToCart(productId, productSize);
-        if(!result.success) {
-            throw new Error(console.errror(result.message))
-        }
+            const result = await addToCart(productId, productSize);
+            if (!result.success) {
+                throw new Error(result.message)
+            }
 
-        // Success
-        console.log(result);
+            // Success
+            console.log(result);
         }
         catch (e) {
-            console.error({success: false, message: e.message});
+            console.error({ success: false, message: e.message });
         }
         finally {
             // Update the size state
