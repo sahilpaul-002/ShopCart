@@ -152,23 +152,22 @@ export default function Collections() {
 
   return (
     <div className="collections-page-container w-[100vw] min-h-screen bg-gradient-to-l from-[#141414] to-[#0c2025] pt-[70px] ">
-
-      <div className="w-[100%] h-[100%] flex flex-col md:flex-row justify-start items-stretch">
+      <div className="w-[100%] h-[100%] flex flex-col md:flex-row">
         {/* Filters */}
-        <div className={`filters w-[100vw] md:w-[40vw] lg:w-[30vw]  ${showFilters ? "h-[320px]" : "h-[50px]"} md:h-auto px-[10px] md:pl-[20px] pb-[40px] pt-[80px] md:pt-[70px] border-r-[1px] border-gray-400 text-[#aaf5fa]`}>
+        <div className={`filters w-[100vw] md:w-[46vw] lg:w-[30vw]  ${showFilters ? "h-[320px]" : "h-[50px]"} md:min-h-[100vh] px-[10px] md:pl-[20px] pb-[40px] pt-[80px] md:pt-[70px] border-r-[1px] border-gray-400 text-[#aaf5fa] md:sticky top-[70px] left-0 z-10`}>
           <div className="flex justify-between items-center">
             <p className="text-[24px] font-semibold flex justify-start items-center gap-[5px] cursor-pointer md:cursor-default" onClick={() => { setShowFilters(prev => !prev) }}>
               FILTERS
               {!showFilters ? <IoIosArrowDown className='inline-block md:hidden' /> : <IoIosArrowUp className='inline-block md:hidden' />}
             </p>
-            <span className="!px-[4px] !py-[1px] !mb-[0.5rem] !rounded-[2px] border-gray-400 border-1 text-white !text-[12px] hover:bg-red-400 cursor-pointer" onClick={handleResetFilters}>
+            <span className="!px-[4px] !py-[1px] !mb-[0.5rem] mr-10 md:mr-0 !rounded-[2px] border-gray-400 border-1 text-white !text-[12px] hover:bg-red-400 cursor-pointer" onClick={handleResetFilters}>
               Reset
             </span>
           </div>
 
           <div className={`w-[100%] ${showFilters ? "flex" : "hidden"} md:flex md:flex-col justify-start items-start gap-[10px] md:pl-0 pl-4`}>
             {/* Categories */}
-            <div className="w-[95%] border-[2px] border-[#dedcdc] pl-2 md:pl-5 py-3 rounded-md bg-slate-600">
+            <div className="w-[70%] md:w-[95%] border-[2px] border-[#dedcdc] pl-2 md:pl-5 py-3 rounded-md bg-slate-600">
               <p className="text-[18px] text-[#f8fafa]">CATEGORIES</p>
               <div className="w-[140px] md:w-[100%] h-[90px] flex flex-col justify-start items-start gap-[2px] pl-[10px]">
                 <p className="flex justify-center items-center gap-[10px] text-[16px] font-light mb-0">
@@ -187,7 +186,7 @@ export default function Collections() {
             </div>
 
             {/* Sub-category */}
-            <div className="w-[95%] border-[2px] border-[#dedcdc] pl-2 md:pl-5 py-3  rounded-md bg-slate-600">
+            <div className="w-[70%] md:w-[95%] border-[2px] border-[#dedcdc] pl-2 md:pl-5 py-3  rounded-md bg-slate-600">
               <p className="text-[18px] text-[#f8fafa]">SUB - CATEGORIES</p>
               <div className="w-[140px] md:w-[100%] h-[90px] flex flex-col justify-start items-start gap-[2px] pl-[10px]">
                 <p className="flex justify-center items-center gap-[10px] text-[16px] font-light mb-0">
@@ -206,13 +205,15 @@ export default function Collections() {
             </div>
           </div>
         </div>
+
         {/* Separator for small screen */}
         <div className="w-[100vw] md:hidden">
           <Separator90 />
         </div>
+
         {/* Collectionz */}
-        <div className="collections w-[100vw] min-h-screen pb-[40px] md:pt-[70px] px-[20px] my-[20px]">
-          <div className="w-[90vw] md:w-[70vw] lg:w-[80vw] flex  justify-between items-start lg:items-center">
+        <div className="collections w-[100vw] md:w-[82vw] min-h-screen pb-[40px] md:pt-[70px] px-[20px] my-[20px]">
+          <div className="w-[90vw] md:w-[66vw] lg:w-[76vw] flex  justify-between items-start lg:items-center">
             <Title text1={"All"} text2={"Collections"} />
             {/* w-[60%] */}
             <select name="" id="" className='bg-slate-600  w-[140px] h-[40px] px-[10px] text-white !text-[12px] rounded-lg hover:border-[#46d1f7] border-[2px]' value={productFilters.sortBy} onChange={toggleSorting}>
@@ -254,5 +255,8 @@ export default function Collections() {
         </div>
       </div>
     </div>
+
   )
+
+
 }

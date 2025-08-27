@@ -11,7 +11,7 @@ export default function ProductCard(props) {
     // Destructue context props
     const { currency } = useContext(AllProductsContext)
     return (
-        <div className='w-[70vw] max-w-[90%] h-[130px] bg-[#ffffff0a] backdrop-blur-lg rounded-lg hover:scale-[110%] flex items-start justify-between shrink-0 p-[10px] cursor-pointer border-[2px] border-[#80808049] transition-all ease-in-out' key={product._id} onClick={() => {navigate(`/productdetails/${product._id}`)}}>
+        <div className=' w-[80vw] md:w-[60vw] h-[130px] bg-[#ffffff0a] backdrop-blur-lg rounded-lg hover:scale-[110%] flex items-start justify-between shrink-0 p-[10px] cursor-pointer border-[2px] border-[#80808049] transition-all ease-in-out' key={product._id} onClick={() => {navigate(`/productdetails/${product._id}`)}}>
             <div className="flex justify-start items-start gap-[20px] relative">
                 <img src={product.image1} alt="Product Image" className='w-[60px] h-[100px] rounded-sm object-cover' />
                 <div className="flex flex-col justify-start items-start gap-[5px]">
