@@ -8,7 +8,6 @@ import { deleteProductDetails } from '../apiCalls/AdminProductDetails.js'
 export default function MensCategory(props) {
     // Destructure props
     const { menProducts, loading, setLoading } = props;
-    console.log(menProducts)
 
     // Local state to manage products
     const [products, setProducts] = useState(menProducts);
@@ -41,6 +40,7 @@ export default function MensCategory(props) {
             // Remove the item from the local state to update the UI
             setProducts(products.filter(product => product._id !== productId));
 
+            // Success message
             console.log({ success: true, message: deletedProduct.message, deletedProduct: deletedProduct.product })
 
             // Reset deleteProduct Loading state

@@ -22,7 +22,6 @@ export default function AddProduct() {
     // Function to get user detail from API
     const fetchUser = async () => {
       const user = await getAdminUserDetail();
-      console.log(user);
       setUserDetail(user);
       // Check user autorized
       if (!user.success) {
@@ -122,6 +121,7 @@ export default function AddProduct() {
         throw addProductResponse
       }
 
+      // Success message
       console.log({ success: true, message: addProductResponse.message, product: addProductResponse.product })
     }
     catch (e) {

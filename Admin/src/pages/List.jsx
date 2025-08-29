@@ -24,7 +24,6 @@ export default function List() {
     // Function to get user detail from API
     const fetchUser = async () => {
       const user = await getAdminUserDetail();
-      console.log(user);
       setUserDetail(user);
       // Check user autorized
       if (!user.success) {
@@ -81,13 +80,11 @@ export default function List() {
         if (!allCategoryProducts.success) {
           throw new Error("Unable to fetch all products");
         }
-        console.log(allCategoryProducts);
 
         // Categorize list of products based on their category
         const menProducts = allCategoryProducts.products.filter((product) => { return (product.category === "Men") })
         const womenProducts = allCategoryProducts.products.filter((product) => { return (product.category === "Women") })
         const kidProducts = allCategoryProducts.products.filter((product) => { return (product.category === "Kids") })
-        console.log(kidProducts)
 
         // Updeate the product list state
         setAllProducts({
@@ -109,7 +106,6 @@ export default function List() {
     }
   }, [])
   // --------------------------- **************** --------------------------- \\
-  console.log(allProducts);
 
   // --------------------------- Logic to display loadinig --------------------------- \\
   useEffect(() => {

@@ -18,7 +18,6 @@ export default function Home() {
     // Function to get user detail from API
     const fetchUser = async () => {
       const user = await getAdminUserDetail();
-      console.log(user);
       setUserDetail(user);
       // Check user autorized
       if (!user.success) {
