@@ -75,9 +75,7 @@ export default function UserCartState(props) {
         }
     }
     // ------------------------------------- ********************* ------------------------------------- \\
-    useEffect(() => {
-        console.log("cartProducts", cartProducts);
-    }, [cartProducts])
+    
 
     // ------------------------------------- Logic to get user cart details ------------------------------------- \\
     useEffect(() => {

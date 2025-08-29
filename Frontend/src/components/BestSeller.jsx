@@ -45,10 +45,6 @@ export default function BestSeller() {
         }))
     }, [allProducts]);
 
-    useEffect(() => {
-        console.log(allBestSellers);
-    }, [allBestSellers]);
-
     return (
         <div>
             <div className='h-[8%] w-[100%] text-center md:text-[50px] mb-[20px]'>

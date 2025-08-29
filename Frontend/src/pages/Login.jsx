@@ -157,7 +157,6 @@ export default function Login() {
 
       // Call google sign in API
       const googleSignInResponse = await googleSignInApi(reqBody);
-      console.log(googleSignInResponse)
       // Check api response
       if (!googleSignInResponse.success) {
         throw new Error("Internal server error");

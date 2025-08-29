@@ -20,7 +20,7 @@ export default function Nav() {
     // Destructure context value
     const { userDetail, setUserDetail } = useContext(GetUserContext);
     const { searchbarCollapse, setSearchbarCollapse, search, setSearch } = useContext(SearchCollapseContext);
-    const {getCartCount, cartProducts, setCartProducts} = useContext(UserCartContext);
+    const { getCartCount, cartProducts, setCartProducts } = useContext(UserCartContext);
 
     // State to store the search display state
     const [searchDisplay, setSearchDisplay] = useState(false);
@@ -117,7 +117,7 @@ export default function Nav() {
         if (e.key === "Enter") {
             // Reset search value
             setSearch("")
-            
+
             navigate(`/collections?search=${search}`);
         }
     }
@@ -131,12 +131,12 @@ export default function Nav() {
     // UseEffect to update the user cart products number on render
     useEffect(() => {
         const cartProductsNumber = getCartCount();
-        console.log("cartProductsNumber",cartProductsNumber)
         setTotalCartProducts(cartProductsNumber);
-    },  [cartProducts, userDetail]);
+    }, [cartProducts, userDetail]);
 
     return (
-        <div className='w-[100vw] h-[80px] bg-[#628f8f] z-[100] fixed top-0 flex items-center justify-between px-[30px] shadow-xl shadow-black '>
+        // bg-[#628f8f]
+        <div className='w-[100vw] h-[80px] bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 z-[100] fixed top-0 flex items-center justify-between px-[30px] shadow-xl shadow-black '>
             {/* Brand Logo */}
             <Link className='!no-underline' to='/'>
                 <div className="brand-logo w-[100%] max-w-[380px] h-[100%] flex justify-start items-center gap-[20px] py-[auto]">
@@ -148,16 +148,24 @@ export default function Nav() {
             <div className="navbar-items w-[60%] h-[100%] hidden md:flex">
                 <ul className="w-[100%] h-[100%] flex items-center justify-center gap-[2%] lg:gap-[4%] text-white ps-0">
                     <NavLink className={"!no-underline text-white"} to='/'>
-                        <li> <ItemsButtonLarge text={'Home'} /> </li>
+                        {({ isActive }) => (
+                            <li> <ItemsButtonLarge text={'Home'} isActive={isActive} /> </li>
+                        )}
                     </NavLink>
                     <NavLink className={"!no-underline text-white"} to='/collections'>
-                        <li> <ItemsButtonLarge text={'Collections'} /> </li>
+                        {({ isActive }) => (
+                            <li> <ItemsButtonLarge text={'Collections'} isActive={isActive} /> </li>
+                        )}
                     </NavLink>
                     <NavLink className={"!no-underline text-white"} to='/About'>
-                        <li> <ItemsButtonLarge text={'About'} /> </li>
+                        {({ isActive }) => (
+                            <li> <ItemsButtonLarge text={'About'} isActive={isActive} /> </li>
+                        )}
                     </NavLink>
                     <NavLink className={"!no-underline text-white"} to='/contact'>
-                        <li> <ItemsButtonLarge text={'Contact'} /> </li>
+                        {({ isActive }) => (
+                            <li> <ItemsButtonLarge text={'Contact'} isActive={isActive} /> </li>
+                        )}
                     </NavLink>
                 </ul>
             </div>
@@ -165,13 +173,18 @@ export default function Nav() {
             <div className="navbar-items w-[40%] md:w-[15%] flex items-center justify-end gap-[2%] relative">
                 <FaSearch className='search-icon w-[50px] h-[25px] cursor-pointer' onClick={handleSearchbarDisplay} />
                 {userDetail.success ? (
-                    <div className="profile-loggedin-icon w-[38px] h-[35px]  aspect-square bg-[#414141] text-white font-bold rounded-[50%] flex items-center justify-center cursor-pointer" onClick={() => { setProfileDisplay(prev => !prev) }}>{userDetail.user.name[0]}</div>
+                    <div className={`profile-loggedin-icon w-[38px] h-[35px]  aspect-square text-white font-bold rounded-[50%] ${profileDisplay ? 'bg-[#921738]' : 'bg-[#000000c9]'} flex items-center justify-center cursor-pointer`} onClick={() => { setProfileDisplay(prev => !prev) }}>{userDetail.user.name[0]}</div>
                 ) : (
                     <FaUserCircle className='profile-icon w-[70px] h-[35px] cursor-pointer' onClick={() => { setProfileDisplay(prev => !prev) }} />
                 )}
-                <Link to='/cart' className='no-underline !text-[#414141]'>
-                    <FaCartShopping className='car-icon w-[60px] h-[30px] cursor-pointer' />
-                </Link>
+                <NavLink to='/cart' className='no-underline !text-[#414141]'>
+                    {({ isActive }) => (
+                        <FaCartShopping
+                            fill={isActive ? "#921738" : "#000000c9"}
+                            className="car-icon w-[60px] h-[30px] cursor-pointer"
+                        />
+                    )}
+                </NavLink>
                 <div className='w-[16px] h-[16px] bg-red-500 text-[8px] text-white rounded-full flex justify-center items-center absolute top-[-10%] right-[-2%]' >
                     {/* <span>{getCartCount()}</span> */}
                     <span>{totalCartProducts}</span>

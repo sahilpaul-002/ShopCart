@@ -44,7 +44,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="home-container w-[100vw] min-h-screen bg-gradient-to-l from-[#141414] to-[#0c2025] pt-[70px] pb-[20px] md:px-[80px] px-[20px]">
+      <div className="home-container w-[100vw] min-h-screen bg-gradient-to-r from-[#141414] from-10% via-[#133139] via-70% to-[#2c1435] pt-[70px] pb-[20px] md:px-[80px] px-[20px]">
         {/* Transparent div to manage the searchbar display action */}
         {!searchbarCollapse && <div className="transparent-navbar w-[100%] h-[75px] mb-[5px]"></div>}
 

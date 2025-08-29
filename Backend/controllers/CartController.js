@@ -4,7 +4,6 @@ const addToCart = async (req, res) => {
     try {
         // Destructure request bodyconst
         const { productId, productSize } = req.body
-        console.log(req.userId)
 
         const userData = await User.findById(req.userId);
         // Check if user exist

@@ -53,13 +53,7 @@ function ProductDetail() {
         setSize("");
     }, [location]);
     // ------------------------------------- **************************** ------------------------------------- \\
-
-    useEffect(() => {
-        console.log(productData)
-    }, [productData]);
-    useEffect(() => {
-        console.log(size);
-    }, [size]);
+    
 
     // ------------------------------ Logic to handle click on add to cart ------------------------------ \\
     const handleAddClick = async (productId, productSize) => {

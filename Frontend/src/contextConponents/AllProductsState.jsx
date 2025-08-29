@@ -33,7 +33,6 @@ export default function AllProductsState(props) {
         if (!allCategoryProducts.success) {
           throw new Error("Unable to fetch all products");
         }
-        console.log(allCategoryProducts);
 
         // Update the products state
         setProducts(allCategoryProducts.products)
@@ -42,7 +41,6 @@ export default function AllProductsState(props) {
         const menProducts = allCategoryProducts.products.filter((product) => { return (product.category === "Men") })
         const womenProducts = allCategoryProducts.products.filter((product) => { return (product.category === "Women") })
         const kidProducts = allCategoryProducts.products.filter((product) => { return (product.category === "Kids") })
-        console.log(kidProducts)
 
         // Updeate the product list state
         setAllProducts({
@@ -63,80 +61,6 @@ export default function AllProductsState(props) {
     //   }, 2000)
     fetchProducts();
   }, [])
-  // ------------------------------------- ********************* ------------------------------------- \\
-
-  // ----------------------------------- Logic to add product to cart ----------------------------------- \\
-  // const addToCart = async (productId, productSize) => {
-  //   try {
-  //     // Update the loading state
-  //     setLoading(true);
-
-  //     // Check if size is selected
-  //     if (!productSize) {
-  //       throw new Error("Select size to add the product to cart");
-  //     }
-
-  //     // Nested copy
-  //     setCartProducts(prevCart => {
-  //       const cartData = { ...prevCart };
-
-  //       // Logic to add product to cart
-  //       if (cartData[productId]) {
-  //         if (cartData[productId][productSize]) {
-  //           // Check sie already present
-  //           cartData[productId][productSize] += 1;
-  //         }
-  //         else {
-  //           // Check size not present
-  //           cartData[productId][productSize] = 1
-  //         }
-  //       }
-  //       else {
-  //         // Product not present in the cart
-  //         cartData[productId] = {};
-  //         cartData[productId][productSize] = 1
-  //       }
-
-  //       return cartData;
-  //     });
-
-  //     // Update the cart in database
-  //     const result = await addProductToCart(productId, productSize)
-
-  //     // Update the loading state
-  //     setLoading(false);
-
-  //     // Success message
-  //     console.log(result);
-  //   }
-  //   catch (e) {
-  //     // Update the loading state
-  //     setLoading(false);
-
-  //     console.error({ success: false, message: e.message, user: null });
-  //   }
-  // }
-  // ------------------------------------- ********************* ------------------------------------- \\
-  // useEffect(() => {
-  //   console.log(cartProducts);
-  // }, [cartProducts])
-
-  // ------------------------------------- Logic to get the cart count ------------------------------------- \\
-  // const getCartCount = () => {
-  //   let totalCount = 0;
-  //   for (const items in cartProducts) {
-  //     for (const item in cartProducts[items]) {
-  //       try {
-  //         if (cartProducts[items][item] > 0) {
-  //           totalCount += cartProducts[items][item]
-  //         }
-  //       } catch (error) {
-  //         console.error({ success: false, message: e.message })
-  //       }
-  //     }
-  //   }
-  //   return totalCount
-  // }
   // ------------------------------------- ********************* ------------------------------------- \\
 
   // const value = { products, setProducts, allProducts, setAllProducts, currency, deliveryCharge, cartProducts, setCartProducts, addToCart, getCartCount };

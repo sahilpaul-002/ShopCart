@@ -90,8 +90,6 @@ const deleteProduct = async (req, res) => {
     try {
         const product = req.body;
         const productId = product._id;
-        console.log(product)
-        console.log(productId)
 
         // Check params fetch
         if (!productId) {
@@ -126,33 +124,15 @@ const deleteProduct = async (req, res) => {
 
                 // Retrieve everything after 'upload/v<version>/' and remove file extension
                 const publicId = parts.slice(uploadIndex + 2).join('/').replace(/\.[^/.]+$/, "");
-                console.log("Deleting Cloudinary public_id:", publicId);
 
                 // Delete from Cloudinary
                 const result = await deleteFromCloudinary(publicId);
-                console.log(result);
 
                 if (!result.success) {
                     throw new Error(`Product deletion failed from Cloudinary for imageUrl${index + 1} but deleted from database`);
                 }
             }
         }
-        // if (!url) {
-        //     throw new Error("Product secure url not found.");
-        // }
-        // const parts = url.split('/');
-        // const uploadIndex = parts.findIndex(part => part === 'upload');
-        // if (uploadIndex === -1) throw new Error("Invalid Cloudinary URL");
-        // // Retrieve everything  after 'upload/v<version>/' and remove file extension
-        // const publicId = parts.slice(uploadIndex + 2).join('/').replace(/\.[^/.]+$/, "");
-        // console.log("Deleting Cloudinary public_id:", publicId);
-        // const result = await deleteFromCloudinary(publicId);
-        // console.log(result)
-
-        // // Check file deleted from cloudinary
-        // if (result.result !== "ok") {
-        //     throw new Error("Product deletion failed from cloudinary but file deleted from database");
-        // }
 
         res.status(200).json({
             success: true,

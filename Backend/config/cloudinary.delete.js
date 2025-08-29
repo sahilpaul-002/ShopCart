@@ -23,7 +23,6 @@ const deleteFromCloudinary = async (publicId) => {
         }
 
         const destroyedFile = await cloudinary.uploader.destroy(publicId);
-        console.log('Deleted from Cloudinary:', destroyedFile);
 
         return { success: true, message: "File deletion successful", deletedFile: destroyedFile };
     }

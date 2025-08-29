@@ -4,7 +4,6 @@ import Title from './Title'
 import ProductCard from './ProductCard'
 
 function RelatedProduct({ category, subCategory, currentProductId }) {
-    console.log(category, subCategory, currentProductId)
 
     let { products } = useContext(AllProductsContext)
     let [related, setRelated] = useState([])
@@ -16,25 +15,16 @@ function RelatedProduct({ category, subCategory, currentProductId }) {
             productsCopy = productsCopy.filter(
                 (product) => product.category.toLowerCase() === category.toLowerCase()
             );
-            console.log("After category filter:", productsCopy);
             productsCopy = productsCopy.filter(
                 (product) => product.subCategory.toLowerCase() === subCategory.toLowerCase()
             );
-            console.log("After sub-category filter:", productsCopy);
             productsCopy = productsCopy.filter(
                 (product) => product._id !== currentProductId
             );
-            console.log("After id filter:", productsCopy);
 
             setRelated(productsCopy);
         }
     }, [products, category, subCategory, currentProductId]);
-    useEffect(() => {
-        console.log(related);
-    }, [related])
-    useEffect(() => {
-        console.log("products from context:", products);
-    }, [products]);
 
     return (
         <div className='my-[130px] md:my-[40px]  md:px-[60px] '>

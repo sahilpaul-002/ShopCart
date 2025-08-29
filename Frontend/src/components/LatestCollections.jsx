@@ -43,10 +43,6 @@ export default function LatestCollections() {
         });
     }, [allProducts]);
 
-    useEffect(() => {
-        console.log(latestProducts);
-    }, [latestProducts]);
-
     // ---------------------------- ***************** ---------------------------- \\
 
     return (
