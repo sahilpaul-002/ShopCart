@@ -2,10 +2,14 @@ import React, { useContext, useState, useEffect } from 'react'
 import Title from './Title'
 import AllProductsContext from '../contexts/AllProductsContext'
 import ProductCard from './ProductCard';
+import Loading from './Loading';
 
 export default function LatestCollections() {
     // Destructure context props
     const { allProducts } = useContext(AllProductsContext);
+
+    // State to manage the loader
+    const [loading, setLoading] = useState(true);
 
     // ------------------------ Logic to retrieve lates products from all products ------------------------  \\
     // State to store latest products
@@ -15,6 +19,7 @@ export default function LatestCollections() {
         kidsProducts: null
     })
 
+    // UseEffect to sort the products based on date
     useEffect(() => {
         if (!allProducts) return;
 
@@ -41,6 +46,12 @@ export default function LatestCollections() {
             womensProducts: latestWomensProducts,
             kidsProducts: latestKidsProducts
         });
+
+        // Reset loading state
+        // setLoading(false);
+        setTimeout(() => {
+            setLoading(false);
+        }, 5000);
     }, [allProducts]);
 
     // ---------------------------- ***************** ---------------------------- \\
@@ -53,26 +64,40 @@ export default function LatestCollections() {
                     Step Into Style - New Collections Dropping This Season
                 </p>
             </div>
-            <div className="w-[80vw] xl:w-[86vw] flex justify-between items-center gap-[40px] p-[40px] m-[auto] overflow-x-scroll overflow-y-hidden scrollbar-hide">
-                {/* Mens Latest Collection */}
-                {latestProducts.mensProducts ? latestProducts.mensProducts.map((product, index) => {
-                    return (
-                        <ProductCard key={product._id} product={product} />
+            {
+                loading ? (
+                    <div className="w-[70vw] mx-[auto] flex items-center justify-center h-[50px] md:h-[100px] mt-[100px]">
+                        <Loading />
+                    </div>
+                ) : (
+                    latestProducts.mensProducts || latestProducts.womensProducts || latestProducts.kidsProducts ? (
+                        <div className="w-[80vw] xl:w-[86vw] flex justify-between items-center gap-[40px] p-[40px] m-[auto] overflow-x-scroll overflow-y-hidden scrollbar-hide">
+                            {/* Mens Latest Collection */}
+                            {latestProducts.mensProducts ? latestProducts.mensProducts.map((product, index) => {
+                                return (
+                                    <ProductCard key={product._id} product={product} />
+                                )
+                            }) : null}
+                            {/* Womens Latest Collection */}
+                            {latestProducts.womensProducts ? latestProducts.womensProducts.map((product, index) => {
+                                return (
+                                    <ProductCard key={product._id} product={product} />
+                                )
+                            }) : null}
+                            {/* Kids Latest Collection */}
+                            {latestProducts.kidsProducts ? latestProducts.kidsProducts.map((product, index) => {
+                                return (
+                                    <ProductCard key={product._id} product={product} />
+                                )
+                            }) : null}
+                        </div>
+                    ) : (
+                        <div className='w-[100%] text-center text-[18px] md:text-[25px] h-[100%] bg-gradient-to-r from-pink-400 to-red-500 flex items-center justify-center rounded-2xl backdrop-blur-sm text-[#1f2b3c] my-[50px] p-[20px]'>
+                            No bestseller available at the moment
+                        </div>
                     )
-                }) : null}
-                {/* Womens Latest Collection */}
-                {latestProducts.womensProducts ? latestProducts.womensProducts.map((product, index) => {
-                    return (
-                        <ProductCard key={product._id} product={product} />
-                    )
-                }) : null}
-                {/* Kids Latest Collection */}
-                {latestProducts.kidsProducts ? latestProducts.kidsProducts.map((product, index) => {
-                    return (
-                        <ProductCard key={product._id} product={product} />
-                    )
-                }) : null}
-            </div>
+                )
+            }
         </div>
     )
 }

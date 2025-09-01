@@ -173,7 +173,7 @@ export default function Nav() {
             <div className="navbar-items w-[40%] md:w-[15%] flex items-center justify-end gap-[2%] relative">
                 <FaSearch className='search-icon w-[50px] h-[25px] cursor-pointer' onClick={handleSearchbarDisplay} />
                 {userDetail.success ? (
-                    <div className={`profile-loggedin-icon w-[38px] h-[35px]  aspect-square text-white font-bold rounded-[50%] ${profileDisplay ? 'bg-[#921738]' : 'bg-[#000000c9]'} flex items-center justify-center cursor-pointer`} onClick={() => { setProfileDisplay(prev => !prev) }}>{userDetail.user.name[0]}</div>
+                    <div className={`profile-loggedin-icon w-[38px] h-[35px]  aspect-square text-white font-bold rounded-[50%] ${profileDisplay ? 'bg-red-500' : 'bg-[#000000c9]'} flex items-center justify-center cursor-pointer`} onClick={() => { setProfileDisplay(prev => !prev) }}>{userDetail.user.name[0]}</div>
                 ) : (
                     <FaUserCircle className='profile-icon w-[70px] h-[35px] cursor-pointer' onClick={() => { setProfileDisplay(prev => !prev) }} />
                 )}
@@ -186,7 +186,6 @@ export default function Nav() {
                     )}
                 </NavLink>
                 <div className='w-[16px] h-[16px] bg-red-500 text-[8px] text-white rounded-full flex justify-center items-center absolute top-[-10%] right-[-2%]' >
-                    {/* <span>{getCartCount()}</span> */}
                     <span>{totalCartProducts}</span>
                 </div>
             </div>
@@ -236,21 +235,29 @@ export default function Nav() {
             )}
 
             {/* Navbar Items Button for small scrren */}
-            <div className='w-[100vw] h-[70px] bg-[#597a7ac0] rounded-t-[20%] z-10 fixed bottom-0 left-0 flex items-center justify-between p-x[10px] md:hidden'>
+            <div className='w-[100vw] h-[70px] bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-t-[20%] z-10 fixed bottom-0 left-0 flex items-center justify-between p-x[10px] md:hidden'>
                 {/* Navbar items */}
                 <div className="navbar-items w-full h-[100%] pt-[15px] overflow-x-auto overflow-y-hidden">
                     <ul className="w-[100%] h-[100%] m-[auto] flex items-center justify-evenly gap-[6px] text-white ps-0 no-scrollbar">
-                        <NavLink to='/'>
-                            <li className="flex-shrink-0"> <ItemsButtonSmall text={'Home'} to='/' /> </li>
+                        <NavLink className={"!no-underline text-white"} to='/'>
+                            {({ isActive }) => (
+                                <li> <ItemsButtonLarge text={'Home'} isActive={isActive} /> </li>
+                            )}
                         </NavLink>
-                        <NavLink to='/collections'>
-                            <li className="flex-shrink-0"> <ItemsButtonSmall text={'Collections'} to='/collections' /> </li>
+                        <NavLink className={"!no-underline text-white"} to='/collections'>
+                            {({ isActive }) => (
+                                <li> <ItemsButtonLarge text={'Collections'} isActive={isActive} /> </li>
+                            )}
                         </NavLink>
-                        <NavLink to='/about'>
-                            <li className="flex-shrink-0"> <ItemsButtonSmall text={'About'} to='/about' /> </li>
+                        <NavLink className={"!no-underline text-white"} to='/About'>
+                            {({ isActive }) => (
+                                <li> <ItemsButtonLarge text={'About'} isActive={isActive} /> </li>
+                            )}
                         </NavLink>
-                        <NavLink to='/contact'>
-                            <li className="flex-shrink-0"> <ItemsButtonSmall text={'Contact'} to='/contact' /> </li>
+                        <NavLink className={"!no-underline text-white"} to='/contact'>
+                            {({ isActive }) => (
+                                <li> <ItemsButtonLarge text={'Contact'} isActive={isActive} /> </li>
+                            )}
                         </NavLink>
                     </ul>
                 </div>
