@@ -7,6 +7,7 @@ import AllProductsContext from '../contexts/AllProductsContext';
 import ProductCard from '../components/ProductCard';
 import HorizontalProductCard from '../components/HorizontalProductCard';
 import SearchCollapseContext from '../contexts/SearchCollapseContext';
+import Loader from '../components/Loader';
 
 export default function Collections() {
   // Destructure context props
@@ -26,17 +27,26 @@ export default function Collections() {
   // State to stroe the searched item
   const [searchedItem, setSearchedItem] = useState(null);
 
+  // State to manage the loading state
+  const [loading, setLoading] = useState(true);
+
   // UseEffect to store the searchedItem
   useEffect(() => {
     setSearchedItem(search);
   }, [search]);
 
-  // UseEffect to update filteredProducts with products
+  // UseEffect to initial update filteredProducts with products
   useEffect(() => {
     if (products) {
-      setFilteredProducts(products);
+      // setFilteredProducts(products);
+
+      // Reset the loading state
+      // setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 5000);
     }
-  }, [products])
+  }, [products]);
 
   // ---------------------------- Logic to handle product filters ---------------------------- \\
   // State to store the applied filters
@@ -150,6 +160,21 @@ export default function Collections() {
   }
   // ----------------------------- ********************* ----------------------------- \\
 
+  // --------------------------- Logic to disable page scrolling when loading --------------------------- \\
+  useEffect(() => {
+    if (loading) {
+      document.body.style.overflow = "hidden"; // disable scroll
+    } else {
+      document.body.style.overflow = "auto"; // enable scroll
+    }
+
+    // Cleanup when component unmounts
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [loading]);
+  // --------------------------- ************** --------------------------- \\
+
   return (
     <div className="collections-page-container w-[100vw] min-h-screen bg-gradient-to-l from-[#141414] to-[#0c2025] pt-[70px] ">
       <div className="w-[100%] h-[100%] flex flex-col md:flex-row">
@@ -211,7 +236,7 @@ export default function Collections() {
           <Separator90 />
         </div>
 
-        {/* Collectionz */}
+        {/* Collections */}
         <div className="collections w-[100vw] md:w-[82vw] min-h-screen pb-[40px] md:pt-[70px] px-[20px] my-[20px]">
           <div className="w-[90vw] md:w-[66vw] lg:w-[76vw] flex  justify-between items-start lg:items-center">
             <Title text1={"All"} text2={"Collections"} />
@@ -229,27 +254,39 @@ export default function Collections() {
             </select>
           </div>
           <div className="lg:w-[80vw] md:w-[70vw] w-[90vw] min-h-[70vh] pt-[20px] hidden lg:flex justify-center items-center gap-[30px] flex-wrap">
-            {filteredProducts ? filteredProducts.map(product => {
-              return (
-                <div key={product._id} className="mb-[20px]">
-                  <ProductCard product={product} />
-                </div>
+            {loading ? <Loader loaderVariant={"pageLoading"} /> :
+              (
+                filteredProducts ? filteredProducts.map(product => {
+                  return (
+                    <div key={product._id} className="mb-[20px]">
+                      <ProductCard product={product} />
+                    </div>
+                  )
+                }) : (
+                  // <div className="w-[100%]">"No products available currently</div>
+                  <div className='w-[100%] text-center mx-[auto] text-[18px] md:text-[25px] h-[100%] bg-gradient-to-r from-pink-400 to-red-500 flex items-center justify-center rounded-2xl backdrop-blur-sm my-[50px] p-[20px] font-bold bg-clip-text text-transparent'>
+                    Opps! No products available currently.
+                  </div>
+                )
               )
-            }) : (
-              <div className="w-[100%]">"No products available currently</div>
-            )
             }
           </div>
           <div className="lg:w-[80vw] md:w-[70vw] w-[90vw] min-h-[70vh] pt-[20px] flex justify-center items-center gap-[30px] flex-wrap lg:hidden">
-            {filteredProducts ? filteredProducts.map(product => {
-              return (
-                <div key={product._id}>
-                  <HorizontalProductCard product={product} />
-                </div>
+            {loading ? <Loader loaderVariant={"pageLoading"} /> :
+              (
+                filteredProducts ? filteredProducts.map(product => {
+                  return (
+                    <div key={product._id}>
+                      <HorizontalProductCard product={product} />
+                    </div>
+                  )
+                }) : (
+                  // <div className="w-[100%]">"No products available currently</div>
+                  <div className='w-[100%] text-center mx-[auto] text-[18px] md:text-[25px] h-[100%] bg-gradient-to-r from-pink-400 to-red-500 flex items-center justify-center rounded-2xl backdrop-blur-sm my-[50px] p-[20px] font-bold bg-clip-text text-transparent'>
+                    Opps! No products available currently.
+                  </div>
+                )
               )
-            }) : (
-              <div className="w-[100%]">"No products available currently</div>
-            )
             }
           </div>
         </div>

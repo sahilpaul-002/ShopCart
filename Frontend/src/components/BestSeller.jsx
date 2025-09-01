@@ -90,8 +90,8 @@ export default function BestSeller() {
                             }) : null}
                         </div>
                     ) : (
-                        <div className='w-[100%] text-center text-[18px] md:text-[25px] h-[100%] bg-gradient-to-r from-pink-400 to-red-500 flex items-center justify-center rounded-2xl backdrop-blur-sm text-[#1f2b3c] my-[50px] p-[20px]'>
-                            No bestseller available at the moment
+                        <div className='w-[100%] text-center mx-[auto] text-[18px] md:text-[25px] h-[100%] bg-gradient-to-r from-pink-400 to-red-500 flex items-center justify-center rounded-2xl backdrop-blur-sm my-[50px] p-[20px] font-bold bg-clip-text text-transparent'>
+                            Opps! No bestseller available at the moment.
                         </div>
                     )
                 )

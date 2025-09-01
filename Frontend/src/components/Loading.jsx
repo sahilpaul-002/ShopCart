@@ -11,8 +11,9 @@ export default function Loading() {
         return () => clearInterval(interval);
     }, []);
 
+    // text-[#1f2b3c]
     return (
-        <div className="w-[100%] h-[100%] bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center rounded-2xl backdrop-blur-sm text-[#1f2b3c] text-[24px] md:text-[36px] font-semibold p-[20px]">
+        <div className="bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center rounded-2xl backdrop-blur-sm bg-clip-text text-transparent text-[32px] md:text-[48px] font-semibold p-[20px]">
             Loading{dots}
         </div>
     )
