@@ -51,7 +51,7 @@ export default function BestSeller() {
         // setLoading(false);
         setTimeout(() => {
             setLoading(false);
-        }, 5000);
+        }, 3000);
     }, [allProducts]);
 
     return (

@@ -110,7 +110,7 @@ const loginUser = async (req, res) => {
             httpOnly: true,  // Prevents client-side JS from accessing the cookie
             secure: environment === "production", // Set to true in production with HTTPS
             sameSite: environment === "production" ? "none" : "lax",
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // expires in 30 days
         });
 
         res.status(200).json({
