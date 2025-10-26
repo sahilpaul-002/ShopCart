@@ -48,10 +48,10 @@ export default function BestSeller() {
         }))
 
         // Reset loading state
-        // setLoading(false);
-        setTimeout(() => {
-            setLoading(false);
-        }, 3000);
+        setLoading(false);
+        // setTimeout(() => {
+        //     setLoading(false);
+        // }, 3000);
     }, [allProducts]);
 
     return (

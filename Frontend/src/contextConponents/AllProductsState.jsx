@@ -56,9 +56,7 @@ export default function AllProductsState(props) {
         console.error({ success: false, message: e.message });
       }
     }
-    //   setTimeout(() => {
-    //     fetchProducts();
-    //   }, 2000)
+
     fetchProducts();
   }, [])
   // ------------------------------------- ********************* ------------------------------------- \\

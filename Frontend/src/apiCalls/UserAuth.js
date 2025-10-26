@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 // Set basic configuration
-const API_BASE = 'http://localhost:5000';
+const API_BASE = import.meta.env.VITE_BASE_URL || 'http://localhost:5000';
 
 // ----------------------------------- Sign Up API Call Logic ----------------------------------- \\
 const userSignUpApi = async (userInput) => {

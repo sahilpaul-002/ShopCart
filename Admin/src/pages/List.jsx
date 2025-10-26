@@ -97,9 +97,10 @@ export default function List() {
         console.log({ success: true, message: "List of all products fetched." })
       }
 
-      setTimeout(() => {
-        fetchProducts();
-      }, 2000)
+      // setTimeout(() => {
+      //   fetchProducts();
+      // }, 2000)
+      fetchProducts();
     }
     catch (e) {
       console.error({ success: false, message: e.message });
