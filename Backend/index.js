@@ -22,7 +22,7 @@ connectDB();
 
 // Enable cors
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  origin: ['http://localhost:5173', 'http://localhost:5174', 'https://68fe5681f29f22b690da1094--shopecomcart.netlify.app/'],
   credentials: true
 }))
 
