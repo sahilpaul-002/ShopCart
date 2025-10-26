@@ -50,7 +50,7 @@ export default function AllProductsState(props) {
         })
 
         // Success message
-        console.log({ success: true, message: "List of all products fetched." })
+        
       }
       catch (e) {
         console.error({ success: false, message: e.message });

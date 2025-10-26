@@ -15,7 +15,6 @@ const getUserDetail = async (name, email, password, confirmPassword) => {
                 withCredentials: true
             },
         )
-        console.log(response);
         return (response.data);
     }
     catch (e) {

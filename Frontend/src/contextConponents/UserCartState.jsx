@@ -64,7 +64,7 @@ export default function UserCartState(props) {
             setLoading(false);
 
             // Success message
-            console.log(result);
+
             return result
         }
         catch (e) {
@@ -91,7 +91,7 @@ export default function UserCartState(props) {
                 setCartProducts(result.userCartData)
 
                 // Success message
-                console.log(result);
+
             }
             catch (e) {
                 console.error({ success: false, message: e.message, userCart: null });
@@ -136,7 +136,7 @@ export default function UserCartState(props) {
             setCartProducts(result.user.cartData)
 
             // Success message
-            console.log(result);
+
         }
         catch (e) {
             console.error({ success: false, message: e.message, userCart: null });

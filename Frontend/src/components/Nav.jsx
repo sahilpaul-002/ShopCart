@@ -69,7 +69,7 @@ export default function Nav() {
             setCartProducts({});
 
             // Succes message
-            console.log(logOutResponse);
+            
         }
         catch (e) {
             console.error({ success: false, message: e.message });

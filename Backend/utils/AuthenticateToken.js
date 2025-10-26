@@ -7,7 +7,6 @@ const jwtSecretKey = process.env.JWT_SECRET_KEY;
 
 const authenticateToken = (token) => {
     try {
-        console.log(token)
         const decodedToken = JWT.verify(token, jwtSecretKey);
         return ({success: true, input: decodedToken.input});
     } catch (err) {

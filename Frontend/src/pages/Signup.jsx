@@ -102,7 +102,7 @@ export default function Signup() {
             navigate('/auth/login');
 
             // Success message
-            console.log({ success: true, message: signUpResponse.message });
+
         }
         catch (e) {
             if (Array.isArray(e.message)) {

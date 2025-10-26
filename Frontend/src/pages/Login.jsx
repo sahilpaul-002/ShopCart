@@ -115,7 +115,7 @@ export default function Login() {
       setUserDetail(logInResponse);
 
       // Success message
-      console.log({ success: true, message: logInResponse.message });
+
 
       // Redirect the user to home pag
       navigate('/');
