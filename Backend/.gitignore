@@ -11,7 +11,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Environment variables
-.env
+# .env
 
 # Build output
 dist/
@@ -32,3 +32,6 @@ jspm_packages/
 *.pid
 *.seed
 *.pid.lock
+
+# Environment variables
+.env
