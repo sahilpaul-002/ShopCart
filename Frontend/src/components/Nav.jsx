@@ -5,6 +5,7 @@ import Logo from '../assets/logo-wo-background-c.png';
 import ItemsButtonLarge from './ItemsButtonLarge';
 import ItemsButtonSmall from './ItemsButtonSmall';
 import { FaSearch } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
 import { FaUserCircle } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import GetUserContext from '../contexts/GetUserContext';
@@ -42,9 +43,6 @@ export default function Nav() {
     // ------------------------------------- Logic to handle log out click ------------------------------------- \\
     const handleLogOut = async () => {
         try {
-            //  Update the state of the userDetail
-            setUserDetail({ success: false, message: "", user: null })
-
             // Logged the user from local storage
             // Get the userId from local strage similar to user input
             let users = JSON.parse(localStorage.getItem('users'));
@@ -53,13 +51,16 @@ export default function Nav() {
                 //  Udpadet the user login status
                 users = users.map((user) => {
                     return (
-                        (user.id === userDetail.user._id) ? { ...user, login: false } : user
+                        (user.id === userDetail?._id) ? { ...user, login: false } : user
                     )
                 });
             }
 
             // Save back to localStorage
             localStorage.setItem("users", JSON.stringify(users));
+
+            //  Update the state of the userDetail
+            setUserDetail(null)
 
             // Call log out api
             const logOutResponse = await userLogOutApi();
@@ -69,7 +70,7 @@ export default function Nav() {
             setCartProducts({});
 
             // Succes message
-            
+
         }
         catch (e) {
             console.error({ success: false, message: e.message });
@@ -115,17 +116,26 @@ export default function Nav() {
     const handleSearchOnEnter = (e) => {
         // Navigate on pressing enter
         if (e.key === "Enter") {
-            // Reset search value
-            setSearch("")
-
             navigate(`/collections?search=${search}`);
+
+            // Reset search value
+            // setSearch("")
         }
     }
     const handleSearchOnClick = (e) => {
-        // Reset search value
-        setSearch("")
+        navigate(`/collections?search=${search}`);
 
-        navigate(`/collections?search=${search}`)
+        // Reset search value
+        // setSearch("")
+    }
+    const removeSearchOnClick = (e) => {
+        // Navigate only if not already on /collections
+        if (location.pathname === "/collections") {
+            navigate("/collections");
+        }
+
+        // Reset search value
+        setSearch("");
     }
 
     // UseEffect to update the user cart products number on render
@@ -172,8 +182,8 @@ export default function Nav() {
 
             <div className="navbar-items w-[40%] md:w-[15%] flex items-center justify-end gap-[2%] relative">
                 <FaSearch className='search-icon w-[50px] h-[25px] cursor-pointer' onClick={handleSearchbarDisplay} />
-                {userDetail.success ? (
-                    <div className={`profile-loggedin-icon w-[38px] h-[35px]  aspect-square text-white font-bold rounded-[50%] ${profileDisplay ? 'bg-red-500' : 'bg-[#000000c9]'} flex items-center justify-center cursor-pointer`} onClick={() => { setProfileDisplay(prev => !prev) }}>{userDetail.user.name[0]}</div>
+                {userDetail ? (
+                    <div className={`profile-loggedin-icon w-[38px] h-[35px]  aspect-square text-white font-bold rounded-[50%] ${profileDisplay ? 'bg-red-500' : 'bg-[#000000c9]'} flex items-center justify-center cursor-pointer`} onClick={() => { setProfileDisplay(prev => !prev) }}>{userDetail?.name?.[0]}</div>
                 ) : (
                     <FaUserCircle className='profile-icon w-[70px] h-[35px] cursor-pointer' onClick={() => { setProfileDisplay(prev => !prev) }} />
                 )}
@@ -194,9 +204,15 @@ export default function Nav() {
                 {searchDisplay ? (
                     <>
                         <input type="text" className='w-[50%] h-[60%] bg-[#4d6a67] rounded-[30px] px-[50px] placeholder:text-white text-white text-[18px]' placeholder='Search' value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={handleSearchOnEnter} />
-                        <div className="absolute right-[28%] cursor-pointer" onClick={handleSearchOnClick}>
-                            <FaSearch fill='white' />
-                        </div>
+                        {!search ? (
+                            <div className="absolute right-[28%] cursor-pointer" onClick={handleSearchOnClick}>
+                                <FaSearch fill='white' />
+                            </div>
+                        ) : (
+                            <div className="absolute right-[28%] cursor-pointer" onClick={removeSearchOnClick}>
+                                <ImCross fill='white' />
+                            </div>
+                        )}
                     </>
                 ) : (
                     null
@@ -204,13 +220,13 @@ export default function Nav() {
             </div>
             {profileDisplay && (
                 <div className="profile-display-list absolute top-[69px] right-[2%] w-[200px] bg-[#000000d7] border-[1px] border-[#aaa9a9] rounded-[10px] z-10" ref={profileDropDownRef}>
-                    {userDetail.success ? (
+                    {userDetail ? (
                         <ul className='profile-list w-[100%] h-[100%] flex flex-col justify-around items-start text-[17px] py-[10px] ps-0 m-0 text-white'>
-                            <Link className='profile-list-item-link w-[100%] !no-underline !text-inherit' to="/orders">
+                            {/* <Link className='profile-list-item-link w-[100%] !no-underline !text-inherit' to="/orders">
                                 <li className='profile-list-item w-[100%] hover:bg-[#2f2f2f] px-[15px] py-[10px] cursor-pointer'>
                                     Orders
                                 </li>
-                            </Link>
+                            </Link> */}
                             <Link className='profile-list-item-link w-[100%] !no-underline !text-inherit' to="/about">
                                 <li className='profile-list-item w-[100%] hover:bg-[#2f2f2f] px-[15px] py-[10px] cursor-pointer'>
                                     About

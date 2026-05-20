@@ -10,9 +10,9 @@ const userSignUpApi = async (userInput) => {
         const { name, email, password, confirmPassword } = userInput;
 
         // Call sign up api
-        const response = await axios.post(`${API_BASE}/api/auth/signup`, 
+        const response = await axios.post(`${API_BASE}/api/auth/signup`,
             {
-            name, email, password, confirmPassword
+                name, email, password, confirmPassword
             },
             {
                 headers: {
@@ -75,6 +75,7 @@ const userLogInApi = async (userInput) => {
 // ----------------------------------- Log Out  API Call Logic ----------------------------------- \\
 const userLogOutApi = async () => {
     try {
+
         // Call sign up api
         const response = await axios.get(`${API_BASE}/api/auth/logout`,
             {
@@ -89,6 +90,26 @@ const userLogOutApi = async () => {
     catch (e) {
         if (e.response) {
             console.error(e.response.data)
+            if (e.response?.data?.message === "Token credentials invalid") {
+                // localStorage.clear();
+
+                // Get the current userId from the local storage
+                const userId = localStorage.getItem('currentUserId');
+                // Get the user same as user input from the local storage
+                const users = JSON.parse(localStorage.getItem('users'));
+                // Check if the user is present
+                if (users) {
+                    //  Udpadet the user login status
+                    users = users.map((user) => {
+                        return (
+                            (user.id === userId) ? { ...user, login: false } : user
+                        )
+                    });
+                }
+
+                // Save back to localStorage
+                localStorage.setItem("users", JSON.stringify(users));
+            }
             return (e.response.data);
         }
         else {
