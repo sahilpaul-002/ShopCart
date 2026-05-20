@@ -11,6 +11,7 @@ import UserCartState from './contextConponents/UserCartState';
 
 function App() {
   const location = useLocation();
+  console.log(window.location.href);
 
   // URLs where not to show the Nav
   const hideNavRoutes = ["/auth/login", "/auth/signup"];
