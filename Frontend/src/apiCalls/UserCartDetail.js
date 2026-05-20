@@ -120,7 +120,6 @@ const getUserCartProducts = async () => {
         return (response.data);
     }
     catch (e) {
-        debugger
         if (e.response) {
             console.error(e.response.data)
 
