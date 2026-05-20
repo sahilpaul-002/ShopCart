@@ -14,7 +14,7 @@ import GetUserContext from '../contexts/GetUserContext';
 
 export default function Login() {
   // Destructure context value
-    const { setUserDetail } = useContext(GetUserContext);
+  const { setUserDetail } = useContext(GetUserContext);
 
   // ---------------------------- Logic redirect user to sign in page and home page ---------------------------- \\
   // Redirect to login page if sign up token is present
@@ -22,14 +22,20 @@ export default function Login() {
   // UseEffect to redirect to login page if user Id exist in local storage
   useEffect(() => {
     // Get the current userId from the local storage
-    const userId = localStorage.getItem('currentUserId');
+    const userId = localStorage.getItem('currentUserId') || null;
     // Get the user same as user input from the local storage
-    const users = JSON.parse(localStorage.getItem('users'));
+    let users = [];
+    try {
+      users = JSON.parse(localStorage.getItem('users')) || [];
+    } catch (error) {
+      users = [];
+    }
 
     // check user logged in 
     if (users && userId) {
-      const user = users.filter((user) => { return (userId === user.id) })
-      if (user.length > 0 && user[0].login) {
+      const user = users.find((user) => user.id === userId);
+
+      if (user?.login) {
         navigate('/');
       }
     }
