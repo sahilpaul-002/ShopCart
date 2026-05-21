@@ -44,20 +44,50 @@ export default function Nav() {
     const handleLogOut = async () => {
         try {
             // Logged the user from local storage
+
+            // Get the current userId from the local storage
+            const userId = localStorage.getItem('currentUserId') || null;
             // Get the userId from local strage similar to user input
-            let users = JSON.parse(localStorage.getItem('users'));
+            const storedUsers = localStorage.getItem("users");
+
+            let users = [];
+
+            if (
+                storedUsers &&
+                storedUsers !== "undefined" &&
+                storedUsers !== "null"
+            ) {
+                try {
+                    users = JSON.parse(storedUsers);
+
+                    // Extra safety check
+                    if (!Array.isArray(users)) {
+                        users = [];
+                    }
+
+                } catch (error) {
+                    users = [];
+                }
+            }
             // Check if the user is present
-            if (users) {
+            if (users.length > 0 && userId) {
                 //  Udpadet the user login status
                 users = users.map((user) => {
                     return (
-                        (user.id === userDetail?._id) ? { ...user, login: false } : user
+                        (user.id === userDetail?._id || user.id === userId) ? { ...user, login: false } : user
                     )
                 });
             }
 
             // Save back to localStorage
-            localStorage.setItem("users", JSON.stringify(users));
+            if (users.length > 0) {
+                localStorage.setItem(
+                    "users",
+                    JSON.stringify(users)
+                );
+            } else {
+                localStorage.removeItem("users");
+            }
 
             //  Update the state of the userDetail
             setUserDetail(null)

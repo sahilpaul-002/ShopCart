@@ -16,7 +16,6 @@ export default function UserDetailState(props) {
       } else {
         setUserDetail(null);
       }
-      setUserDetail(user?.user);
     };
 
     fetchUser();

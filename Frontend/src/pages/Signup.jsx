@@ -11,6 +11,7 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from '../utils/Firebase';
 import generateRandomPassword from '../utils/RandomPasswordGenerator';
 import GetUserContext from '../contexts/GetUserContext';
+import { toast } from 'react-toastify';
 
 export default function Signup() {
     // Redirect to login page if sign up token is present
@@ -74,7 +75,8 @@ export default function Signup() {
 
             // Check password and confirm password
             if (userInput.password !== userInput.confirmPassword) {
-                throw new Error("Passwords should match. Please try again")
+                toast.error("Passwords should match. Please try again")
+                return;
             }
 
             // Call signup-api-calling-function
@@ -86,7 +88,27 @@ export default function Signup() {
             }
 
             // Get existing data from localStorage or create an empty array
-            let users = JSON.parse(localStorage.getItem('users')) || [];
+            const storedUsers = localStorage.getItem("users");
+
+            let users = [];
+
+            if (
+                storedUsers &&
+                storedUsers !== "undefined" &&
+                storedUsers !== "null"
+            ) {
+                try {
+                    users = JSON.parse(storedUsers);
+
+                    // Extra safety check
+                    if (!Array.isArray(users)) {
+                        users = [];
+                    }
+
+                } catch (error) {
+                    users = [];
+                }
+            }
             // Create a new user object
             const newUser = {
                 id: signUpResponse.userId,
@@ -95,9 +117,20 @@ export default function Signup() {
             // Push the new user into the array
             users.push(newUser);
             // Save back to localStorage
-            localStorage.setItem('users', JSON.stringify(users));
+            if (users.length > 0) {
+                localStorage.setItem(
+                    "users",
+                    JSON.stringify(users)
+                );
+            } else {
+                localStorage.removeItem("users");
+            }
             // Store the current user id in local storage separately as current user
-            localStorage.setItem('currentUserId', signUpResponse.userId);
+            if (signUpResponse.userId) {
+                localStorage.setItem("currentUserId", signUpResponse.userId);
+            } else {
+                localStorage.removeItem("currentUserId");
+            }
 
             navigate('/auth/login');
 
@@ -149,7 +182,28 @@ export default function Signup() {
             }
 
             // Get existing data from localStorage or create an empty array
-            let users = JSON.parse(localStorage.getItem('users')) || [];
+            const storedUsers = localStorage.getItem("users");
+
+            // Safely parse users
+            let users = [];
+
+            if (
+                storedUsers &&
+                storedUsers !== "undefined" &&
+                storedUsers !== "null"
+            ) {
+                try {
+                    users = JSON.parse(storedUsers);
+
+                    // Extra safety check
+                    if (!Array.isArray(users)) {
+                        users = [];
+                    }
+
+                } catch (error) {
+                    users = [];
+                }
+            }
             // Check users detail is present in local storage
             if (!users.find(user => user.id === googleSignInResponse.user._id)) {
                 // Create a new user object
@@ -170,12 +224,23 @@ export default function Signup() {
                     )
                 });
             }
-            localStorage.setItem('users', JSON.stringify(users));
+            if (users.length > 0) {
+                localStorage.setItem(
+                    "users",
+                    JSON.stringify(users)
+                );
+            } else {
+                localStorage.removeItem("users");
+            }
             // Store the current user id in local storage separately as current user
-            localStorage.setItem('currentUserId', googleSignInResponse.user._id);
+            if (googleSignInResponse.user._id) {
+                localStorage.setItem("currentUserId", googleSignInResponse.user._id);
+            } else {
+                localStorage.removeItem("currentUserId");
+            }
 
             // Set the userDetail context state 
-            setUserDetail(googleSignInResponse);
+            setUserDetail(googleSignInResponse?.user);
 
             // Redirect the user to home pag
             navigate('/');

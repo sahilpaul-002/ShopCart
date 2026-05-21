@@ -24,15 +24,31 @@ export default function Login() {
     // Get the current userId from the local storage
     const userId = localStorage.getItem('currentUserId') || null;
     // Get the user same as user input from the local storage
+    const storedUsers = localStorage.getItem("users");
+
+    // Safely parse users
     let users = [];
-    try {
-      users = JSON.parse(localStorage.getItem('users')) || [];
-    } catch (error) {
-      users = [];
+
+    if (
+      storedUsers &&
+      storedUsers !== "undefined" &&
+      storedUsers !== "null"
+    ) {
+      try {
+        users = JSON.parse(storedUsers);
+
+        // Extra safety check
+        if (!Array.isArray(users)) {
+          users = [];
+        }
+
+      } catch (error) {
+        users = [];
+      }
     }
 
     // check user logged in 
-    if (users && userId) {
+    if (users.length > 0 && userId) {
       const user = users.find((user) => user.id === userId);
 
       if (user?.login) {
@@ -91,7 +107,27 @@ export default function Login() {
         throw logInResponse
       }
       // Get the userId from local strage similar to user input
-      let users = JSON.parse(localStorage.getItem('users')) || [];
+      const storedUsers = localStorage.getItem("users");
+
+      let users = [];
+
+      if (
+        storedUsers &&
+        storedUsers !== "undefined" &&
+        storedUsers !== "null"
+      ) {
+        try {
+          users = JSON.parse(storedUsers);
+
+          // Extra safety check
+          if (!Array.isArray(users)) {
+            users = [];
+          }
+
+        } catch (error) {
+          users = [];
+        }
+      }
       // Check users detail is present in local storage
       if (!users.find(user => user.id === logInResponse.user._id)) {
         // Create a new user object
@@ -113,12 +149,24 @@ export default function Login() {
         });
       }
       //  Save the changed user details back to local storage
-      localStorage.setItem('users', JSON.stringify(users))
+      if (users.length > 0) {
+        localStorage.setItem(
+          "users",
+          JSON.stringify(users)
+        );
+      } else {
+        localStorage.removeItem("users");
+      }
       // Update the current user id with the user input
       localStorage.setItem('currentUserId', logInResponse.user._id)
+      if (logInResponse.user._id) {
+        localStorage.setItem("currentUserId", logInResponse.user._id);
+      } else {
+        localStorage.removeItem("currentUserId");
+      }
 
       // Set the userDetail context state 
-      setUserDetail(logInResponse);
+      setUserDetail(logInResponse.user);
 
       // Success message
 
@@ -169,7 +217,27 @@ export default function Login() {
       }
 
       // Get the userId from local strage similar to user input
-      let users = JSON.parse(localStorage.getItem('users')) || [];
+      const storedUsers = localStorage.getItem("users");
+
+      let users = [];
+
+      if (
+        storedUsers &&
+        storedUsers !== "undefined" &&
+        storedUsers !== "null"
+      ) {
+        try {
+          users = JSON.parse(storedUsers);
+
+          // Extra safety check
+          if (!Array.isArray(users)) {
+            users = [];
+          }
+
+        } catch (error) {
+          users = [];
+        }
+      }
       // Check users detail is present in local storage
       if (!users.find(user => user.id === googleSignInResponse.user._id)) {
         // Create a new user object
@@ -191,12 +259,23 @@ export default function Login() {
         });
       }
       //  Save the changed user details back to local storage
-      localStorage.setItem('users', JSON.stringify(users))
+      if (users.length > 0) {
+        localStorage.setItem(
+          "users",
+          JSON.stringify(users)
+        );
+      } else {
+        localStorage.removeItem("users");
+      }
       // Update the current user id with the user input
-      localStorage.setItem('currentUserId', googleSignInResponse.user._id)
+      if (googleSignInResponse.user._id) {
+        localStorage.setItem("currentUserId", googleSignInResponse.user._id);
+      } else {
+        localStorage.removeItem("currentUserId");
+      }
 
       // Set the userDetail context state 
-      setUserDetail(googleSignInResponse);
+      setUserDetail(googleSignInResponse?.user);
 
       // Redirect the user to home pag
       navigate('/');

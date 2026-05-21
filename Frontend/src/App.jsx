@@ -8,6 +8,7 @@ import Footer from './components/Footer'
 import SearchCollapseState from './contextConponents/SearchCollapseState';
 import AllProductsState from './contextConponents/AllProductsState';
 import UserCartState from './contextConponents/UserCartState';
+import { ToastContainer, Slide } from 'react-toastify';
 
 function App() {
   const location = useLocation();
@@ -28,6 +29,18 @@ function App() {
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        theme="dark"
+        transition={Slide}
+      />
+
       <UserDetailState>
         <AllProductsState>
           <UserCartState>

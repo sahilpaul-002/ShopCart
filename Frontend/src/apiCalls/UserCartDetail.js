@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toast } from 'react-toastify';
 
 // Set basic configuration
 const API_BASE = import.meta.env.VITE_BASE_URL || 'http://localhost:5000';
@@ -15,7 +16,16 @@ const addProductToCart = async (productId, productSize) => {
                 withCredentials: true
             },
         )
-        return (response.data);
+        if (!response.data?.success) {
+            toast.error("Add to cart service is facing issue. Please try again later.");
+        }
+        else {
+            toast.success("Product added to cart successfully!");
+        }
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        return response.data;
+
     }
     catch (e) {
         if (e.response) {
@@ -27,9 +37,29 @@ const addProductToCart = async (productId, productSize) => {
                 // Get the current userId from the local storage
                 const userId = localStorage.getItem('currentUserId');
                 // Get the user same as user input from the local storage
-                const users = JSON.parse(localStorage.getItem('users'));
+                const storedUsers = localStorage.getItem("users");
+
+                let users = [];
+
+                if (
+                    storedUsers &&
+                    storedUsers !== "undefined" &&
+                    storedUsers !== "null"
+                ) {
+                    try {
+                        users = JSON.parse(storedUsers);
+
+                        // Extra safety check
+                        if (!Array.isArray(users)) {
+                            users = [];
+                        }
+
+                    } catch (error) {
+                        users = [];
+                    }
+                }
                 // Check if the user is present
-                if (users) {
+                if (users.length > 0 && userId) {
                     //  Udpadet the user login status
                     users = users.map((user) => {
                         return (
@@ -39,16 +69,22 @@ const addProductToCart = async (productId, productSize) => {
                 }
 
                 // Save back to localStorage
-                localStorage.setItem("users", JSON.stringify(users));
+                if (users.length > 0) {
+                    localStorage.setItem(
+                        "users",
+                        JSON.stringify(users)
+                    );
+                } else {
+                    localStorage.removeItem("users");
+                }
             }
 
-            // Save back to localStorage
-            localStorage.setItem("users", JSON.stringify(users));
-
+            toast.error("Add to cart service is facing issue. Please try again later.");
             return (e.response.data);
         }
         else {
             console.error(e.message)
+            toast.error("Add to cart service is facing issue. Please try again later.");
             return (e.message);
         }
     }
@@ -67,7 +103,15 @@ const updateCartProducts = async (productId, productSize, quantity) => {
                 withCredentials: true
             },
         )
-        return (response.data);
+        if (!response.data?.success) {
+            toast.error("Update cart service is facing issue. Please try again later.");
+        }
+        else {
+            toast.success("Product updated in cart successfully!");
+        }
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        return response.data;
     }
     catch (e) {
         if (e.response) {
@@ -79,9 +123,29 @@ const updateCartProducts = async (productId, productSize, quantity) => {
                 // Get the current userId from the local storage
                 const userId = localStorage.getItem('currentUserId');
                 // Get the user same as user input from the local storage
-                const users = JSON.parse(localStorage.getItem('users'));
+                const storedUsers = localStorage.getItem("users");
+
+                let users = [];
+
+                if (
+                    storedUsers &&
+                    storedUsers !== "undefined" &&
+                    storedUsers !== "null"
+                ) {
+                    try {
+                        users = JSON.parse(storedUsers);
+
+                        // Extra safety check
+                        if (!Array.isArray(users)) {
+                            users = [];
+                        }
+
+                    } catch (error) {
+                        users = [];
+                    }
+                }
                 // Check if the user is present
-                if (users) {
+                if (users.length > 0 && userId) {
                     //  Udpadet the user login status
                     users = users.map((user) => {
                         return (
@@ -91,15 +155,22 @@ const updateCartProducts = async (productId, productSize, quantity) => {
                 }
 
                 // Save back to localStorage
-                localStorage.setItem("users", JSON.stringify(users));
+                if (users.length > 0) {
+                    localStorage.setItem(
+                        "users",
+                        JSON.stringify(users)
+                    );
+                } else {
+                    localStorage.removeItem("users");
+                }
             }
 
-            // Save back to localStorage
-            localStorage.setItem("users", JSON.stringify(users));
+            toast.error("Update cart service is facing issue. Please try again later.");
             return (e.response.data);
         }
         else {
             console.error(e.message)
+            toast.error("Update cart service is facing issue. Please try again later.");
             return (e.message);
         }
     }
@@ -129,22 +200,47 @@ const getUserCartProducts = async () => {
                 // Get the current userId from the local storage
                 const userId = localStorage.getItem('currentUserId');
                 // Get the user same as user input from the local storage
-                const users = JSON.parse(localStorage.getItem('users'));
+                const storedUsers = localStorage.getItem("users");
+
+                let users = [];
+
+                if (
+                    storedUsers &&
+                    storedUsers !== "undefined" &&
+                    storedUsers !== "null"
+                ) {
+                    try {
+                        users = JSON.parse(storedUsers);
+
+                        // Extra safety check
+                        if (!Array.isArray(users)) {
+                            users = [];
+                        }
+
+                    } catch (error) {
+                        users = [];
+                    }
+                }
                 // Check if the user is present
-                let updatedUsers
-                if (users) {
+                if (users.length > 0 && userId) {
                     //  Udpadet the user login status
-                    updatedUsers = users.map((user) => { 
-                        return (user.id === userId) ? { ...user, login: false } : user
-                    });
+                    users = users.map((user) =>
+                        user.id === userId
+                            ? { ...user, login: false }
+                            : user
+                    );
                 }
 
                 // Save back to localStorage
-                localStorage.setItem("users", JSON.stringify(updatedUsers));
+                if (users.length > 0) {
+                    localStorage.setItem(
+                        "users",
+                        JSON.stringify(users)
+                    );
+                } else {
+                    localStorage.removeItem("users");
+                }
             }
-
-            // Save back to localStorage
-            localStorage.setItem("users", JSON.stringify(users));
 
             return (e.response.data);
         }

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toast } from 'react-toastify';
 
 // Set basic configuration
 const API_BASE = import.meta.env.VITE_BASE_URL || 'http://localhost:5000';
@@ -21,15 +22,46 @@ const userSignUpApi = async (userInput) => {
                 withCredentials: true
             },
         )
-        return (response.data);
+        if (!response.data?.success) {
+            toast.error("Sign up service is facing issue. Please try again later.");
+        }
+        else {
+            toast.success("Sign up successful. Please log in to continue.");
+        }
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
+        return response.data;
     }
     catch (e) {
         if (e.response) {
             console.error(e.response.data)
+
+            const message = e.response?.data?.message;
+            if (
+                Array.isArray(message)
+            ) {
+                if (message.some((err) => err.msg === "Invalid email format")) {
+                    toast.error("Email format incorrect. Please try again.");
+                }
+                else if (message.some((err) => err.msg === "Passwords do not match")) {
+                    toast.error("Passwords do not match. Please try again.");
+                }
+                else if (message.some((err) => err.msg === "User already exists")) {
+                    toast.error("User already exists. Please log in to continue.");
+                }
+                else {
+                    toast.error("Sign up service is facing issue. Please try again later.");
+                }
+            }
+            else {
+                toast.error("Sign up service is facing issue. Please try again later.");
+            }
+
             return (e.response.data);
         }
         else {
             console.error(e.message)
+            toast.error("Sign up service is facing issue. Please try again later.");
             return (e.message);
         }
     }
@@ -55,15 +87,46 @@ const userLogInApi = async (userInput) => {
                 withCredentials: true
             }
         )
-        return (response.data);
+        if (!response.data?.success) {
+            toast.error("Login service failed. Please try again later.");
+        }
+        else {
+            toast.success("Login successful. Redirecting to home page...");
+        }
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
+        return response.data;
     }
     catch (e) {
         if (e.response) {
             console.error(e.response.data)
+
+            const message = e.response?.data?.message;
+            if (
+                Array.isArray(message)
+            ) {
+                if (message.some((err) => err.msg === "Invalid email format")) {
+                    toast.error("Email format incorrect. Please try again.");
+                }
+                else {
+                    toast.error("Login service is facing issue. Please try again later.");
+                }
+            }
+            if (message === "User does not exist") {
+                toast.error("User does not exist. Please sign up first.");
+            }
+            else if (message === "Invalid user credentials") {
+                toast.error("Invalid user credentials. Please try again.");
+            }
+            else {
+                toast.error("Login service is facing issue. Please try again later.");
+            }
+
             return (e.response.data);
         }
         else {
             console.error(e.message)
+            toast.error("Login service is facing issue. Please try again later.");
             return (e.message);
         }
     }
@@ -85,6 +148,14 @@ const userLogOutApi = async () => {
                 withCredentials: true
             }
         )
+        if (!response.data?.success) {
+            toast.error("Logout service failed. Please try again later.");
+        }
+        else {
+            toast.success("Logout successful.");
+        }
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
         return (response.data);
     }
     catch (e) {
@@ -96,9 +167,29 @@ const userLogOutApi = async () => {
                 // Get the current userId from the local storage
                 const userId = localStorage.getItem('currentUserId');
                 // Get the user same as user input from the local storage
-                const users = JSON.parse(localStorage.getItem('users'));
+                const storedUsers = localStorage.getItem("users");
+
+                let users = [];
+
+                if (
+                    storedUsers &&
+                    storedUsers !== "undefined" &&
+                    storedUsers !== "null"
+                ) {
+                    try {
+                        users = JSON.parse(storedUsers);
+
+                        // Extra safety check
+                        if (!Array.isArray(users)) {
+                            users = [];
+                        }
+
+                    } catch (error) {
+                        users = [];
+                    }
+                }
                 // Check if the user is present
-                if (users) {
+                if (users.length > 0 && userId) {
                     //  Udpadet the user login status
                     users = users.map((user) => {
                         return (
@@ -108,12 +199,21 @@ const userLogOutApi = async () => {
                 }
 
                 // Save back to localStorage
-                localStorage.setItem("users", JSON.stringify(users));
+                if (users.length > 0) {
+                    localStorage.setItem(
+                        "users",
+                        JSON.stringify(users)
+                    );
+                } else {
+                    localStorage.removeItem("users");
+                }
             }
+            toast.error("Logout service is facing issue. Please try again later.");
             return (e.response.data);
         }
         else {
             console.error(e.message)
+            toast.error("Logout service is facing issue. Please try again later.");
             return (e.message);
         }
     }
@@ -139,15 +239,25 @@ const googleSignInApi = async (userInput) => {
                 withCredentials: true
             }
         )
-        return (response.data);
+        if (!response.data?.success) {
+            toast.error("Google sign in service is facing issue. Please try again later.");
+        }
+        else {
+            toast.success("Google sign in successful. Redirecting to home page ...");
+        }
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
+        return response.data;
     }
     catch (e) {
         if (e.response) {
             console.error(e.response.data)
+            toast.error("Google sign in service is facing issue. Please try again later.");
             return (e.response.data);
         }
         else {
             console.error(e.message)
+            toast.error("Google sign in service is facing issue. Please try again later.");
             return (e.message);
         }
     }
